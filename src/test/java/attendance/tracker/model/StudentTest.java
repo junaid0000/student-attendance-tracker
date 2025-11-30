@@ -1,4 +1,4 @@
-package attendance.tracker;
+package attendance.tracker.model;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
