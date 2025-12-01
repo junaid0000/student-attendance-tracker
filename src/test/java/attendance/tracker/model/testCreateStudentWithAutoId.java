@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class testCreateStudentWithAutoId {
-	//Test auto student id generate.
 	
 	@Test
 	public void testCreateStudentWithAutoId() {
