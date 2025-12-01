@@ -7,6 +7,7 @@ public class Student {
     
     public Student(String name, String rollNumber) {
         this.name = name;
+        
         this.rollNumber = rollNumber;
         
         this.id = "STU001"; 							// Simple ID for now
