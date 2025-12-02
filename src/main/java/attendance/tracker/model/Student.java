@@ -48,4 +48,11 @@ public class Student {
     public void setId(String id) {
         this.id = id; // setter for id.
     }
+    @Override
+    public int hashCode() {
+        if (id == null) {
+            return 0;
+        }
+        return id.hashCode();
+    }
 }
