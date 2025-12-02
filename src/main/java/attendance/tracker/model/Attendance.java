@@ -24,4 +24,7 @@ public class Attendance {
     public Date getDate() {
         return date;
     }
+    public boolean isPresent() {
+        return present;
+    }
 }
