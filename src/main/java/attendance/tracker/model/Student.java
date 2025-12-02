@@ -22,4 +22,7 @@ public class Student {
     public String getRollNumber() {
         return rollNumber;
     }
+    public void setName(String name) {
+        this.name = name;
+    }
 }
