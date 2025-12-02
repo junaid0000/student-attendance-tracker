@@ -21,4 +21,7 @@ public class Attendance {
     public String getStudentId() {
         return studentId;
     }
+    public Date getDate() {
+        return date;
+    }
 }
