@@ -33,4 +33,25 @@ public class Attendance {
     public void setPresent(boolean present) {
         this.present = present;
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Attendance other = (Attendance) obj;
+        if (id == null) {
+            return other.id == null;
+        } else {
+            return id.equals(other.id);
+        }
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
 }
