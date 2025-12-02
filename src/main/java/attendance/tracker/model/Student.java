@@ -25,4 +25,7 @@ public class Student {
     public void setName(String name) {
         this.name = name;
     }
+    public void setRollNumber(String rollNumber) {
+        this.rollNumber = rollNumber;
+    }
 }
