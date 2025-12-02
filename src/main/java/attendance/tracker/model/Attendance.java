@@ -18,4 +18,7 @@ public class Attendance {
     public String getId() {
         return id;
     }
+    public String getStudentId() {
+        return studentId;
+    }
 }
