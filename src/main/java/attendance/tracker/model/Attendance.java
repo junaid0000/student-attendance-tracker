@@ -30,4 +30,7 @@ public class Attendance {
     public void setDate(Date date) {
         this.date = date;
     }
+    public void setPresent(boolean present) {
+        this.present = present;
+    }
 }
