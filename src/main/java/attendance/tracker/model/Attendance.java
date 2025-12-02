@@ -27,4 +27,7 @@ public class Attendance {
     public boolean isPresent() {
         return present;
     }
+    public void setDate(Date date) {
+        this.date = date;
+    }
 }
