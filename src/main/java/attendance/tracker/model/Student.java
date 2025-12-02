@@ -1,5 +1,7 @@
 package attendance.tracker.model;
 
+import java.util.Objects;
+
 public class Student {
     private String id;
     private String name;
@@ -27,5 +29,23 @@ public class Student {
     }
     public void setRollNumber(String rollNumber) {
         this.rollNumber = rollNumber;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Student other = (Student) obj;
+        return Objects.equals(id, other.id);
+    }
+
+    public void setId(String id) {
+        this.id = id; // setter for id.
     }
 }
