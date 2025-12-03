@@ -1,4 +1,4 @@
-package attendance.tracker.model;
+package com.example.attendance.model;
 
 import java.util.Date;
 

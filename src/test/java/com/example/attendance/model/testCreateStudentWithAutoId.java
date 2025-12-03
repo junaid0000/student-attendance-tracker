@@ -1,8 +1,10 @@
-package attendance.tracker.model;
+package com.example.attendance.model;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import com.example.attendance.model.Student;
 
 public class testCreateStudentWithAutoId {
 	

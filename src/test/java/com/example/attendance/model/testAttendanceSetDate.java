@@ -1,10 +1,12 @@
-package attendance.tracker.model;
+package com.example.attendance.model;
 
 import static org.junit.Assert.*;
 
 import java.util.Date;
 
 import org.junit.Test;
+
+import com.example.attendance.model.Attendance;
 
 public class testAttendanceSetDate {
 
