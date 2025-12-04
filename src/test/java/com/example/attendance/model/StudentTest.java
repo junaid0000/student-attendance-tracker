@@ -5,6 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.example.attendance.model.Student;
+import static org.junit.Assert.assertFalse;
+
+import static org.junit.Assert.assertTrue;
 
 public class StudentTest {
 	
@@ -22,6 +25,15 @@ public class StudentTest {
 	    student2.setId(student1.getId());
 	    assertEquals("Students with same data should be equal", 
 	                student1, student2);
+	 // For Jacoco: Test equals with null (covers if (obj == null) branch)
+	    assertFalse("Student should not equal null", student1.equals(null));
+	    
+	    // For Jacoco: Test equals with different class (covers if (getClass() != obj.getClass()))
+	    assertFalse("Student should not equal String", student1.equals("I'm a String"));
+	    
+	    // For Jacoco: Test equals with same object (covers if (this == obj))
+	    assertTrue("Student should equal itself", student1.equals(student1));
+	
 	}
 	@Test
 	public void testStudentGetId() {
@@ -50,7 +62,14 @@ public class StudentTest {
 	    student2.setId(student1.getId());
 	    assertEquals("Equal students should have same hashcode", 
 	                student1.hashCode(), student2.hashCode());
+	 // ADD THIS LINE AT THE END:
+	    
+	    // For Jacoco: Test hashCode when id is null (covers if (id == null) branch)
+	    Student student3 = new Student("Bob", "R003");
+	    student3.setId(null);
+	    assertEquals(0, student3.hashCode());
 	}
+	
 	@Test
 	public void testStudentSetName() {
 	    Student student = new Student("OldName", "7131056");
