@@ -1,39 +1,30 @@
-package com.example.attendance.model;
-
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
-import com.example.attendance.model.Student;
-import static org.junit.Assert.assertFalse;
-
-import static org.junit.Assert.assertTrue;
-
-public class StudentTest {
+	package com.example.attendance.model;
 	
+	import static org.junit.Assert.*;
+	import static org.assertj.core.api.Assertions.assertThat;
+	import org.junit.Test;
+	import static org.junit.Assert.assertFalse;
+	import static org.junit.Assert.assertTrue;
+	public class StudentTest {
+		
 	@Test
 	public void testCreateStudentWithAutoId() {
 	    Student student = new Student("Junaid", "7131056");
-	    assertNotNull("Student ID should be automatically assigned",  
-	                 student.getId());
+	    assertThat(student.getId()).isEqualTo("STU001");
 	}
 	@Test
 	public void testStudentEquals() {
 	    Student student1 = new Student("Junaid", "7131056");
 	    Student student2 = new Student("Junaid", "7131056");
+	    
 	    // Give them same ID for equality test
 	    student2.setId(student1.getId());
-	    assertEquals("Students with same data should be equal", 
-	                student1, student2);
-	 // For Jacoco: Test equals with null (covers if (obj == null) branch)
-	    assertFalse("Student should not equal null", student1.equals(null));
 	    
-	    // For Jacoco: Test equals with different class (covers if (getClass() != obj.getClass()))
-	    assertFalse("Student should not equal String", student1.equals("I'm a String"));
-	    
-	    // For Jacoco: Test equals with same object (covers if (this == obj))
-	    assertTrue("Student should equal itself", student1.equals(student1));
-	
+	    // Multiple assertions in one test as in book Money Example
+	    assertThat(student1).isEqualTo(student2);
+	    assertThat(student1.equals(null)).isFalse();
+	    assertThat(student1.equals("String")).isFalse();
+	    assertThat(student1).isEqualTo(student1);
 	}
 	@Test
 	public void testStudentGetId() {
