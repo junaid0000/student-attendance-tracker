@@ -3,7 +3,7 @@ package com.example.attendance.model;
 import java.util.Objects;
 
 public class Student {
-    private String id;
+    private String studentId;  
     private String name;
     private String rollNumber;
     
@@ -12,11 +12,11 @@ public class Student {
         
         this.rollNumber = rollNumber;
         
-        this.id = "STU001"; 							// Simple ID for
+        this.studentId = "STU001"; 						
     }
     
-    public String getId() {
-        return id;
+    public String getStudentId() { 
+        return studentId;
     }
     public String getName() {
         return name;
@@ -42,17 +42,17 @@ public class Student {
             return false;
         }
         Student other = (Student) obj;
-        return Objects.equals(id, other.id);
+        return Objects.equals(studentId, other.studentId);  
     }
 
-    public void setId(String id) {
-        this.id = id; // setter for id.
+    public void setStudentId(String studentId) {  
+        this.studentId = studentId; 
     }
     @Override
     public int hashCode() {
-        if (id == null) {
+        if (studentId == null) {  
             return 0;
         }
-        return id.hashCode();
+        return studentId.hashCode();  
     }
 }

@@ -85,6 +85,12 @@
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <version>1.9.11</version>
+                <configuration>
+        <outputFormats>
+            <outputFormat>HTML</outputFormat>
+        </outputFormats>
+        <timestampedReports>false</timestampedReports>
+    </configuration>
             </plugin>
         </plugins>  
     </build>

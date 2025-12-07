@@ -2,21 +2,21 @@ package com.example.attendance.model;
 
 import java.util.Date;
 
-public class Attendance {
-    private String id;
+public class AttendanceRecord {  
+    private String recordId;  
     private String studentId;
     private Date date;
     private boolean present;
     
-    public Attendance(String studentId, Date date, boolean present) {
+    public AttendanceRecord(String studentId, Date date, boolean present) {  
         this.studentId = studentId;
         this.date = date;
         this.present = present;
-        this.id = "ATT001"; // Simple ID for now
+        this.recordId = "ATT001"; 
     }
     
-    public String getId() {
-        return id;
+    public String getRecordId() {  
+        return recordId;
     }
     public String getStudentId() {
         return studentId;
@@ -44,21 +44,21 @@ public class Attendance {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Attendance other = (Attendance) obj;
-        if (id == null) {
-            return other.id == null;
+        AttendanceRecord other = (AttendanceRecord) obj;  
+        if (recordId == null) {  
+            return other.recordId == null;  
         } else {
-            return id.equals(other.id);
+            return recordId.equals(other.recordId);  
         }
     }
-    public void setId(String id) {
-        this.id = id;
+    public void setRecordId(String recordId) {  
+        this.recordId = recordId;  
     }
     @Override
     public int hashCode() {
-        if (id == null) {
+        if (recordId == null) {  
             return 0;
         }
-        return id.hashCode();
+        return recordId.hashCode();  
     }
 }
