@@ -12,7 +12,7 @@ public class Student {
         
         this.rollNumber = rollNumber;
         
-        this.studentId = "STU001"; 						
+        this.studentId = java.util.UUID.randomUUID().toString();						
     }
     
     public String getStudentId() { 
@@ -42,7 +42,7 @@ public class Student {
             return false;
         }
         Student other = (Student) obj;
-        return Objects.equals(studentId, other.studentId);  
+        return Objects.equals(rollNumber, other.rollNumber);  
     }
 
     public void setStudentId(String studentId) {  
