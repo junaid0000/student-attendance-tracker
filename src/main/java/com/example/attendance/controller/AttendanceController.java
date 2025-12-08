@@ -4,10 +4,9 @@ import com.example.attendance.model.AttendanceRecord;
 import com.example.attendance.model.Student;
 import com.example.attendance.repository.AttendanceRepository;
 import com.example.attendance.repository.StudentRepository;
-
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Date; 
 import java.util.List;
+
 
 public class AttendanceController {
     private final AttendanceRepository attendanceRepository;
@@ -20,38 +19,28 @@ public class AttendanceController {
     }
     
     public AttendanceRecord markAttendance(String rollNumber, Date date, boolean present) {
-        Student student = studentRepository.findByRollNumber(rollNumber)
-            .orElseThrow(() -> new IllegalArgumentException("Student not found"));
-        
+        Student student = studentRepository.findByRollNumber(rollNumber).get();
         AttendanceRecord record = new AttendanceRecord(student.getStudentId(), date, present);
         return attendanceRepository.save(record);
     }
+    
     // get attendance by date
     public List<AttendanceRecord> getAttendanceByDate(Date date) {
         return attendanceRepository.findByDate(date);
     }
+    
+    
     // get attendance by student
     public List<AttendanceRecord> getAttendanceByStudent(String rollNumber) {
-        Student student = studentRepository.findByRollNumber(rollNumber)
-            .orElseThrow(() -> new IllegalArgumentException("Student not found"));
-        
+        Student student = studentRepository.findByRollNumber(rollNumber).get();
         return attendanceRepository.findByStudentId(student.getStudentId());
     }
+    
     // Implement Percentage Calculation
     public double getAttendancePercentage(String rollNumber) {
-        // Find student
-        Student student = studentRepository.findByRollNumber(rollNumber)
-            .orElseThrow(() -> new IllegalArgumentException("Student not found"));
-        
-        // Get student's attendance records
+        Student student = studentRepository.findByRollNumber(rollNumber).get();
         List<AttendanceRecord> records = attendanceRepository.findByStudentId(student.getStudentId());
         
-        // If no records, return 0%
-        if (records.isEmpty()) {
-            return 0.0;
-        }
-        
-        // Count present records
         long presentCount = 0;
         for (AttendanceRecord record : records) {
             if (record.isPresent()) {
@@ -59,7 +48,6 @@ public class AttendanceController {
             }
         }
         
-        // Calculate percentage
         return (presentCount * 100.0) / records.size();
     }
 }

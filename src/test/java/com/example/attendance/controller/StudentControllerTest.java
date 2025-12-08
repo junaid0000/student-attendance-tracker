@@ -42,6 +42,7 @@ public class StudentControllerTest {
         verify(studentRepository).findByRollNumber("7131056");
         verify(studentRepository).save(any(Student.class));
     }
+    
     //Delete student
     @Test
     public void testDeleteStudent() {
@@ -51,9 +52,8 @@ public class StudentControllerTest {
         Student student = new Student("Junaid", "7131056");
         when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
         
-        boolean result = studentController.deleteStudent("7131056");
+        studentController.deleteStudent("7131056");
         
-        assertTrue(result);
         verify(studentRepository).findByRollNumber("7131056");
         verify(studentRepository).delete(student);
     }

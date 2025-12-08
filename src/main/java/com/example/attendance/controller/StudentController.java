@@ -1,7 +1,5 @@
 package com.example.attendance.controller;
 
-import java.util.Optional;
-
 import com.example.attendance.model.Student;
 import com.example.attendance.repository.StudentRepository;
 
@@ -18,23 +16,14 @@ public class StudentController {
     }
  
     public Student updateStudent(String rollNumber, String newName, String newRollNumber) {
-        // Find the student to update
-        Student student = studentRepository.findByRollNumber(rollNumber)
-            .orElseThrow(() -> new IllegalArgumentException("Student not found"));
-     
+        Student student = studentRepository.findByRollNumber(rollNumber).get();
         student.setName(newName);
         student.setRollNumber(newRollNumber);
-        
-        // Save updated student
         return studentRepository.save(student);
     }
     
-    public boolean deleteStudent(String rollNumber) {
-        Optional<Student> student = studentRepository.findByRollNumber(rollNumber);
-        if (student.isPresent()) {
-            studentRepository.delete(student.get());
-            return true;
-        }
-        return false;
+    public void deleteStudent(String rollNumber) {
+        Student student = studentRepository.findByRollNumber(rollNumber).get();
+        studentRepository.delete(student);
     }
 }
