@@ -42,5 +42,15 @@ public class StudentControllerTest {
         verify(studentRepository).findByRollNumber("7131056");
         verify(studentRepository).save(any(Student.class));
     }
+    //Delete student
+    @Test
+    public void testDeleteStudent() {
+        // This will fail
+        StudentRepository studentRepository = mock(StudentRepository.class);
+        StudentController studentController = new StudentController(studentRepository);
+        
+        boolean result = studentController.deleteStudent("7131056");
+        assertTrue(result);
+    }
     
 }

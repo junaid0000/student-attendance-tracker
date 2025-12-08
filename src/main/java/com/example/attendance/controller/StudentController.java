@@ -26,4 +26,9 @@ public class StudentController {
         // Save updated student
         return studentRepository.save(student);
     }
+    
+    public boolean deleteStudent(String rollNumber) {
+        
+        return true;
+    }
 }
