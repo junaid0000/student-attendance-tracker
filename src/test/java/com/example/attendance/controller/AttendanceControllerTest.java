@@ -14,6 +14,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 public class AttendanceControllerTest {
@@ -54,5 +55,18 @@ public class AttendanceControllerTest {
 	    // Assert
 	    assertNotNull(result);
 	    assertFalse(result.isPresent());
+	}
+	@Test
+	public void testGetAttendanceByDate() {
+	    // ARRANGE
+	    AttendanceRepository attendanceRepository = mock(AttendanceRepository.class);
+	    StudentRepository studentRepository = mock(StudentRepository.class);
+	    AttendanceController controller = new AttendanceController(attendanceRepository, studentRepository);
+	    
+	    // ACT - This will fail because returns null
+	    List<AttendanceRecord> result = controller.getAttendanceByDate(new Date());
+	    
+	    // ASSERT - Will fail
+	    assertNotNull(result);
 	}
 }
