@@ -37,9 +37,29 @@ public class AttendanceController {
         
         return attendanceRepository.findByStudentId(student.getStudentId());
     }
+    // Implement Percentage Calculation
     public double getAttendancePercentage(String rollNumber) {
-        // Will implement later
-        return 0.0;
+        // Find student
+        Student student = studentRepository.findByRollNumber(rollNumber)
+            .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+        
+        // Get student's attendance records
+        List<AttendanceRecord> records = attendanceRepository.findByStudentId(student.getStudentId());
+        
+        // If no records, return 0%
+        if (records.isEmpty()) {
+            return 0.0;
+        }
+        
+        // Count present records
+        long presentCount = 0;
+        for (AttendanceRecord record : records) {
+            if (record.isPresent()) {
+                presentCount++;
+            }
+        }
+        
+        // Calculate percentage
+        return (presentCount * 100.0) / records.size();
     }
-    
 }

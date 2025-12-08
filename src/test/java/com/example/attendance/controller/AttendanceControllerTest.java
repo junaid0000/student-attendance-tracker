@@ -108,15 +108,27 @@ public class AttendanceControllerTest {
 	}
 	@Test
 	public void testGetAttendancePercentage() {
-	    // ARRANGE
+	    // ARRANGE with mocking
 	    AttendanceRepository attendanceRepository = mock(AttendanceRepository.class);
 	    StudentRepository studentRepository = mock(StudentRepository.class);
 	    AttendanceController controller = new AttendanceController(attendanceRepository, studentRepository);
 	    
-	    // ACT - This will return 0.0
+	    // Mock student
+	    Student student = new Student("Junaid", "7131056");
+	    when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
+	    
+	    // Mock attendance records
+	    List<AttendanceRecord> mockRecords = Arrays.asList(
+	        new AttendanceRecord(student.getStudentId(), new Date(), true),  // Present
+	        new AttendanceRecord(student.getStudentId(), new Date(), true),  // Present
+	        new AttendanceRecord(student.getStudentId(), new Date(), false)  // Absent
+	    );
+	    when(attendanceRepository.findByStudentId(student.getStudentId())).thenReturn(mockRecords);
+	    
+	    // ACT
 	    double result = controller.getAttendancePercentage("7131056");
 	    
-	    // ASSERT - Check it returns something
-	    assertEquals(0.0, result, 0.01);
+	    // ASSERT: 2 out of 3 = 66.66%
+	    assertEquals(66.66, result, 0.01);
 	}
 }
