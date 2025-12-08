@@ -35,4 +35,24 @@ public class AttendanceControllerTest {
 	    assertTrue(result.isPresent());
 	    verify(attendanceRepository).save(any(AttendanceRecord.class));
 	}
+	@Test
+	public void testMarkAttendanceAbsent() {
+	    // Arrange
+	    AttendanceRepository attendanceRepository = mock(AttendanceRepository.class);
+	    StudentRepository studentRepository = mock(StudentRepository.class);
+	    AttendanceController controller = new AttendanceController(attendanceRepository, studentRepository);
+	    
+	    Student student = new Student("Junaid", "7131056");
+	    when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
+	    
+	    AttendanceRecord fakeRecord = new AttendanceRecord(student.getStudentId(), new Date(), false);
+	    when(attendanceRepository.save(any(AttendanceRecord.class))).thenReturn(fakeRecord);
+	    
+	    // Act
+	    AttendanceRecord result = controller.markAttendance("7131056", new Date(), false);
+	    
+	    // Assert
+	    assertNotNull(result);
+	    assertFalse(result.isPresent());
+	}
 }

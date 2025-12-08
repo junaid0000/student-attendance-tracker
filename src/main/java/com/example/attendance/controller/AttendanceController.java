@@ -23,4 +23,5 @@ public class AttendanceController {
         AttendanceRecord record = new AttendanceRecord(student.getStudentId(), date, present);
         return attendanceRepository.save(record);
     }
+    
 }
