@@ -37,5 +37,9 @@ public class AttendanceController {
         
         return attendanceRepository.findByStudentId(student.getStudentId());
     }
+    public double getAttendancePercentage(String rollNumber) {
+        // Will implement later
+        return 0.0;
+    }
     
 }

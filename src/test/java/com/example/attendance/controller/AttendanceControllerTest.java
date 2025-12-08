@@ -106,4 +106,17 @@ public class AttendanceControllerTest {
 	    verify(studentRepository).findByRollNumber("7131056");
 	    verify(attendanceRepository).findByStudentId(student.getStudentId());
 	}
+	@Test
+	public void testGetAttendancePercentage() {
+	    // ARRANGE
+	    AttendanceRepository attendanceRepository = mock(AttendanceRepository.class);
+	    StudentRepository studentRepository = mock(StudentRepository.class);
+	    AttendanceController controller = new AttendanceController(attendanceRepository, studentRepository);
+	    
+	    // ACT - This will return 0.0
+	    double result = controller.getAttendancePercentage("7131056");
+	    
+	    // ASSERT - Check it returns something
+	    assertEquals(0.0, result, 0.01);
+	}
 }
