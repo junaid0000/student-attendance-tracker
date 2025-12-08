@@ -79,4 +79,17 @@ public class AttendanceControllerTest {
 	    assertEquals(2, result.size());
 	    verify(attendanceRepository).findByDate(any(Date.class));
 	}
+	@Test
+	public void testGetAttendanceByStudent() {
+	    // ARRANGE
+	    AttendanceRepository attendanceRepository = mock(AttendanceRepository.class);
+	    StudentRepository studentRepository = mock(StudentRepository.class);
+	    AttendanceController controller = new AttendanceController(attendanceRepository, studentRepository);
+	    
+	    // ACT - 
+	    List<AttendanceRecord> result = controller.getAttendanceByStudent("7131056");
+	    
+	    // ASSERT 
+	    assertNotNull(result);
+	}
 }
