@@ -27,8 +27,7 @@ public class AttendanceController {
         return attendanceRepository.save(record);
     }
     public List<AttendanceRecord> getAttendanceByDate(Date date) {
-        // Simple implementation to pass test
-        return new ArrayList<>();
+        return attendanceRepository.findByDate(date);
     }
     
 }

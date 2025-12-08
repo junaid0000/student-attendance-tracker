@@ -13,6 +13,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -63,10 +64,19 @@ public class AttendanceControllerTest {
 	    StudentRepository studentRepository = mock(StudentRepository.class);
 	    AttendanceController controller = new AttendanceController(attendanceRepository, studentRepository);
 	    
-	    // ACT - This will fail because returns null
+	    // Mock data
+	    List<AttendanceRecord> mockRecords = Arrays.asList(
+	        new AttendanceRecord("STU001", new Date(), true),
+	        new AttendanceRecord("STU002", new Date(), false)
+	    );
+	    when(attendanceRepository.findByDate(any(Date.class))).thenReturn(mockRecords);
+	    
+	    // ACT
 	    List<AttendanceRecord> result = controller.getAttendanceByDate(new Date());
 	    
-	    // ASSERT - Will fail
+	    // ASSERT
 	    assertNotNull(result);
+	    assertEquals(2, result.size());
+	    verify(attendanceRepository).findByDate(any(Date.class));
 	}
 }
