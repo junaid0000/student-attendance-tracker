@@ -8,4 +8,5 @@ import com.example.attendance.model.AttendanceRecord;
 public interface AttendanceRepository {
     AttendanceRecord save(AttendanceRecord record);
     List<AttendanceRecord> findByDate(Date date);
+    List<AttendanceRecord> findByStudentId(String studentId);
 }

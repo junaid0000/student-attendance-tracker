@@ -86,10 +86,24 @@ public class AttendanceControllerTest {
 	    StudentRepository studentRepository = mock(StudentRepository.class);
 	    AttendanceController controller = new AttendanceController(attendanceRepository, studentRepository);
 	    
-	    // ACT - 
+	    // Mock student
+	    Student student = new Student("Junaid", "7131056");
+	    when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
+	    
+	    // Mock attendance records
+	    List<AttendanceRecord> mockRecords = Arrays.asList(
+	        new AttendanceRecord(student.getStudentId(), new Date(), true),
+	        new AttendanceRecord(student.getStudentId(), new Date(), false)
+	    );
+	    when(attendanceRepository.findByStudentId(student.getStudentId())).thenReturn(mockRecords);
+	    
+	    // ACT
 	    List<AttendanceRecord> result = controller.getAttendanceByStudent("7131056");
 	    
-	    // ASSERT 
+	    // ASSERT
 	    assertNotNull(result);
+	    assertEquals(2, result.size());
+	    verify(studentRepository).findByRollNumber("7131056");
+	    verify(attendanceRepository).findByStudentId(student.getStudentId());
 	}
 }

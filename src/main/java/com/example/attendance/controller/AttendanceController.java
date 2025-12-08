@@ -26,12 +26,16 @@ public class AttendanceController {
         AttendanceRecord record = new AttendanceRecord(student.getStudentId(), date, present);
         return attendanceRepository.save(record);
     }
+    // get attendance by date
     public List<AttendanceRecord> getAttendanceByDate(Date date) {
         return attendanceRepository.findByDate(date);
     }
+    // get attendance by student
     public List<AttendanceRecord> getAttendanceByStudent(String rollNumber) {
-        // Simple implementation to pass test
-        return new ArrayList<>();
+        Student student = studentRepository.findByRollNumber(rollNumber)
+            .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+        
+        return attendanceRepository.findByStudentId(student.getStudentId());
     }
     
 }
