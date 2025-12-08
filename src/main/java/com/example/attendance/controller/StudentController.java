@@ -16,7 +16,14 @@ public class StudentController {
     }
  
     public Student updateStudent(String rollNumber, String newName, String newRollNumber) {
-        // Simple implementation to pass test
-        return new Student(newName, newRollNumber);
+        // Find the student to update
+        Student student = studentRepository.findByRollNumber(rollNumber)
+            .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+     
+        student.setName(newName);
+        student.setRollNumber(newRollNumber);
+        
+        // Save updated student
+        return studentRepository.save(student);
     }
 }
