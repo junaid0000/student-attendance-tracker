@@ -1,5 +1,7 @@
 package com.example.attendance.controller;
 
+import java.util.Optional;
+
 import com.example.attendance.model.Student;
 import com.example.attendance.repository.StudentRepository;
 
@@ -28,7 +30,11 @@ public class StudentController {
     }
     
     public boolean deleteStudent(String rollNumber) {
-        
-        return true;
+        Optional<Student> student = studentRepository.findByRollNumber(rollNumber);
+        if (student.isPresent()) {
+            studentRepository.delete(student.get());
+            return true;
+        }
+        return false;
     }
 }

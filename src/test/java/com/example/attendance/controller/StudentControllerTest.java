@@ -45,12 +45,17 @@ public class StudentControllerTest {
     //Delete student
     @Test
     public void testDeleteStudent() {
-        // This will fail
         StudentRepository studentRepository = mock(StudentRepository.class);
         StudentController studentController = new StudentController(studentRepository);
         
+        Student student = new Student("Junaid", "7131056");
+        when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
+        
         boolean result = studentController.deleteStudent("7131056");
+        
         assertTrue(result);
+        verify(studentRepository).findByRollNumber("7131056");
+        verify(studentRepository).delete(student);
     }
     
 }
