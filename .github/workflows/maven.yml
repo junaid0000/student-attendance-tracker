@@ -22,13 +22,13 @@ jobs:
           distribution: 'temurin'
 
       #Tthis is updated for  Cache Maven dependencies
-	  - name: Cache Maven packages
-	          uses: actions/cache@v4
-	          with:
-	            path: ~/.m2
-	            key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml', '**/*.yml') }}
-	            restore-keys: |
-	              ${{ runner.os }}-m2-
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml', '**/*.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2-
 
       # This for Build and test with Maven
       - name: Build with Maven
