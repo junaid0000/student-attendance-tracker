@@ -30,3 +30,4 @@ The application will manage students' attendance records with two main entities:
 - Test-Driven Development (TDD)
 - Unit, integration, and end-to-end tests
 - Clean, reproducible GitHub repository
+- Testing pull request workflow
