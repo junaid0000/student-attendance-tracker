@@ -6,13 +6,13 @@ on:
   pull_request:
 
 jobs:
-  build:  # test against several Operating syestem after completion diff jdk (8,11,17):
+  build:
+    # test against several Operating syestem after completion diff jdk (8,11,17):
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
         # test against several Operating Syestemm:
-		
         os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
