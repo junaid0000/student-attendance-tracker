@@ -8,18 +8,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    # Added strategy matrix for multiple Java versions (8and 11).
+	# Added strategy matrix for multiple Java versions (8and 11) its was failed.
+	# again Added strategy matrix for multiple Java versions (8,11 and 17) also changing in pom 17 to 8 verion because java 8 jobs failed.
     strategy:
       matrix:
-        java: [8, 17]
+        java: [8, 11, 17]
 
     steps:
       # This will Checkout source code
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # this is for Set up Java based on matrix
+      # this is for Set up Java
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:
@@ -31,7 +31,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-m2-jdk${{ matrix.java }}-${{ hashFiles('**/pom.xml', '**/*.yml') }}
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml', '**/*.yml') }}
           restore-keys: |
             ${{ runner.os }}-m2-
 
