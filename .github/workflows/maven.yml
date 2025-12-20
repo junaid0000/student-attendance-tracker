@@ -8,8 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-	# Added strategy matrix for multiple Java versions (8and 11) its was failed.
-	# again Added strategy matrix for multiple Java versions (8,11 and 17) also changing in pom 17 to 8 verion because java 8 jobs failed.
+    # Added strategy matrix for multiple Java versions (8and 11) its was failed.
+    # again Added strategy matrix for multiple Java versions (8,11 and 17) also changing in pom 17 to 8 verion because java 8 jobs failed.
     strategy:
       matrix:
         java: [8, 11, 17]
