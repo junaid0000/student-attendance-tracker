@@ -56,9 +56,7 @@ jobs:
       # Generate JUnit Report
       - name: Generate JUnit Report
         run: >
-		
-          mvn surefire-report:report-only 
-		  site:site -DgenerateReports=false
+          mvn surefire-report:report-only site:site -DgenerateReports=false
         if: ${{ always() }}
 
       #  Archive JUnit Report
