@@ -59,10 +59,11 @@ jobs:
           mvn surefire-report:report-only site:site -DgenerateReports=false
         if: ${{ always() }}
 
-      #  Archive JUnit Report
-      - name: Archive JUnit Report
-        uses: actions/upload-artifact@v4
-        if: ${{ always() }}
-        with:
-          name: surefire-report-jdk-${{ matrix.java }}
-          path: '**/target/site'
+		#  Archive JUnit Report
+		- name: Archive JUnit Report
+		  uses: actions/upload-artifact@v4
+		  if: ${{ always() }}
+		  with:
+		    name: surefire-report-${{ matrix.os }}-jdk-${{ matrix.java }}
+		    path: '**/target/site'
+
