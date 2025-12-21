@@ -32,7 +32,7 @@ jobs:
             java: 17
 
     steps:
-      # This will Checkout source code
+      # This will Checkout source code .
       - name: Checkout repository
         uses: actions/checkout@v3
 
