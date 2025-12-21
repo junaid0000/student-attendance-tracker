@@ -32,3 +32,5 @@ The application will manage students' attendance records with two main entities:
 - Clean, reproducible GitHub repository
 git add README.md
 git commit -m "Test Coveralls PR"
+Testing Coveralls PR
+
