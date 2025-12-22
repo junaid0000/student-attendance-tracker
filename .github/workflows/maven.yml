@@ -3,37 +3,12 @@ name: Java CI with Maven
 
 on:
   push:
-#  pull_request:   # Disabled to prevent multiple workflow runs for the same commit its was runing three at a time
+  pull_request:
 
 jobs:
   build:
     # test against several Operating syestem after completion diff jdk(8,11,17) but now this is only for code coverge in CI java 17
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          # ubuntu will run 8,11,17 and java 17 will generate code coverage and i added pjacoco + Coveralls
-          - os: ubuntu-latest
-            java: 17
-            additional-maven-args: "-Pjacoco coveralls:report"
-          - os: ubuntu-latest
-            java: 8
-            additional-maven-args: ""
-          - os: ubuntu-latest
-            java: 11
-            additional-maven-args: ""
-
-          # window will run 17
-          - os: windows-latest
-            java: 17
-            additional-maven-args: ""
-
-          # macos will run 17
-          - os: macos-latest
-            java: 17
-            additional-maven-args: ""
+    runs-on: ubuntu-latest
 
     steps:
       # This will Checkout source code .
@@ -41,10 +16,10 @@ jobs:
         uses: actions/checkout@v3
 
       # this is for Set up Java 17
-      - name: Set up JDK ${{ matrix.java }}
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: '${{ matrix.java }}'
+          java-version: '17'
           distribution: 'temurin'
 
       # Tthis is updated for Cache Maven dependencies .m2
@@ -52,13 +27,13 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-m2-jdk${{ matrix.java }}-${{ hashFiles('**/pom.xml', '**/*.yml') }}
+          key: ${{ runner.os }}-m2-jdk17-${{ hashFiles('**/pom.xml', '**/*.yml') }}
           restore-keys: |
             ${{ runner.os }}-m2-
 
       # This for Build and test with Maven
       - name: Build with Maven
-        run: mvn clean verify ${{ matrix.additional-maven-args }}
+        run: mvn clean verify -Pjacoco coveralls:report
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
@@ -73,5 +48,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
-          name: surefire-report-${{ matrix.os }}-jdk-${{ matrix.java }}
+          name: surefire-report-ubuntu-jdk-17
           path: '**/target/site'
