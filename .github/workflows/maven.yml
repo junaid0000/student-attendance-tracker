@@ -17,23 +17,23 @@ jobs:
           # ubuntu will run 8,11,17 and java 17 will generate code coverage and i added pjacoco + Coveralls
           - os: ubuntu-latest
             java: 17
-            additional-maven-args: "-Pjacoco -DrepoToken=$COVERALLS_REPO_TOKEN coveralls:report"
+            run-coveralls: true
           - os: ubuntu-latest
             java: 8
-            additional-maven-args: ""
+            run-coveralls: false
           - os: ubuntu-latest
             java: 11
-            additional-maven-args: ""
+            run-coveralls: false
 
           # window will run 17
           - os: windows-latest
             java: 17
-            additional-maven-args: ""
+            run-coveralls: false
 
           # macos will run 17
           - os: macos-latest
             java: 17
-            additional-maven-args: ""
+            run-coveralls: false
 
     steps:
       # This will Checkout source code .
@@ -58,9 +58,14 @@ jobs:
 
       # This for Build and test with Maven
       - name: Build with Maven
-        run: mvn clean verify ${{ matrix.additional-maven-args }}
+        run: |
+          if [ "${{ matrix.run-coveralls }}" = "true" ]; then
+            mvn clean verify -Pjacoco coveralls:report
+          else
+            mvn clean verify
+          fi
         env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
       # Generate JUnit Report
       - name: Generate JUnit Report
