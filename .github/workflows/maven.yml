@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    # test against several Operating syestem after completion diff jdk(8,11,17) but now this is only for code coverge in CI java 17
+    # test against several Operating  syestem after completion diff jdk(8,11,17) but now this is only for code coverge in CI java 17
     runs-on: ${{ matrix.os }}
 
     strategy:
