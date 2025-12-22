@@ -8,18 +8,43 @@ on:
 jobs:
   build:
     # test against several Operating syestem after completion diff jdk(8,11,17) but now this is only for code coverge in CI java 17
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # ubuntu will run 8,11,17 and java 17 will generate code coverage and i added pjacoco + Coveralls
+          - os: ubuntu-latest
+            java: 17
+            additional-maven-args: "-Pjacoco coveralls:report"
+          - os: ubuntu-latest
+            java: 8
+            additional-maven-args: ""
+          - os: ubuntu-latest
+            java: 11
+            additional-maven-args: ""
+
+          # windows will run 17
+          - os: windows-latest
+            java: 17
+            additional-maven-args: ""
+
+          # macos will run 17
+          - os: macos-latest
+            java: 17
+            additional-maven-args: ""
 
     steps:
       # This will Checkout source code .
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # this is for Set up Java 17
-      - name: Set up JDK 17
+      # this is for Set up Java
+      - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '${{ matrix.java }}'
           distribution: 'temurin'
 
       # Tthis is updated for Cache Maven dependencies .m2
@@ -27,13 +52,13 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-m2-jdk17-${{ hashFiles('**/pom.xml', '**/*.yml') }}
+          key: ${{ runner.os }}-m2-jdk${{ matrix.java }}-${{ hashFiles('**/pom.xml', '**/*.yml') }}
           restore-keys: |
             ${{ runner.os }}-m2-
 
       # This for Build and test with Maven
       - name: Build with Maven
-        run: mvn clean verify -Pjacoco coveralls:report
+        run: mvn clean verify ${{ matrix.additional-maven-args }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
@@ -48,5 +73,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
-          name: surefire-report-ubuntu-jdk-17
+          name: surefire-report-${{ matrix.os }}-jdk-${{ matrix.java }}
           path: '**/target/site'
