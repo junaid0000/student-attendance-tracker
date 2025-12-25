@@ -1,3 +1,12 @@
+# Student Attendance Tracker i am adding build status and codecoverage for badges.
+
+## Build Status
+[![Java CI with Maven](https://github.com/junaid0000/student-attendance-tracker/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/junaid0000/student-attendance-tracker/actions)
+
+## Code Coverage
+[![Coverage Status](https://coveralls.io/repos/github/junaid0000/student-attendance-tracker/badge.svg?branch=main)](https://coveralls.io/github/junaid0000/student-attendance-tracker?branch=main)
+
+
 # Student Attendance Tracker
 
 Advanced Programming Exam Project - Student Attendance Tracker with TDD
