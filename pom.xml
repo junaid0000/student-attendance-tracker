@@ -75,8 +75,9 @@
         <!-- Add MongoDB Dependency-->
 		<dependency>
 		    <groupId>org.mongodb</groupId>
-		    <artifactId>mongodb-driver-sync</artifactId>
-		    <version>4.9.1</version>
+		    <artifactId>mongo-java-driver</artifactId>
+		    <version>3.12.7</version>
+		    <scope>test</scope>
 		</dependency>
     </dependencies>
     
@@ -193,6 +194,9 @@
                         <configuration>
                             <showLogs>true</showLogs>
                             <verbose>build</verbose>
+                            <!-- Docker custom networks mentioned in the run image configurations
+                            will be created automatically during "start" and removed during "stop". -->
+                            <autoCreateCustomNetworks>true</autoCreateCustomNetworks>
                             <images>
                                 <image>
                                     <name>student-attendance-tracker</name>
@@ -204,7 +208,29 @@
                                         </args>
                                     </build>
                                     <run>
+                                        <network>
+                                            <mode>custom</mode>
+                                            <name>attendance-network</name>
+                                        </network>
                                         <wait>
+                                            <time>10000</time>
+                                        </wait>
+                                        <dependsOn>
+                                            <container>mongo</container>
+                                        </dependsOn>
+                                    </run>
+                                </image>
+                                <image>
+                                    <name>mongo:4.4.3</name>
+                                    <alias>mongo</alias>
+                                    <run>
+                                        <network>
+                                            <mode>custom</mode>
+                                            <name>attendance-network</name>
+                                            <alias>mongodb</alias>
+                                        </network>
+                                        <wait>
+                                            <log>Waiting for connections</log>
                                             <time>10000</time>
                                         </wait>
                                     </run>
