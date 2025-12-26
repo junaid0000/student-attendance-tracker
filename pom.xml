@@ -72,6 +72,12 @@
             <version>4.11.0</version>
             <scope>test</scope>
         </dependency>
+        <!-- Add MongoDB Dependency-->
+		<dependency>
+		    <groupId>org.mongodb</groupId>
+		    <artifactId>mongodb-driver-sync</artifactId>
+		    <version>4.9.1</version>
+		</dependency>
     </dependencies>
     
     <build>
