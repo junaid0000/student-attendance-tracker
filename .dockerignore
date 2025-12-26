@@ -1,5 +1,5 @@
-# Ignore everything...
+# Ignore everything
 **
 
-# ...but the JAR file
-!/target/*.jar
+# Except the JAR file
+!target/*.jar

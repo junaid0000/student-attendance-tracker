@@ -1,8 +1,7 @@
-# Use OpenJDK 17 (instead of Java 8 from book)
 FROM openjdk:17-jdk-slim
 
-# Copy the JAR file
-COPY target/*.jar app.jar
+ARG JAR_FILE
 
-# Run the application
+COPY target/${JAR_FILE} app.jar
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
