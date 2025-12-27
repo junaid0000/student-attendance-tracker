@@ -83,6 +83,27 @@
     
     <build>
         <plugins>  
+            <!-- Build Helper Plugin for integration tests -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-test-source</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/it/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
             <!-- JaCoCo for Code Coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
