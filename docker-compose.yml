@@ -1,0 +1,17 @@
+version: '2'
+services:
+  app:
+    image: student-attendance-tracker:latest
+    networks:
+      - attendance-network
+    depends_on:
+      - mongodb
+  
+  mongodb:
+    image: mongo:4.4.3
+    networks:
+      - attendance-network
+
+networks:
+  attendance-network:
+    driver: bridge
