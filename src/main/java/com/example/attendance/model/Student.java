@@ -7,11 +7,17 @@ public class Student {
     private String name;
     private String rollNumber;
     
+    // constructor 
+    public Student(String studentId, String name, String rollNumber) {
+        this.studentId = studentId;
+        this.name = name;
+        this.rollNumber = rollNumber;
+    }
+    
+    // constructor
     public Student(String name, String rollNumber) {
         this.name = name;
-        
         this.rollNumber = rollNumber;
-        
         this.studentId = java.util.UUID.randomUUID().toString();						
     }
     
