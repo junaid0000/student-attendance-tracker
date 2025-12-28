@@ -118,6 +118,21 @@
                 </executions>
             </plugin>
             
+            <!-- Maven Failsafe Plugin for integration tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.2.5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
             <!-- JaCoCo for Code Coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -216,6 +231,7 @@
                 </plugins>
             </build>
         </profile>
+        
         
         <!-- Docker profile for building docker images  same as prof did -->
         <profile>
