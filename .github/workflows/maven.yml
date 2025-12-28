@@ -22,12 +22,12 @@ jobs:
           # window will run 17
           - os: windows-latest
             java: 17
-            additional-maven-args: ""
+            additional-maven-args: "-DskipITs"
 
           # macos will run 17
           - os: macos-latest
             java: 17
-            additional-maven-args: ""
+            additional-maven-args: "-DskipITs"
 
     steps:
       # This will Checkout source code .
@@ -55,6 +55,7 @@ jobs:
         run: mvn clean verify ${{ matrix.additional-maven-args }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+          TESTCONTAINERS_RYUK_DISABLED: true
 
       # Generate JUnit Report
       - name: Generate JUnit Report
