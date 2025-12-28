@@ -8,6 +8,15 @@ public class AttendanceRecord {
     private Date date;
     private boolean present;
     
+    // constructor
+    public AttendanceRecord(String recordId, Date date, boolean present, String studentId) {  
+        this.recordId = recordId;
+        this.date = date;
+        this.present = present;
+        this.studentId = studentId;
+    }
+    
+    // constructor
     public AttendanceRecord(String studentId, Date date, boolean present) {  
         this.studentId = studentId;
         this.date = date;

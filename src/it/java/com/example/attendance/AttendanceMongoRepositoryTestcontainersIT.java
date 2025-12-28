@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AttendanceMongoRepositoryTestcontainersIT {
     
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({ "rawtypes", "resource" })
     @ClassRule
     public static final GenericContainer mongo = 
         new GenericContainer("mongo:4.4.3").withExposedPorts(27017);
@@ -23,7 +23,8 @@ public class AttendanceMongoRepositoryTestcontainersIT {
     private MongoClient client;
     private AttendanceMongoRepository repository;
     
-    @Before
+    @SuppressWarnings("deprecation")
+	@Before
     public void setup() {
         client = new MongoClient(
             new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017))
