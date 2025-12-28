@@ -30,6 +30,9 @@ public class AttendanceMongoRepositoryTestcontainersIT {
             new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017))
         );
         repository = new AttendanceMongoRepository(client, "attendance_db", "attendance_records");
+        
+        // I am adding this line for Clean the database before each test because its added more record in database
+        client.getDatabase("attendance_db").getCollection("attendance_records").deleteMany(new org.bson.Document());
     }
     
     @After
@@ -69,7 +72,7 @@ public class AttendanceMongoRepositoryTestcontainersIT {
         repository.markAttendance(record1);
         repository.markAttendance(record2);
         
-        List<AttendanceRecord> found = repository.findByStudent("S001");
+        List<AttendanceRecord> found = repository.findByStudent("S1");
         assertThat(found).hasSize(2);
     }
     

@@ -32,6 +32,8 @@ public class StudentMongoRepositoryTestcontainersIT {
             )
         );
         studentRepository = new StudentMongoRepository(client, "attendance_db", "students");
+     // I am adding  for Clean the database before each test because its added more record in database
+        client.getDatabase("attendance_db").getCollection("students").deleteMany(new org.bson.Document());
     }
     
     @After
