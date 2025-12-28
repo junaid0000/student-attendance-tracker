@@ -36,16 +36,28 @@ public class AttendanceMongoRepositoryTestcontainersIT {
         client.close();
     }
     
-    // Test 1: Mark attendance
+    //  Mark attendance TDD
     @Test
     public void testMarkAttendance() {
         Date today = new Date();
-        AttendanceRecord record = new AttendanceRecord("R001", today, true, "S001");
+        AttendanceRecord record = new AttendanceRecord("R1", today, true, "S1");
         repository.markAttendance(record);
         
         List<AttendanceRecord> found = repository.findByDate(today);
         assertThat(found).hasSize(1);
         assertThat(found.get(0).isPresent()).isTrue();
+    }
+    // View attendance by date TDD
+    @Test
+    public void testFindAttendanceByDate() {
+        Date today = new Date();
+        AttendanceRecord record1 = new AttendanceRecord("R1", today, true, "S1");
+        AttendanceRecord record2 = new AttendanceRecord("R2", today, false, "S2");
+        repository.markAttendance(record1);
+        repository.markAttendance(record2);
+        
+        List<AttendanceRecord> found = repository.findByDate(today);
+        assertThat(found).hasSize(2);
     }
     
     
