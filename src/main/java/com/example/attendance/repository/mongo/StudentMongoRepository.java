@@ -1,27 +1,64 @@
 package com.example.attendance.repository.mongo;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import org.bson.Document;
 import com.example.attendance.model.Student;
 
 public class StudentMongoRepository {
     
+    private MongoClient client;
+    private MongoDatabase database;
+    private MongoCollection<Document> studentCollection;
+    
     public StudentMongoRepository(MongoClient client, String databaseName, String collectionName) {
-        // Empty constructor
+        this.client = client;
+        this.database = client.getDatabase(databaseName);
+        this.studentCollection = database.getCollection(collectionName);
     }
     
     public Student save(Student student) {
-        throw new RuntimeException("save() not implemented");
+        Document doc = new Document()
+            .append("studentId", student.getStudentId())
+            .append("name", student.getName())
+            .append("rollNumber", student.getRollNumber());
+        
+        studentCollection.insertOne(doc);
+        return student;
     }
     
     public Student findById(String studentId) {
-        throw new RuntimeException("findById() not implemented");
+        Document doc = studentCollection.find(
+            Filters.eq("studentId", studentId)
+        ).first();
+        
+        if (doc == null) {
+            return null;
+        }
+        
+        return new Student(
+            doc.getString("studentId"),
+            doc.getString("name"),
+            doc.getString("rollNumber")
+        );
     }
     
     public void update(Student student) {
-        throw new RuntimeException("update() not implemented");
+        studentCollection.updateOne(
+            Filters.eq("studentId", student.getStudentId()),
+            Updates.combine(
+                Updates.set("name", student.getName()),
+                Updates.set("rollNumber", student.getRollNumber())
+            )
+        );
     }
     
     public void delete(String studentId) {
-        throw new RuntimeException("delete() not implemented");
+        studentCollection.deleteOne(
+            Filters.eq("studentId", studentId)
+        );
     }
 }

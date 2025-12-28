@@ -78,7 +78,6 @@
 		    <groupId>org.mongodb</groupId>
 		    <artifactId>mongo-java-driver</artifactId>
 		    <version>3.12.7</version>
-		    <scope>test</scope>
 		</dependency>
 		
 		<!-- Testcontainers for MongoDB integration tests -->
