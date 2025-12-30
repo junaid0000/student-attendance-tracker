@@ -118,7 +118,7 @@
                 </executions>
             </plugin>
             
-            <!-- Maven Failsafe Plugin for integration tests -->
+            <!-- Maven Failsafe Plugin for integration tests maven defauld  its has four phases  -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>

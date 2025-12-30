@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.MongoDBContainer;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import com.example.attendance.model.Student;
@@ -13,17 +13,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class StudentMongoRepositoryTestcontainersIT {
 
-    @SuppressWarnings("rawtypes")
     @ClassRule
-    public static final GenericContainer mongo = 
-        new GenericContainer("mongo:4.4.3")
-            .withExposedPorts(27017);
+    public static final MongoDBContainer mongo = new MongoDBContainer("mongo:4.4.3");
     
     private MongoClient client;
     private StudentMongoRepository studentRepository;
     
     // Connect to MongoDB container
-    @Before
+    @SuppressWarnings("deprecation")
+	@Before
     public void setup() {
         client = new MongoClient(
             new ServerAddress(
@@ -32,7 +30,7 @@ public class StudentMongoRepositoryTestcontainersIT {
             )
         );
         studentRepository = new StudentMongoRepository(client, "attendance_db", "students");
-     // I am adding  for Clean the database before each test because its added more record in database
+     // I am adding thisline for Clean the database before each test because its added more record in database
         client.getDatabase("attendance_db").getCollection("students").deleteMany(new org.bson.Document());
     }
     
@@ -41,13 +39,14 @@ public class StudentMongoRepositoryTestcontainersIT {
         client.close();
     }
     
-    // /check that we can connect to the container
+    // /check that we can connect to the container like  check test Connectivity
     @Test
-    public void test() {
+    public void testConnectivity() {
         client.getDatabase("test").getName();
     }
     
-    private void addTestStudentToDatabase(String studentId, String name, String rollNumber) {
+    @SuppressWarnings("deprecation")
+	private void addTestStudentToDatabase(String studentId, String name, String rollNumber) {
         MongoClient tempClient = new MongoClient(
             new ServerAddress(
                 mongo.getContainerIpAddress(),

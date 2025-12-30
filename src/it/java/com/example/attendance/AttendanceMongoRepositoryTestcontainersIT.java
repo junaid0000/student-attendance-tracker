@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.MongoDBContainer;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import com.example.attendance.model.AttendanceRecord;
@@ -15,16 +15,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AttendanceMongoRepositoryTestcontainersIT {
     
-    @SuppressWarnings({ "rawtypes", "resource" })
     @ClassRule
-    public static final GenericContainer mongo = 
-        new GenericContainer("mongo:4.4.3").withExposedPorts(27017);
+    public static final MongoDBContainer mongo = new MongoDBContainer("mongo:4.4.3");
     
     private MongoClient client;
     private AttendanceMongoRepository repository;
     
-    @SuppressWarnings("deprecation")
-	@Before
+    @Before
     public void setup() {
         client = new MongoClient(
             new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017))
@@ -38,6 +35,12 @@ public class AttendanceMongoRepositoryTestcontainersIT {
     @After
     public void tearDown() {
         client.close();
+    }
+    
+    //  check that  connect to the container check test Connectivity
+    @Test
+    public void testConnectivity() {
+        client.getDatabase("test").getName();
     }
     
     //  Mark attendance TDD
@@ -75,6 +78,4 @@ public class AttendanceMongoRepositoryTestcontainersIT {
         List<AttendanceRecord> found = repository.findByStudent("S1");
         assertThat(found).hasSize(2);
     }
-    
-    
 }
