@@ -43,7 +43,7 @@ public class AttendanceMongoRepositoryTestcontainersIT {
         client.getDatabase("test").getName();
     }
     
-    //  Mark attendance TDD
+    //  Mark attendance TDD .
     @Test
     public void testMarkAttendance() {
         Date today = new Date();
