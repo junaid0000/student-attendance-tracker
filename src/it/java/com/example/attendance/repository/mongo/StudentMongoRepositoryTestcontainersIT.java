@@ -1,4 +1,4 @@
-package com.example.attendance;
+package com.example.attendance.repository.mongo;
 
 import org.junit.After;
 import org.junit.Before;

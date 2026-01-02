@@ -1,4 +1,4 @@
-package com.example.attendance;
+package com.example.attendance.repository.mongo;
 
 import org.junit.After;
 import org.junit.Before;
@@ -8,7 +8,6 @@ import org.testcontainers.containers.MongoDBContainer;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import com.example.attendance.model.AttendanceRecord;
-import com.example.attendance.repository.mongo.AttendanceMongoRepository;
 import java.util.Date;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
