@@ -74,7 +74,7 @@ public class AttendanceMongoRepositoryTestcontainersIT {
         repository.markAttendance(record1);
         repository.markAttendance(record2);
         
-        List<AttendanceRecord> found = repository.findByStudent("S1");
+        List<AttendanceRecord> found = repository.findByStudentId("S1");
         assertThat(found).hasSize(2);
     }
 }

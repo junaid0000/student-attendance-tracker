@@ -7,8 +7,10 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import com.example.attendance.model.Student;
+import com.example.attendance.repository.StudentRepository;
+import java.util.Optional;
 
-public class StudentMongoRepository {
+public class StudentMongoRepository implements StudentRepository {
     
     private MongoClient client;
     private MongoDatabase database;
@@ -61,4 +63,27 @@ public class StudentMongoRepository {
             Filters.eq("studentId", studentId)
         );
     }
+    
+    public Optional<Student> findByRollNumber(String rollNumber) {
+        Document doc = studentCollection.find(
+            Filters.eq("rollNumber", rollNumber)
+        ).first();
+        
+        if (doc == null) {
+            return Optional.empty();
+        }
+        
+        Student student = new Student(
+            doc.getString("studentId"),
+            doc.getString("name"),
+            doc.getString("rollNumber")
+        );
+        
+        return Optional.of(student);
+    }
+     
+    public void delete(Student student) {
+        delete(student.getStudentId());
+    	}
+	 
 }
