@@ -3,25 +3,25 @@ package com.example.attendance.model;
 import java.util.Objects;
 
 public class Student {
-    private String studentId;  
+    private String studentId;
     private String name;
     private String rollNumber;
-    
-    // constructor 
+
+    // constructor
     public Student(String studentId, String name, String rollNumber) {
         this.studentId = studentId;
         this.name = name;
         this.rollNumber = rollNumber;
     }
-    
+
     // constructor
     public Student(String name, String rollNumber) {
         this.name = name;
         this.rollNumber = rollNumber;
-        this.studentId = java.util.UUID.randomUUID().toString();						
+        this.studentId = java.util.UUID.randomUUID().toString();
     }
-    
-    public String getStudentId() { 
+
+    public String getStudentId() {
         return studentId;
     }
     public String getName() {
@@ -41,24 +41,21 @@ public class Student {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if ((obj == null) || (getClass() != obj.getClass())) {
             return false;
         }
         Student other = (Student) obj;
-        return Objects.equals(rollNumber, other.rollNumber);  
+        return Objects.equals(rollNumber, other.rollNumber);
     }
 
-    public void setStudentId(String studentId) {  
-        this.studentId = studentId; 
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
     @Override
     public int hashCode() {
-        if (studentId == null) {  
+        if (studentId == null) {
             return 0;
         }
-        return studentId.hashCode();  
+        return studentId.hashCode();
     }
 }

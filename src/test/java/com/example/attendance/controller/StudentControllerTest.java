@@ -1,18 +1,21 @@
 package com.example.attendance.controller;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
-import com.example.attendance.model.Student;
-import com.example.attendance.repository.StudentRepository;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.After;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import com.example.attendance.model.Student;
+import com.example.attendance.repository.StudentRepository;
 
 public class StudentControllerTest {
 
@@ -34,7 +37,7 @@ public class StudentControllerTest {
         closeable.close();
     }
 
-    // Add student 
+    // Add student
     @Test
     public void testAddStudent() {
         Student student = new Student("Junaid", "7131056");

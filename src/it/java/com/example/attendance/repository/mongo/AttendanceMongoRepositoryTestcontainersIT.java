@@ -1,54 +1,57 @@
 package com.example.attendance.repository.mongo;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Date;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.testcontainers.containers.MongoDBContainer;
+
+import com.example.attendance.model.AttendanceRecord;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
-import com.example.attendance.model.AttendanceRecord;
-import java.util.Date;
-import java.util.List;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class AttendanceMongoRepositoryTestcontainersIT {
-    
+
     @ClassRule
     public static final MongoDBContainer mongo = new MongoDBContainer("mongo:4.4.3");
-    
+
     private MongoClient client;
     private AttendanceMongoRepository repository;
-    
+
     @Before
     public void setup() {
         client = new MongoClient(
             new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017))
         );
         repository = new AttendanceMongoRepository(client, "attendance_db", "attendance_records");
-        
+
         // I am adding this line for Clean the database before each test because its added more record in database
         client.getDatabase("attendance_db").getCollection("attendance_records").deleteMany(new org.bson.Document());
     }
-    
+
     @After
     public void tearDown() {
         client.close();
     }
-    
+
     //  check that  connect to the container check test Connectivity
     @Test
     public void testConnectivity() {
         client.getDatabase("test").getName();
     }
-    
+
     //  Mark attendance TDD .
     @Test
     public void testMarkAttendance() {
         Date today = new Date();
         AttendanceRecord record = new AttendanceRecord("R1", today, true, "S1");
         repository.markAttendance(record);
-        
+
         List<AttendanceRecord> found = repository.findByDate(today);
         assertThat(found).hasSize(1);
         assertThat(found.get(0).isPresent()).isTrue();
@@ -61,7 +64,7 @@ public class AttendanceMongoRepositoryTestcontainersIT {
         AttendanceRecord record2 = new AttendanceRecord("R2", today, false, "S2");
         repository.markAttendance(record1);
         repository.markAttendance(record2);
-        
+
         List<AttendanceRecord> found = repository.findByDate(today);
         assertThat(found).hasSize(2);
     }
@@ -73,7 +76,7 @@ public class AttendanceMongoRepositoryTestcontainersIT {
         AttendanceRecord record2 = new AttendanceRecord("R2", today, true, "S1");
         repository.markAttendance(record1);
         repository.markAttendance(record2);
-        
+
         List<AttendanceRecord> found = repository.findByStudentId("S1");
         assertThat(found).hasSize(2);
     }

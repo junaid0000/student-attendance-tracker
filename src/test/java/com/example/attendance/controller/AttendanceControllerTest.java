@@ -1,25 +1,29 @@
 package com.example.attendance.controller;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.attendance.model.AttendanceRecord;
-import com.example.attendance.model.Student;
-import com.example.attendance.repository.AttendanceRepository;
-import com.example.attendance.repository.StudentRepository;
-
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import com.example.attendance.model.AttendanceRecord;
+import com.example.attendance.model.Student;
+import com.example.attendance.repository.AttendanceRepository;
+import com.example.attendance.repository.StudentRepository;
 
 public class AttendanceControllerTest {
 
@@ -44,7 +48,7 @@ public class AttendanceControllerTest {
         closeable.close();
     }
 
-    // Test for Practicing Mocking 
+    // Test for Practicing Mocking
 
     @Test
     public void testMarkAttendancePresent() {

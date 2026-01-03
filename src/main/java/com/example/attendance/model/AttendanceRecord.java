@@ -2,29 +2,29 @@ package com.example.attendance.model;
 
 import java.util.Date;
 
-public class AttendanceRecord {  
-    private String recordId;  
+public class AttendanceRecord {
+    private String recordId;
     private String studentId;
     private Date date;
     private boolean present;
-    
+
     // constructor
-    public AttendanceRecord(String recordId, Date date, boolean present, String studentId) {  
+    public AttendanceRecord(String recordId, Date date, boolean present, String studentId) {
         this.recordId = recordId;
         this.date = date;
         this.present = present;
         this.studentId = studentId;
     }
-    
+
     // constructor
-    public AttendanceRecord(String studentId, Date date, boolean present) {  
+    public AttendanceRecord(String studentId, Date date, boolean present) {
         this.studentId = studentId;
         this.date = date;
         this.present = present;
-        this.recordId = "ATT001"; 
+        this.recordId = "ATT001";
     }
-    
-    public String getRecordId() {  
+
+    public String getRecordId() {
         return recordId;
     }
     public String getStudentId() {
@@ -47,27 +47,24 @@ public class AttendanceRecord {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if ((obj == null) || (getClass() != obj.getClass())) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        AttendanceRecord other = (AttendanceRecord) obj;  
-        if (recordId == null) {  
-            return other.recordId == null;  
+        AttendanceRecord other = (AttendanceRecord) obj;
+        if (recordId == null) {
+            return other.recordId == null;
         } else {
-            return recordId.equals(other.recordId);  
+            return recordId.equals(other.recordId);
         }
     }
-    public void setRecordId(String recordId) {  
-        this.recordId = recordId;  
+    public void setRecordId(String recordId) {
+        this.recordId = recordId;
     }
     @Override
     public int hashCode() {
-        if (recordId == null) {  
+        if (recordId == null) {
             return 0;
         }
-        return recordId.hashCode();  
+        return recordId.hashCode();
     }
 }
