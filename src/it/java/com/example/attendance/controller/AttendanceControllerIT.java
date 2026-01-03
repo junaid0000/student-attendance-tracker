@@ -3,7 +3,6 @@ package com.example.attendance.controller;
 import com.example.attendance.repository.mongo.AttendanceMongoRepository;
 import com.example.attendance.repository.mongo.StudentMongoRepository;
 import com.example.attendance.model.AttendanceRecord;
-import com.example.attendance.model.Student;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -30,20 +29,17 @@ public class AttendanceControllerIT {
     
     @Before
     public void setup() {
-        // Connection to MongoDB container
         client = new MongoClient(
             new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017))
         );
         
-        // Initialize repositories
         attendanceRepository = new AttendanceMongoRepository(client, "attendance_db", "attendance_records");
         studentRepository = new StudentMongoRepository(client, "attendance_db", "students");
         
-        // Initialize controllers with real repositories
         attendanceController = new AttendanceController(attendanceRepository, studentRepository);
         studentController = new StudentController(studentRepository);
         
-        // will Clean database before evry test
+        // Clean database
         client.getDatabase("attendance_db").getCollection("attendance_records").deleteMany(new org.bson.Document());
         client.getDatabase("attendance_db").getCollection("students").deleteMany(new org.bson.Document());
     }
@@ -53,53 +49,90 @@ public class AttendanceControllerIT {
         client.close();
     }
     
-    // Connectivity test
+    // Mark Attendance Present
     @Test
-    public void testConnectivity() {
-        client.getDatabase("test").getName();
-    }
-    
-    // Mark attendance for a student
-    @Test
-    public void testMarkAttendance() {
-        // First, create a student
-        Student student = new Student("S1", "John Doe", "7131056");
-        studentRepository.save(student);
+    public void testMarkAttendancePresent() {
+        // Add student first
+        studentController.addStudent("Junaid", "7131056");
         
-        // Mark attendance
+        // Mark attendance as present
         Date today = new Date();
-        AttendanceRecord result = attendanceController.markAttendance("7131056", today, true);
+        AttendanceRecord record = attendanceController.markAttendance("7131056", today, true);
         
-        // Verify
-        assertThat(result).isNotNull();
-        assertThat(result.isPresent()).isTrue();
-        assertThat(result.getStudentId()).isEqualTo(student.getStudentId());
-        
-        // Check if saved in database
-        List<AttendanceRecord> records = attendanceRepository.findByDate(today);
-        assertThat(records).hasSize(1);
+        assertThat(record).isNotNull();
+        assertThat(record.isPresent()).isTrue();
     }
     
-    // Get attendance by date (TDD)
+    // Mark Attendance Absent
+    @Test
+    public void testMarkAttendanceAbsent() {
+        // Add student first
+        studentController.addStudent("Ahmed", "7131057");
+        
+        // Mark attendance as absent
+        Date today = new Date();
+        AttendanceRecord record = attendanceController.markAttendance("7131057", today, false);
+        
+        assertThat(record).isNotNull();
+        assertThat(record.isPresent()).isFalse();
+    }
+    
+    // Get Attendance By Date
     @Test
     public void testGetAttendanceByDate() {
-        // Create student
-        Student student = new Student("S1", "John Doe", "7131056");
-        studentRepository.save(student);
+        // Add students
+        studentController.addStudent("Junaid", "7131056");
+        studentController.addStudent("Ahmed", "7131057");
         
-        // Mark attendance for today
+        // Mark attendance for same date
         Date today = new Date();
         attendanceController.markAttendance("7131056", today, true);
-        
-        // Mark another attendance for today
-        Student student2 = new Student("S2", "Jane Smith", "7131057");
-        studentRepository.save(student2);
         attendanceController.markAttendance("7131057", today, false);
         
         // Get attendance by date
-        List<AttendanceRecord> result = attendanceController.getAttendanceByDate(today);
+        List<AttendanceRecord> records = attendanceController.getAttendanceByDate(today);
         
-        // Verify
-        assertThat(result).hasSize(2);
+        assertThat(records).hasSize(2);
+    }
+    
+    // Get Attendance By Student
+    @Test
+    public void testGetAttendanceByStudent() {
+        // Add student
+        studentController.addStudent("Junaid", "7131056");
+        
+        // Mark multiple attendances
+        Date today = new Date();
+        Date yesterday = new Date(System.currentTimeMillis() - 86400000);
+        
+        attendanceController.markAttendance("7131056", today, true);
+        attendanceController.markAttendance("7131056", yesterday, false);
+        
+        // Get attendance by student
+        List<AttendanceRecord> records = attendanceController.getAttendanceByStudent("7131056");
+        
+        assertThat(records).hasSize(2);
+    }
+    
+    // Get Attendance Percentage
+    @Test
+    public void testGetAttendancePercentage() {
+        // Add student
+        studentController.addStudent("Junaid", "7131056");
+        
+        // Mark 3 attendances: 2 present, 1 absent
+        Date date1 = new Date();
+        Date date2 = new Date(System.currentTimeMillis() - 86400000);
+        Date date3 = new Date(System.currentTimeMillis() - 172800000);
+        
+        attendanceController.markAttendance("7131056", date1, true);  // Present
+        attendanceController.markAttendance("7131056", date2, true);  // Present
+        attendanceController.markAttendance("7131056", date3, false); // Absent
+        
+        // Get percentage
+        double percentage = attendanceController.getAttendancePercentage("7131056");
+        
+        // 2 out of 3 = 66.66%
+        assertThat(percentage).isEqualTo(66.66, org.assertj.core.api.Assertions.offset(0.01));
     }
 }

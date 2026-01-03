@@ -53,7 +53,7 @@ public class AttendanceControllerTest {
         when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
 
         AttendanceRecord record = new AttendanceRecord(student.getStudentId(), new Date(), true);
-        when(attendanceRepository.save(any(AttendanceRecord.class))).thenReturn(record);
+        when(attendanceRepository.markAttendance(any(AttendanceRecord.class))).thenReturn(record);
 
         // Act
         AttendanceRecord result = attendanceController.markAttendance("7131056", new Date(), true);
@@ -61,7 +61,7 @@ public class AttendanceControllerTest {
         // Assert
         assertNotNull(result);
         assertTrue(result.isPresent());
-        verify(attendanceRepository).save(any(AttendanceRecord.class));
+        verify(attendanceRepository).markAttendance(any(AttendanceRecord.class));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class AttendanceControllerTest {
         when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
 
         AttendanceRecord record = new AttendanceRecord(student.getStudentId(), new Date(), false);
-        when(attendanceRepository.save(any(AttendanceRecord.class))).thenReturn(record);
+        when(attendanceRepository.markAttendance(any(AttendanceRecord.class))).thenReturn(record);
 
         // Act
         AttendanceRecord result = attendanceController.markAttendance("7131056", new Date(), false);
@@ -79,7 +79,7 @@ public class AttendanceControllerTest {
         // Assert
         assertNotNull(result);
         assertFalse(result.isPresent());
-        verify(attendanceRepository).save(any(AttendanceRecord.class));
+        verify(attendanceRepository).markAttendance(any(AttendanceRecord.class));
     }
 
     @Test
