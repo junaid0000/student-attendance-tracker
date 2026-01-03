@@ -21,7 +21,7 @@ public class AttendanceController {
     public AttendanceRecord markAttendance(String rollNumber, Date date, boolean present) {
         Student student = studentRepository.findByRollNumber(rollNumber).get();
         AttendanceRecord record = new AttendanceRecord(student.getStudentId(), date, present);
-        return attendanceRepository.save(record);
+        return attendanceRepository.markAttendance(record);
     }
     
     // get attendance by date
