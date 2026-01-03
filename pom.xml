@@ -45,6 +45,14 @@
             <scope>test</scope>
         </dependency>
         
+        <!-- AssertJ Swing for UI tests -->
+		<dependency>
+		    <groupId>org.assertj</groupId>
+		    <artifactId>assertj-swing-junit</artifactId>
+		    <version>3.17.1</version>
+		    <scope>test</scope>
+		</dependency>
+		
         <!-- Log4j -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
