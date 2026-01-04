@@ -17,17 +17,14 @@ jobs:
           # ubuntu will run 8,11,17 and java 17 will generate code coverage and i added pjacoco + Coveralls
           - os: ubuntu-latest
             java: 17
-            additional-maven-args: "-Pjacoco" 
 
           # window will run 17
           - os: windows-latest
             java: 17
-            additional-maven-args: "-DskipITs"
 
           # macos will run 17
           - os: macos-latest
             java: 17
-            additional-maven-args: "-DskipITs"
 
     steps:
       # This will Checkout source code .
@@ -55,29 +52,38 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-m2-
 
-      # This for Build and test with Maven
-      - name: Build with Maven
+      # This for Build and test with Maven - SEPARATE FOR EACH OS
+      - name: Build with Maven (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
         run: |
-          if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
-            xvfb-run -a mvn clean verify ${{ matrix.additional-maven-args }}
-          elif [ "${{ matrix.os }}" = "windows-latest" ]; then
-            # Windows needs different shell
-            mvn clean verify ${{ matrix.additional-maven-args }}
-          else
-            # macOS
-            mvn clean verify ${{ matrix.additional-maven-args }}
-          fi
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          export DISPLAY=:99
+          mvn clean verify -Pjacoco
         env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
           TESTCONTAINERS_RYUK_DISABLED: true
 
-      # Upload coverage to Coveralls (Ubuntu only) - FIXED it Run coveralls separately
+      - name: Build with Maven (Windows)
+        if: matrix.os == 'windows-latest'
+        run: mvn clean verify -Pjacoco -DskipITs
+        env:
+          TESTCONTAINERS_RYUK_DISABLED: true
+
+      - name: Build with Maven (macOS)
+        if: matrix.os == 'macos-latest'
+        run: mvn clean verify -Pjacoco -DskipITs
+        env:
+          TESTCONTAINERS_RYUK_DISABLED: true
+
+      # Upload coverage to Coveralls (Ubuntu only) - WITH GITHUB ACTIONS ENV
       - name: Upload coverage to Coveralls
         if: matrix.os == 'ubuntu-latest' && matrix.java == 17
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
         run: |
-          xvfb-run -a mvn coveralls:report -Pjacoco
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          export DISPLAY=:99
+          mvn coveralls:report -Pjacoco -DrepoToken=$COVERALLS_REPO_TOKEN
 
       # Generate JUnit Report
       - name: Generate JUnit Report
