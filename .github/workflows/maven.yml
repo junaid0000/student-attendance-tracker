@@ -17,7 +17,7 @@ jobs:
           # ubuntu will run 8,11,17 and java 17 will generate code coverage and i added pjacoco + Coveralls
           - os: ubuntu-latest
             java: 17
-            additional-maven-args: "-Pjacoco -DrepoToken=$COVERALLS_REPO_TOKEN coveralls:report"
+            additional-maven-args: "-Pjacoco" 
 
           # window will run 17
           - os: windows-latest
@@ -36,10 +36,15 @@ jobs:
 
       # this is for Set up Java 17
       - name: Set up JDK ${{ matrix.java }}
-        uses: actions/setup-java@v3
+        uses: actions/sup-java@v3
         with:
           java-version: '${{ matrix.java }}'
           distribution: 'temurin'
+
+      # Adding tthe Install Xvfb for Ubuntu UI tests
+      - name: Install X Virtual Framebuffer (Ubuntu only)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install -y xvfb
 
       # Tthis is updated for Cache Maven dependencies .m2
       - name: Cache Maven packages
@@ -52,10 +57,22 @@ jobs:
 
       # This for Build and test with Maven
       - name: Build with Maven
-        run: mvn clean verify ${{ matrix.additional-maven-args }}
+        run: |
+          if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
+            xvfb-run -a mvn clean verify ${{ matrix.additional-maven-args }}
+          else
+            mvn clean verify ${{ matrix.additional-maven-args }}
+          fi
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
           TESTCONTAINERS_RYUK_DISABLED: true
+
+      # Upload coverage to Coveralls (Ubuntu only)
+      - name: Upload coverage to Coveralls
+        if: matrix.os == 'ubuntu-latest' && matrix.java == 17
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+        run: mvn coveralls:report -Pjacoco
 
       # Generate JUnit Report
       - name: Generate JUnit Report
