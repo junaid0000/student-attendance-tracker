@@ -20,7 +20,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
             return view;
         });
         window = new FrameFixture(robot(), view);
-        window.show(); // this isshows the frame to test
+        window.show(); // this is shows the frame to test
     }
 
     @Test
