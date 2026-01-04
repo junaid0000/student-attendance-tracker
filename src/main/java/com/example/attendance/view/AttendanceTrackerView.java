@@ -7,13 +7,13 @@ import com.example.attendance.model.Student;
 
 public interface AttendanceTrackerView {
 	
-    // Student CRUD operations
+    // Student operations add ,update and delete
     void studentAdded(Student student);
     void studentUpdated(Student student);
     void studentDeleted(Student student);
     void showStudentError(String message, Student student);
     
-    // Attendance operations
+    // Attendance operations as per project featur
     void attendanceMarked(AttendanceRecord record);
     void attendanceUpdated(AttendanceRecord record);
     void showAttendanceByDate(List<AttendanceRecord> records);
