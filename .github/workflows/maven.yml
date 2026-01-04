@@ -59,20 +59,25 @@ jobs:
       - name: Build with Maven
         run: |
           if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
-            xvfb-run -a mvn clean verify ${{ matrix.additional-maven-args }} coveralls:report
+            xvfb-run -a mvn clean verify ${{ matrix.additional-maven-args }}
+          elif [ "${{ matrix.os }}" = "windows-latest" ]; then
+            # Windows needs different shell
+            mvn clean verify ${{ matrix.additional-maven-args }}
           else
+            # macOS
             mvn clean verify ${{ matrix.additional-maven-args }}
           fi
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
           TESTCONTAINERS_RYUK_DISABLED: true
 
-      # Upload coverage to Coveralls (Ubuntu only)
+      # Upload coverage to Coveralls (Ubuntu only) - FIXED it Run coveralls separately
       - name: Upload coverage to Coveralls
         if: matrix.os == 'ubuntu-latest' && matrix.java == 17
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
-        run: echo "Coverage already uploaded during build"
+        run: |
+          xvfb-run -a mvn coveralls:report -Pjacoco
 
       # Generate JUnit Report
       - name: Generate JUnit Report
