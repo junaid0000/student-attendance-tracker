@@ -59,7 +59,7 @@ jobs:
       - name: Build with Maven
         run: |
           if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
-            xvfb-run -a mvn clean verify ${{ matrix.additional-maven-args }}
+            xvfb-run -a mvn clean verify ${{ matrix.additional-maven-args }} coveralls:report
           else
             mvn clean verify ${{ matrix.additional-maven-args }}
           fi
@@ -72,7 +72,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.java == 17
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
-        run: mvn coveralls:report -Pjacoco
+        run: echo "Coverage already uploaded during build"
 
       # Generate JUnit Report
       - name: Generate JUnit Report
