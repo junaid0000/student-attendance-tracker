@@ -125,14 +125,17 @@ public class AttendanceTrackerSwingView extends JFrame {
         
         // Buttons
         btnAdd = new JButton("Add");
+        btnAdd.setName("addButton"); // Add component name for testing
         btnAdd.setBounds(20, 120, 120, 25);
         panel.add(btnAdd);
         
         btnUpdate = new JButton("Update");
+        btnUpdate.setName("updateButton"); // Add component name for testing
         btnUpdate.setBounds(150, 120, 120, 25);
         panel.add(btnUpdate);
         
         btnDelete = new JButton("Delete");
+        btnDelete.setName("deleteButton"); // Add component name for testing
         btnDelete.setBounds(280, 120, 120, 25);
         panel.add(btnDelete);
         
@@ -156,6 +159,7 @@ public class AttendanceTrackerSwingView extends JFrame {
         
         // Error label
         lblerror = new JLabel("Error: No errors");
+        lblerror.setName("errorLabel"); // Add component name for testing
         lblerror.setFont(new Font("Tahoma", Font.BOLD, 11));
         lblerror.setHorizontalAlignment(SwingConstants.LEFT);
         lblerror.setBounds(20, 400, 350, 20);
@@ -184,6 +188,7 @@ public class AttendanceTrackerSwingView extends JFrame {
         panel.add(dateLabel);
         
         dateFieldattendance = new JTextField();
+        dateFieldattendance.setName("dateTextField"); // Add component name for testing
         dateFieldattendance.setText("dd/mm/yyyy");
         dateFieldattendance.setBounds(70, 50, 120, 20);
         panel.add(dateFieldattendance);
@@ -261,6 +266,7 @@ public class AttendanceTrackerSwingView extends JFrame {
         
         // Mark Attendance button
         btnmarkAttendance = new JButton("Mark Attendance");
+        btnmarkAttendance.setName("markAttendanceButton"); // Add component name for testing
         btnmarkAttendance.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         	}
@@ -291,12 +297,14 @@ public class AttendanceTrackerSwingView extends JFrame {
         
         // View Attendance button
         btnviewByDate = new JButton("View Attendance");
+        btnviewByDate.setName("viewByDateButton"); // Add compnent name for testing
         btnviewByDate.setFont(new Font("Tahoma", Font.PLAIN, 11));
         btnviewByDate.setBounds(20, 370, 150, 30);
         panel.add(btnviewByDate);
         
         // Get Summary button
         btngetSummary = new JButton("Get Summary");
+        btngetSummary.setName("getSummaryButton"); // Add component name for testing
         btngetSummary.setFont(new Font("Tahoma", Font.PLAIN, 11));
         btngetSummary.setBounds(180, 370, 150, 30);
         panel.add(btngetSummary);
@@ -312,18 +320,21 @@ public class AttendanceTrackerSwingView extends JFrame {
         panel.add(recordsScrollPane);
         
         attendanceRecordsArea = new JTextArea();
+        attendanceRecordsArea.setName("attendanceRecordsArea"); // Add compnent name for testing
         recordsScrollPane.setViewportView(attendanceRecordsArea);
         attendanceRecordsArea.setText("2026-04-01: Junaid - Present\r\n2026-04-01: Awais - Absent");
         attendanceRecordsArea.setEditable(false);
         
         // Summary label
         summaryLabel = new JLabel("Attendance: 75%");
+        summaryLabel.setName("summaryLabel"); // Add compnent name for testing
         summaryLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
         summaryLabel.setBounds(20, 540, 200, 30);
         panel.add(summaryLabel);
         
         // Error label
         attendanceErrorLabel = new JLabel("");
+        attendanceErrorLabel.setName("attendanceErrorLabel"); // Add compnent name for testing
         attendanceErrorLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
         attendanceErrorLabel.setForeground(java.awt.Color.RED);
         attendanceErrorLabel.setBounds(20, 570, 450, 20);
