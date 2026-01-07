@@ -72,7 +72,6 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
     }
 
     //INTERFACE IMPLEMENTATION tests
-    
     @Test
     public void testStudentAddedInterfaceMethod() {
         if (GraphicsEnvironment.isHeadless()) return;
@@ -81,7 +80,6 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         view.studentAdded(student);
         window.label("errorLabel").requireText("Student added: Ahmed");
     }
-    
     @Test
     public void testStudentUpdatedInterfaceMethod() {
         if (GraphicsEnvironment.isHeadless()) return;
@@ -90,7 +88,6 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         view.studentUpdated(student);
         window.label("errorLabel").requireText("Student updated: Umer");
     }
-    
     @Test
     public void testStudentDeletedInterfaceMethod() {
         if (GraphicsEnvironment.isHeadless()) return;
@@ -99,7 +96,6 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         view.studentDeleted(student);
         window.label("errorLabel").requireText("Student deleted: Sarim");
     }
-    
     @Test
     public void testShowStudentErrorInterfaceMethod() {
         if (GraphicsEnvironment.isHeadless()) return;
@@ -108,7 +104,6 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         view.showStudentError("Test error", student);
         window.label("errorLabel").requireText("Error: Test error"); 
     }
-    
     @Test
     public void testAttendanceMarkedInterfaceMethod() {
         if (GraphicsEnvironment.isHeadless()) return;
@@ -118,7 +113,6 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         view.attendanceMarked(record);
         window.label("attendanceErrorLabel").requireText("Attendance marked for student ID: 123");
     }
-    
     @Test
     public void testShowAttendancePercentageInterfaceMethod() {
         if (GraphicsEnvironment.isHeadless()) return;
@@ -126,5 +120,14 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         window.tabbedPane().selectTab("Attendance");
         view.showAttendancePercentage(85.5);
         window.label("summaryLabel").requireText("Overall Attendance: 85.5%");
+    }
+    //now it is UI integration test and integration verification
+    @Test
+    public void testSimpleUIInteraction() {
+        if (GraphicsEnvironment.isHeadless()) return;
+        window.tabbedPane().selectTab("Students");
+        window.textBox("studentnameTextBox").enterText("Test");
+        window.textBox("rollnumberTxtBox").enterText("123");
+        window.button("addButton").click();
     }
 }
