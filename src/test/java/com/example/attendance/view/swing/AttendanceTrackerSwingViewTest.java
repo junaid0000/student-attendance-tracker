@@ -106,7 +106,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         
         Student student = new Student("Test", "999");
         view.showStudentError("Test error", student);
-        window.label("errorLabel").requireText("Error: Test error");
+        window.label("errorLabel").requireText("Error: Test error"); 
     }
     
     @Test
