@@ -17,8 +17,14 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.List;
+import javax.swing.SwingUtilities;
 
-public class AttendanceTrackerSwingView extends JFrame {
+import com.example.attendance.model.Student;
+import com.example.attendance.model.AttendanceRecord;
+import com.example.attendance.view.AttendanceTrackerView;
+
+public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrackerView {
 
     private static final long serialVersionUID = 1L;
     private JTabbedPane tabbedPane;
@@ -109,6 +115,12 @@ public class AttendanceTrackerSwingView extends JFrame {
         textFieldname.setBounds(90, 50, 200, 20);
         panel.add(textFieldname);
         textFieldname.setColumns(10);
+        // ADD KEY LISTENER
+        textFieldname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                updateAddButtonState();
+            }
+        });
         
         // Roll No label and field
         JLabel lblrollno = new JLabel("Roll No:");
@@ -122,11 +134,18 @@ public class AttendanceTrackerSwingView extends JFrame {
         textFieldrollno.setBounds(90, 80, 200, 20);
         panel.add(textFieldrollno);
         textFieldrollno.setColumns(10);
+        // ADD KEY LISTENER 
+        textFieldrollno.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                updateAddButtonState();
+            }
+        });
         
         // Buttons
         btnAdd = new JButton("Add");
         btnAdd.setName("addButton"); // Add component name for testing
         btnAdd.setBounds(20, 120, 120, 25);
+        btnAdd.setEnabled(false); //btn disable
         panel.add(btnAdd);
         
         btnUpdate = new JButton("Update");
@@ -166,6 +185,12 @@ public class AttendanceTrackerSwingView extends JFrame {
         panel.add(lblerror);
         
         return panel;
+    }
+    
+    private void updateAddButtonState() {
+        boolean nameNotEmpty = !textFieldname.getText().trim().isEmpty();
+        boolean rollNoNotEmpty = !textFieldrollno.getText().trim().isEmpty();
+        btnAdd.setEnabled(nameNotEmpty && rollNoNotEmpty);
     }
     
     private JPanel createAttendancePanel() {
@@ -341,5 +366,101 @@ public class AttendanceTrackerSwingView extends JFrame {
         panel.add(attendanceErrorLabel);
         
         return panel;
+    }
+    
+   
+    // Interface Implementation
+    
+    @Override
+    public void studentAdded(Student student) {
+        SwingUtilities.invokeLater(() -> {
+            // Update error label
+            lblerror.setText("Student added: " + student.getName());
+            
+            // Update list if needed
+            // Your existing GUI already shows students
+        });
+    }
+    
+    @Override
+    public void studentUpdated(Student student) {
+        SwingUtilities.invokeLater(() -> {
+            lblerror.setText("Student updated: " + student.getName());
+        });
+    }
+    
+    @Override
+    public void studentDeleted(Student student) {
+        SwingUtilities.invokeLater(() -> {
+            lblerror.setText("Student deleted: " + student.getName());
+        });
+    }
+    
+    @Override
+    public void showStudentError(String message, Student student) {
+        SwingUtilities.invokeLater(() -> {
+            lblerror.setText("Error: " + message);
+        });
+    }
+    
+    @Override
+    public void attendanceMarked(AttendanceRecord record) {
+        SwingUtilities.invokeLater(() -> {
+            attendanceErrorLabel.setText("Attendance marked for student ID: " + record.getStudentId());
+        });
+    }
+    
+    @Override
+    public void attendanceUpdated(AttendanceRecord record) {
+        SwingUtilities.invokeLater(() -> {
+            attendanceErrorLabel.setText("Attendance updated for: " + record.getStudentId());
+        });
+    }
+    
+    @Override
+    public void showAttendanceByDate(List<AttendanceRecord> records) {
+        SwingUtilities.invokeLater(() -> {
+            StringBuilder sb = new StringBuilder();
+            for (AttendanceRecord record : records) {
+                String status = record.isPresent() ? "Present" : "Absent";
+                sb.append(record.getDate()).append(": Student ").append(record.getStudentId())
+                  .append(" - ").append(status).append("\n");
+            }
+            attendanceRecordsArea.setText(sb.toString());
+            attendanceErrorLabel.setText("Showing " + records.size() + " records by date");
+        });
+    }
+    
+    @Override
+    public void showAttendanceByStudent(List<AttendanceRecord> records) {
+        SwingUtilities.invokeLater(() -> {
+            StringBuilder sb = new StringBuilder();
+            for (AttendanceRecord record : records) {
+                String status = record.isPresent() ? "Present" : "Absent";
+                sb.append("Date: ").append(record.getDate())
+                  .append(" - ").append(status).append("\n");
+            }
+            attendanceRecordsArea.setText(sb.toString());
+            attendanceErrorLabel.setText("Showing attendance for selected student");
+        });
+    }
+    
+    @Override
+    public void showAttendancePercentage(double percentage) {
+        SwingUtilities.invokeLater(() -> {
+            summaryLabel.setText(String.format("Overall Attendance: %.1f%%", percentage));
+        });
+    }
+    
+    @Override
+    public void showAttendanceError(String message) {
+        SwingUtilities.invokeLater(() -> {
+            attendanceErrorLabel.setText("Error: " + message);
+        });
+    }
+    
+    // Helper method for testing
+    public JList getStudentList() {
+        return liststudent;
     }
 }
