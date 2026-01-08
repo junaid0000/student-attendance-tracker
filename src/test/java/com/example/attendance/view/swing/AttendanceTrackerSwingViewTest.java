@@ -12,6 +12,8 @@ import com.example.attendance.model.Student;
 import com.example.attendance.model.AttendanceRecord;
 import java.util.Date;
 
+import javax.swing.SwingUtilities;
+
 @RunWith(GUITestRunner.class)
 public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
@@ -129,5 +131,16 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         window.textBox("studentnameTextBox").enterText("Test");
         window.textBox("rollnumberTxtBox").enterText("123");
         window.button("addButton").click();
+    }
+    // now multithreading
+    @Test 
+    public void testUIOnEDT() {
+        if (GraphicsEnvironment.isHeadless()) return;
+        Student student = new Student("EDT", "999");
+        SwingUtilities.invokeLater(() -> {
+            view.studentAdded(student);
+        });
+        window.robot().waitForIdle();
+        window.label("errorLabel").requireText("Student added: EDT");
     }
 }
