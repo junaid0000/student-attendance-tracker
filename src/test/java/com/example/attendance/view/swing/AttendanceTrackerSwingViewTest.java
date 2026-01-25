@@ -31,17 +31,18 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
     //GUI TESTS
     
     @Test
-    public void testViewIsVisible() {
+    public void testThatMainWindowIsVisibleWhenApplicationStarts() {
         if (GraphicsEnvironment.isHeadless()) return;
         window.requireVisible();
     }
     
     @Test
-    public void testAllComponentsExist() {
+    public void testThatAllRequiredGUIComponentsArePresentAndVisible() {
         if (GraphicsEnvironment.isHeadless()) return;
         
         // Students tab 
         window.tabbedPane().selectTab("Students");
+        window.robot().waitForIdle();
         window.textBox("studentnameTextBox").requireVisible();
         window.textBox("rollnumberTxtBox").requireVisible();
         window.button("addButton").requireVisible();
@@ -52,6 +53,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         
         // Attendance tab
         window.tabbedPane().selectTab("Attendance");
+        window.robot().waitForIdle();
         window.textBox("dateTextField").requireVisible();
         window.button("markAttendanceButton").requireVisible();
         window.button("viewByDateButton").requireVisible();
@@ -62,20 +64,20 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
     }
     
     @Test
-    public void testAddButtonStateManagement() {
+    public void testThatAddButtonIsDisabledWhenNameOrRollNumberIsEmpty() {
         if (GraphicsEnvironment.isHeadless()) return;
         
         window.tabbedPane().selectTab("Students");
         window.button("addButton").requireDisabled();
         
-        window.textBox("studentnameTextBox").enterText("John");
+        window.textBox("studentnameTextBox").enterText("JJ");
         window.textBox("rollnumberTxtBox").enterText("123");
         window.button("addButton").requireEnabled();
     }
 
     //INTERFACE IMPLEMENTATION tests
     @Test
-    public void testStudentAddedInterfaceMethod() {
+    public void shouldDisplaySuccessMessageWhenStudentIsAdded() {
         if (GraphicsEnvironment.isHeadless()) return;
         
         Student student = new Student("Ahmed", "123");
@@ -83,7 +85,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         window.label("errorLabel").requireText("Student added: Ahmed");
     }
     @Test
-    public void testStudentUpdatedInterfaceMethod() {
+    public void shouldDisplayUpdateMessageWhenStudentIsUpdated() {
         if (GraphicsEnvironment.isHeadless()) return;
         
         Student student = new Student("Umer", "456");
@@ -91,7 +93,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         window.label("errorLabel").requireText("Student updated: Umer");
     }
     @Test
-    public void testStudentDeletedInterfaceMethod() {
+    public void shouldDisplayDeleteMessageWhenStudentIsDeleted() {
         if (GraphicsEnvironment.isHeadless()) return;
         
         Student student = new Student("Sarim", "789");
@@ -99,15 +101,15 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         window.label("errorLabel").requireText("Student deleted: Sarim");
     }
     @Test
-    public void testShowStudentErrorInterfaceMethod() {
+    public void shouldDisplayErrorMessageWhenShowStudentErrorIsCalled() {
         if (GraphicsEnvironment.isHeadless()) return;
         
-        Student student = new Student("Test", "999");
+        Student student = new Student("sadii", "999");
         view.showStudentError("Test error", student);
         window.label("errorLabel").requireText("Error: Test error"); 
     }
     @Test
-    public void testAttendanceMarkedInterfaceMethod() {
+    public void shouldUpdateAttendanceErrorLabelWhenAttendanceIsMarked() {
         if (GraphicsEnvironment.isHeadless()) return;
         
         window.tabbedPane().selectTab("Attendance");
@@ -116,7 +118,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         window.label("attendanceErrorLabel").requireText("Attendance marked for student ID: 123");
     }
     @Test
-    public void testShowAttendancePercentageInterfaceMethod() {
+    public void shouldUpdateSummaryLabelWhenAttendancePercentageIsShown() {
         if (GraphicsEnvironment.isHeadless()) return;
         
         window.tabbedPane().selectTab("Attendance");
@@ -125,16 +127,16 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
     }
     //now it is UI integration test and integration verification
     @Test
-    public void testSimpleUIInteraction() {
+    public void shouldAllowUserInteractionWithStudentForm() {
         if (GraphicsEnvironment.isHeadless()) return;
         window.tabbedPane().selectTab("Students");
         window.textBox("studentnameTextBox").enterText("Test");
         window.textBox("rollnumberTxtBox").enterText("123");
         window.button("addButton").click();
     }
-    // now multithreading
+    // now multithreading but
     @Test 
-    public void testUIOnEDT() {
+    public void shouldUpdateUIOnEventDispatchThread() {
         if (GraphicsEnvironment.isHeadless()) return;
         Student student = new Student("EDT", "999");
         SwingUtilities.invokeLater(() -> {
