@@ -40,7 +40,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
     public void testThatAllRequiredGUIComponentsArePresentAndVisible() {
         if (GraphicsEnvironment.isHeadless()) return;
         
-        // Students tab 
+        // Students tab  
         window.tabbedPane().selectTab("Students");
         window.robot().waitForIdle();
         window.textBox("studentnameTextBox").requireVisible();
