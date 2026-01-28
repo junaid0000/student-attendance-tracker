@@ -55,4 +55,17 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
         view.studentAdded(student);
         window.label("errorLabel").requireText("Student added: Haider");
     }
+    @Test
+    public void testAttendanceTabFunctionality() {
+        window.tabbedPane().selectTab("Attendance");
+        window.robot().waitForIdle();
+        
+        com.example.attendance.model.AttendanceRecord record = 
+            new com.example.attendance.model.AttendanceRecord("7131056", new java.util.Date(), true);
+        
+        AttendanceTrackerSwingView view = (AttendanceTrackerSwingView) window.target();
+        view.attendanceMarked(record);
+        
+        window.label("attendanceErrorLabel").requireText("Attendance marked for student ID  7131056");
+    }
 }
