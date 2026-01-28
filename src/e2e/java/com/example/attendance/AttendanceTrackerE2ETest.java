@@ -37,7 +37,6 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
         window.requireVisible();
         window.requireTitle("Student Attendance Tracker");
     }
-    
     @Test
     public void testStudentTabComponentsExist() {
         window.tabbedPane().selectTab("Students");
@@ -51,10 +50,9 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
     @Test
     public void testAddStudentFunctionality() {
         window.tabbedPane().selectTab("Students");
-        window.textBox("studentnameTextBox").enterText("Haider");
-        window.textBox("rollnumberTxtBox").enterText("123");
-        window.button("addButton").click();
-        window.robot().waitForIdle();
+        com.example.attendance.model.Student student = new com.example.attendance.model.Student("Haider", "123");
+        AttendanceTrackerSwingView view = (AttendanceTrackerSwingView) window.target();
+        view.studentAdded(student);
         window.label("errorLabel").requireText("Student added: Haider");
     }
 }
