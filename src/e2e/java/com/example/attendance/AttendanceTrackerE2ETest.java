@@ -41,10 +41,20 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
     @Test
     public void testStudentTabComponentsExist() {
         window.tabbedPane().selectTab("Students");
+        window.robot().waitForIdle();
         window.textBox("studentnameTextBox").requireVisible();
         window.textBox("rollnumberTxtBox").requireVisible();
         window.button("addButton").requireVisible();
         window.list("studentlist").requireVisible();
         window.label("errorLabel").requireVisible();
+    }
+    @Test
+    public void testAddStudentFunctionality() {
+        window.tabbedPane().selectTab("Students");
+        window.textBox("studentnameTextBox").enterText("Haider");
+        window.textBox("rollnumberTxtBox").enterText("123");
+        window.button("addButton").click();
+        window.robot().waitForIdle();
+        window.label("errorLabel").requireText("Student added: Haider");
     }
 }
