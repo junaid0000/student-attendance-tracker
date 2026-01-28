@@ -113,6 +113,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         if (GraphicsEnvironment.isHeadless()) return;
         
         window.tabbedPane().selectTab("Attendance");
+        window.robot().waitForIdle();
         AttendanceRecord record = new AttendanceRecord("123", new Date(), true);
         view.attendanceMarked(record);
         window.label("attendanceErrorLabel").requireText("Attendance marked for student ID: 123");
@@ -122,6 +123,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         if (GraphicsEnvironment.isHeadless()) return;
         
         window.tabbedPane().selectTab("Attendance");
+        window.robot().waitForIdle();
         view.showAttendancePercentage(85.5);
         window.label("summaryLabel").requireText("Overall Attendance: 85.5%");
     }
