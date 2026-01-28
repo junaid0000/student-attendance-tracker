@@ -1,10 +1,16 @@
 package com.example.attendance;
 
-public class AttendanceTrackerE2ETest {
+import org.assertj.swing.junit.runner.GUITestRunner;
+import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+@RunWith(GUITestRunner.class)
+public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
 
-	}
-
+    @Test
+    public void testApplicationStartsSuccessfully() {
+        // This will fail not i implement this E2E setup yet
+        throw new AssertionError("Not implemented yet");
+    }
 }
