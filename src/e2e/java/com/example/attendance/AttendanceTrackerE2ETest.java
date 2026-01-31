@@ -59,13 +59,17 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
     public void testAttendanceTabFunctionality() {
         window.tabbedPane().selectTab("Attendance");
         window.robot().waitForIdle();
-        
-        com.example.attendance.model.AttendanceRecord record = 
-            new com.example.attendance.model.AttendanceRecord("7131056", new java.util.Date(), true);
-        
+        com.example.attendance.model.AttendanceRecord record = new com.example.attendance.model.AttendanceRecord("7131056", new java.util.Date(), true);
         AttendanceTrackerSwingView view = (AttendanceTrackerSwingView) window.target();
         view.attendanceMarked(record);
-        
-        window.label("attendanceErrorLabel").requireText("Attendance marked for student ID  7131056");
+        window.label("attendanceErrorLabel").requireText("Attendance marked for student ID: 7131056");
+    }
+    @Test
+    public void testViewAttendanceSummary() {
+        window.tabbedPane().selectTab("Attendance");
+        window.robot().waitForIdle();
+        AttendanceTrackerSwingView view = (AttendanceTrackerSwingView) window.target();
+        view.showAttendancePercentage(85.5);
+        window.label("summaryLabel").requireText("Overall Attendance: 85.5%");
     }
 }

@@ -293,8 +293,8 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         btnmarkAttendance = new JButton("Mark Attendance");
         btnmarkAttendance.setName("markAttendanceButton"); // Add component name for testing
         btnmarkAttendance.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        	}
+        public void actionPerformed(ActionEvent e) {
+        }
         });
         btnmarkAttendance.setFont(new Font("Tahoma", Font.PLAIN, 11));
         btnmarkAttendance.setBounds(20, 290, 150, 30);
