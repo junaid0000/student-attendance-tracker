@@ -21,6 +21,7 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 
 import com.example.attendance.model.Student;
+import com.example.attendance.controller.StudentController;
 import com.example.attendance.model.AttendanceRecord;
 import com.example.attendance.view.AttendanceTrackerView;
 
@@ -48,6 +49,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private JTextArea attendanceRecordsArea;
     private JLabel attendanceErrorLabel;
     private JLabel summaryLabel;
+    private StudentController studentController;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -147,6 +149,15 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         btnAdd.setBounds(20, 120, 120, 25);
         btnAdd.setEnabled(false); //btn disable
         panel.add(btnAdd);
+        
+        // Adding LISTENER 
+        btnAdd.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                addStudentAction();
+            }
+        });
+        
+        btnUpdate = new JButton("Update");
         
         btnUpdate = new JButton("Update");
         btnUpdate.setName("updateButton"); // Add component name for testing
@@ -462,5 +473,33 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     // Helper method for testing
     public JList getStudentList() {
         return liststudent;
+    }
+    
+    private void addStudentAction() {
+        String name = textFieldname.getText().trim();
+        String rollNumber = textFieldrollno.getText().trim();
+        
+        if (name.isEmpty() || rollNumber.isEmpty()) {
+            showStudentError("Name and Roll Number are required", null);
+            return;
+        }
+        
+        if (studentController == null) {
+            showStudentError("Database not connected", null);
+            return;
+        }
+        
+        try {
+            Student student = studentController.addStudent(name, rollNumber);
+            studentAdded(student); // This updates UI via interface method
+            textFieldname.setText("");
+            textFieldrollno.setText("");
+        } catch (Exception ex) {
+            showStudentError("Failed to add student: " + ex.getMessage(), null);
+        }
+    }
+    
+    public void setStudentController(StudentController studentController) {
+        this.studentController = studentController;
     }
 }
