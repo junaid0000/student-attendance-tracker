@@ -1,5 +1,7 @@
 package com.example.attendance.repository.mongo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.bson.Document;
@@ -10,7 +12,8 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
 
 public class StudentMongoRepository implements StudentRepository {
 
@@ -22,15 +25,15 @@ public class StudentMongoRepository implements StudentRepository {
         this.client = client;
         this.database = client.getDatabase(databaseName);
         this.studentCollection = database.getCollection(collectionName);
+        studentCollection.createIndex(Indexes.ascending("rollNumber"), new IndexOptions().unique(true));
     }
-
     @Override
-	public Student save(Student student) {
+    public Student save(Student student) {
         Document doc = new Document()
             .append("studentId", student.getStudentId())
             .append("name", student.getName())
             .append("rollNumber", student.getRollNumber());
-
+        
         studentCollection.insertOne(doc);
         return student;
     }
@@ -50,17 +53,18 @@ public class StudentMongoRepository implements StudentRepository {
             doc.getString("rollNumber")
         );
     }
-
+    @Override
     public void update(Student student) {
-        studentCollection.updateOne(
+        Document doc = new Document()
+            .append("studentId", student.getStudentId())
+            .append("name", student.getName())
+            .append("rollNumber", student.getRollNumber());
+
+        studentCollection.replaceOne(
             Filters.eq("studentId", student.getStudentId()),
-            Updates.combine(
-                Updates.set("name", student.getName()),
-                Updates.set("rollNumber", student.getRollNumber())
-            )
+            doc
         );
     }
-
     public void delete(String studentId) {
         studentCollection.deleteOne(
             Filters.eq("studentId", studentId)
@@ -90,5 +94,18 @@ public class StudentMongoRepository implements StudentRepository {
 	public void delete(Student student) {
         delete(student.getStudentId());
     	}
+    @Override
+    public List<Student> findAll() {
+        List<Student> students = new ArrayList<>();
+        for (Document doc : studentCollection.find()) {
+            Student student = new Student(
+                doc.getString("studentId"),
+                doc.getString("name"),
+                doc.getString("rollNumber")
+            );
+            students.add(student);
+        }
+        return students;
+    }
 
 }
