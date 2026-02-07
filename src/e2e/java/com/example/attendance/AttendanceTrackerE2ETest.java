@@ -167,4 +167,5 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
             
         assertThat(studentDoc).isNull();
     }
+    
 }
