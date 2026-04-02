@@ -1,9 +1,12 @@
 package com.example.attendance.app;
 
+import com.example.attendance.controller.AttendanceController;
 import com.example.attendance.controller.StudentController;
+import com.example.attendance.repository.AttendanceRepository;
 import com.example.attendance.repository.mongo.StudentMongoRepository;
 import com.example.attendance.view.swing.AttendanceTrackerSwingView;
 import com.mongodb.MongoClient;
+import javax.swing.SwingUtilities;
 
 public class AttendanceTrackerApp {
     public static void main(String[] args) {
@@ -31,11 +34,24 @@ public class AttendanceTrackerApp {
                 
                 // Create controller  
                 StudentController studentController = new StudentController(studentRepository);
+                AttendanceRepository attendanceRepository = null;
+				AttendanceController attendanceController = new AttendanceController(attendanceRepository, studentRepository);
                 
                 // Create UI and pass controller
                 AttendanceTrackerSwingView frame = new AttendanceTrackerSwingView();
                 frame.setStudentController(studentController);
-                frame.setVisible(true);
+                frame.setAttendanceController(attendanceController);
+                
+                //delay to ensure students are loaded before tests start
+                SwingUtilities.invokeLater(() -> {
+                    try {
+                        // Give UI time to load students from database
+                        Thread.sleep(500);  // Half second delay
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                    frame.setVisible(true);
+                });
                 
                 // Close connection when window closes
                 frame.addWindowListener(new java.awt.event.WindowAdapter() {
