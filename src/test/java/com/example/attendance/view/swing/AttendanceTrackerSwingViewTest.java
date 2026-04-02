@@ -7,27 +7,51 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import java.awt.GraphicsEnvironment;
+import static org.mockito.Mockito.*;
 
 import com.example.attendance.model.Student;
 import com.example.attendance.model.AttendanceRecord;
+import com.example.attendance.controller.StudentController;  
+import com.example.attendance.controller.AttendanceController;
+
 import java.util.Date;
 
 import javax.swing.SwingUtilities;
 
 @RunWith(GUITestRunner.class)
 public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
-
+    static {
+        System.setProperty("java.awt.headless", "false");// Fix for Java 17+ module access issues
+        System.setProperty("test.mode", "true"); // Force test mode
+    }
     private FrameFixture window;
     private AttendanceTrackerSwingView view;
 
     @Override
     protected void onSetUp() {
+        robot().settings().timeoutToBeVisible(1000);// speed up UI tests 
         if (GraphicsEnvironment.isHeadless()) return;
-        view = GuiActionRunner.execute(() -> new AttendanceTrackerSwingView());
+        
+        // Create fake controllers that will not connect to database
+        StudentController fakeStudentController = mock(StudentController.class);
+        AttendanceController fakeAttendanceController = mock(AttendanceController.class);
+        
+        // CRITICAL: Set system property BEFORE creating view
+        System.setProperty("test.mode", "true");
+        
+        view = GuiActionRunner.execute(() -> {
+            AttendanceTrackerSwingView v = new AttendanceTrackerSwingView();
+            v.setTestMode(true);
+            return v;
+        });
+        
+        // Set the fake controllers
+        view.setStudentController(fakeStudentController);
+        view.setAttendanceController(fakeAttendanceController);
+        
         window = new FrameFixture(robot(), view);
-        window.show();
+        window.show(); // This should now work without MongoDB connection attempts
     }
-
     //GUI TESTS
     
     @Test
