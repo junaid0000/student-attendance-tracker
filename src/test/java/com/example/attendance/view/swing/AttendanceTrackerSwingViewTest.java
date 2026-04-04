@@ -20,22 +20,25 @@ import javax.swing.SwingUtilities;
 
 @RunWith(GUITestRunner.class)
 public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
-    static {
-        System.setProperty("java.awt.headless", "false");// Fix for Java 17+ module access issues
-        System.setProperty("test.mode", "true"); // Force test mode
-    }
     private FrameFixture window;
     private AttendanceTrackerSwingView view;
 
     @Override
     protected void onSetUp() {
-        if (GraphicsEnvironment.isHeadless()) return;
+        // DETECT HEADLESS AND SKIP IF NO DISPLAY - THIS PREVENTS CI CRASHES
+        if (GraphicsEnvironment.isHeadless()) {
+            return;
+        }
+        
+        // Increase robot timeout for slow CI environments
+        robot().settings().delayBetweenEvents(50);
+        robot().settings().timeoutToBeVisible(10000);
         
         // Create fake controllers that will not connect to database
         StudentController fakeStudentController = mock(StudentController.class);
         AttendanceController fakeAttendanceController = mock(AttendanceController.class);
         
-        // CRITICAL: Set system property BEFORE creating view
+        // Ensure test mode is set for properties
         System.setProperty("test.mode", "true");
         
         view = GuiActionRunner.execute(() -> {
