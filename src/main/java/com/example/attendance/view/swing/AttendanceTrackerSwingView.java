@@ -53,6 +53,8 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private JButton btnviewByDate;
     private JButton viewByStudentButton;
     private JButton btngetSummary;
+    private JRadioButton byDateRadio;
+    private JRadioButton byStudentRadio;
     private JList attendanceList;
     private JTextArea attendanceRecordsArea;
     private JLabel attendanceErrorLabel;
@@ -308,12 +310,12 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         viewLabel.setBounds(20, 340, 120, 20);
         panel.add(viewLabel);
         
-        JRadioButton byDateRadio = new JRadioButton("By Date");
+        byDateRadio = new JRadioButton("By Date");
         byDateRadio.setSelected(true);
         byDateRadio.setBounds(140, 340, 80, 20);
         panel.add(byDateRadio);
         
-        JRadioButton byStudentRadio = new JRadioButton("By Student");
+        byStudentRadio = new JRadioButton("By Student");
         byStudentRadio.setBounds(220, 340, 100, 20);
         panel.add(byStudentRadio);
         
@@ -327,6 +329,11 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         btnviewByDate.setName("viewByDateButton"); // Add compnent name for testing
         btnviewByDate.setFont(new Font("Tahoma", Font.PLAIN, 11));
         btnviewByDate.setBounds(20, 370, 150, 30);
+        btnviewByDate.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                viewAttendanceAction();
+            }
+        });
         panel.add(btnviewByDate);
         
         // Get Summary button
@@ -334,6 +341,11 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         btngetSummary.setName("getSummaryButton"); // Add component name for testing
         btngetSummary.setFont(new Font("Tahoma", Font.PLAIN, 11));
         btngetSummary.setBounds(180, 370, 150, 30);
+        btngetSummary.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                getSummaryAction();
+            }
+        });
         panel.add(btngetSummary);
         
         // Attendance records display
@@ -397,10 +409,12 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                 studentPanel.add(studentLabel);
                 
                 JRadioButton presentRadio = new JRadioButton("Present");
+                presentRadio.setActionCommand("Present");
                 presentRadio.setBounds(170, 5, 70, 20);
                 studentPanel.add(presentRadio);
                 
                 JRadioButton absentRadio = new JRadioButton("Absent");
+                absentRadio.setActionCommand("Absent");
                 absentRadio.setBounds(250, 5, 70, 20);
                 studentPanel.add(absentRadio);
                 
@@ -422,6 +436,64 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         }
     }
     
+    /**
+     * Parses the date from the date field. Falls back to the current date if empty or invalid.
+     * @return java.util.Date
+     */
+    private java.util.Date parseDate() {
+        try {
+            String dateTxt = dateFieldattendance.getText();
+            if (dateTxt.equals("dd/mm/yyyy") || dateTxt.isEmpty()) {
+                return new java.util.Date();
+            }
+            return new SimpleDateFormat("dd/MM/yyyy").parse(dateTxt);
+        } catch (Exception e) {
+            return new java.util.Date(); // Fallback to current date
+        }
+    }
+
+    /**
+     * Action performed when clicking the 'View Attendance' button.
+     * Supports filtering by date (from the date field) or by student (via input dialog).
+     */
+    private void viewAttendanceAction() {
+        if (attendanceController == null) return;
+        try {
+            if (byDateRadio.isSelected()) {
+                // Filter records by the date specified in the UI
+                List<AttendanceRecord> records = attendanceController.getAttendanceByDate(parseDate());
+                showAttendanceByDate(records);
+            } else if (byStudentRadio.isSelected()) {
+                // Prompt the user for a roll number and filter records by that student
+                String rollNo = javax.swing.JOptionPane.showInputDialog(this, "Enter Student Roll Number:");
+                if (rollNo != null && !rollNo.trim().isEmpty()) {
+                    List<AttendanceRecord> records = attendanceController.getAttendanceByStudent(rollNo);
+                    showAttendanceByStudent(records);
+                }
+            }
+        } catch (Exception e) {
+            showAttendanceError(e.getMessage());
+        }
+    }
+
+    /**
+     * Action performed when clicking the 'Get Summary' button.
+     * Calculates and displays the attendance percentage for a specific student.
+     */
+    private void getSummaryAction() {
+        if (attendanceController == null) return;
+        try {
+            // Prompt the user for a roll number to calculate the cumulative attendance percentage
+            String rollNo = javax.swing.JOptionPane.showInputDialog(this, "Enter Student Roll Number for Summary:");
+            if (rollNo != null && !rollNo.trim().isEmpty()) {
+                double perc = attendanceController.getAttendancePercentage(rollNo);
+                showAttendancePercentage(perc);
+            }
+        } catch (Exception e) {
+            showAttendanceError(e.getMessage());
+        }
+    }
+
     // Mark attendance action
     private void markAttendanceAction() {
         if (attendanceController == null) {
@@ -429,8 +501,8 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             return;
         }
         
-        // Use current date
-        java.util.Date date = new java.util.Date();
+        // Use provided date
+        java.util.Date date = parseDate();
         
         boolean anyMarked = false;
         int markedCount = 0;
@@ -438,8 +510,11 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         // Mark attendance for each student
         for (Student student : currentStudentsList) {
             try {
-                // Mark all as present for simplicity
+                ButtonGroup group = studentAttendanceGroups.get(student.getRollNumber());
                 boolean isPresent = true;
+                if (group != null && group.getSelection() != null) {
+                    isPresent = group.getSelection().getActionCommand().equals("Present");
+                }
                 AttendanceRecord record = attendanceController.markAttendance(
                     student.getRollNumber(), date, isPresent);
                 markedCount++;
@@ -451,11 +526,17 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         }
         
         if (anyMarked) {
+            // Success: Update the status label and show a confirmation popup (only if not in test mode)
             attendanceErrorLabel.setText("Attendance marked for " + markedCount + " student(s)");
-            // Update UI
+            if (!isTestMode) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Attendance marked successfully!", "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            }
+            
+            // Trigger UI update through the attendanceMarked listener
             AttendanceRecord dummyRecord = new AttendanceRecord("temp", date, true, "temp");
             attendanceMarked(dummyRecord);
         } else {
+            // Failure: Notify the user if no students were found to mark
             attendanceErrorLabel.setText("No students to mark attendance");
         }
     }
@@ -520,13 +601,32 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         });
     }
     
+    /**
+     * Retrieves student name and roll number for display in attendance records based on student ID.
+     */
+    private String getStudentDetails(String studentId) {
+        if (studentController != null) {
+            try {
+                for (Student s : studentController.getAllStudents()) {
+                    if (s.getStudentId().equals(studentId)) {
+                        return s.getName() + " (" + s.getRollNumber() + ")";
+                    }
+                }
+            } catch(Exception e) {}
+        }
+        return "ID: " + studentId;
+    }
+
     @Override
     public void showAttendanceByDate(List<AttendanceRecord> records) {
         SwingUtilities.invokeLater(() -> {
             StringBuilder sb = new StringBuilder();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             for (AttendanceRecord record : records) {
                 String status = record.isPresent() ? "Present" : "Absent";
-                sb.append(record.getDate()).append(": Student ").append(record.getStudentId())
+                String studentDetails = getStudentDetails(record.getStudentId());
+                sb.append("Date: ").append(sdf.format(record.getDate()))
+                  .append(" | ").append(studentDetails)
                   .append(" - ").append(status).append("\n");
             }
             attendanceRecordsArea.setText(sb.toString());
@@ -538,9 +638,12 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     public void showAttendanceByStudent(List<AttendanceRecord> records) {
         SwingUtilities.invokeLater(() -> {
             StringBuilder sb = new StringBuilder();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             for (AttendanceRecord record : records) {
                 String status = record.isPresent() ? "Present" : "Absent";
-                sb.append("Date: ").append(record.getDate())
+                String studentDetails = getStudentDetails(record.getStudentId());
+                sb.append("Date: ").append(sdf.format(record.getDate()))
+                  .append(" | ").append(studentDetails)
                   .append(" - ").append(status).append("\n");
             }
             attendanceRecordsArea.setText(sb.toString());
@@ -551,7 +654,11 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     @Override
     public void showAttendancePercentage(double percentage) {
         SwingUtilities.invokeLater(() -> {
-            summaryLabel.setText(String.format("Overall Attendance: %.1f%%", percentage));
+            String formatted = String.format("Overall Attendance: %.1f%%", percentage);
+            summaryLabel.setText(formatted);
+            if (!isTestMode) {
+                javax.swing.JOptionPane.showMessageDialog(this, formatted, "Attendance Summary", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            }
         });
     }
     
@@ -595,8 +702,9 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             textFieldname.setText("");
             textFieldrollno.setText("");
             
-            // Reset flag after 3 seconds
-            new Timer(3000, new ActionListener() {
+            // Reset flag after 3 seconds (or faster in test mode)
+            int delay = isTestMode ? 100 : 3000;
+            new Timer(delay, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     showingSuccessMessage = false;
