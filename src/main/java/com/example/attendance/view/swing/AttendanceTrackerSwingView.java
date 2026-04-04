@@ -84,9 +84,11 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     }
 
     public AttendanceTrackerSwingView() {
+        // QUICKLY CHECK TEST MODE BEFORE UI INIT
         if (Boolean.parseBoolean(System.getProperty("test.mode", "false"))) {
             this.isTestMode = true;
         }
+        
         setTitle("Student Attendance Tracker");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
@@ -151,7 +153,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         panel.add(lblname);
         
         textFieldname = new JTextField();
-        textFieldname.setName("studentnameTextBox");
+        textFieldname.setName("studentnameTextBox"); // DO NOT CHANGE THIS NAME - IT IS USED IN TESTS
         textFieldname.setBounds(90, 50, 200, 20);
         panel.add(textFieldname);
         textFieldname.setColumns(10);
@@ -170,7 +172,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         panel.add(lblrollno);
         
         textFieldrollno = new JTextField();
-        textFieldrollno.setName("rollnumberTxtBox");
+        textFieldrollno.setName("rollnumberTxtBox"); // DO NOT CHANGE THIS NAME - IT IS USED IN TESTS
         textFieldrollno.setBounds(90, 80, 200, 20);
         panel.add(textFieldrollno);
         textFieldrollno.setColumns(10);
@@ -815,8 +817,9 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         SwingUtilities.invokeLater(() -> {
             String currentMessage = lblerror.getText();
             if (currentMessage.contains("Student added") || currentMessage.contains("Student deleted")) {
-                // Wait 2 seconds then load
-                new Timer(2000, new ActionListener() {
+                // Wait 2 seconds then load (or fast in test mode)
+                int delay = isTestMode ? 50 : 2000;
+                new Timer(delay, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         loadStudentsFromDatabase();

@@ -29,7 +29,6 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
     @Override
     protected void onSetUp() {
-        robot().settings().timeoutToBeVisible(1000);// speed up UI tests 
         if (GraphicsEnvironment.isHeadless()) return;
         
         // Create fake controllers that will not connect to database
