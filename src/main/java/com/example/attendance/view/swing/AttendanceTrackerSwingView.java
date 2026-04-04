@@ -51,7 +51,6 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private JTextField dateFieldattendance;
     private JButton btnmarkAttendance;
     private JButton btnviewByDate;
-    private JButton viewByStudentButton;
     private JButton btngetSummary;
     private JRadioButton byDateRadio;
     private JRadioButton byStudentRadio;
@@ -118,10 +117,16 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         // Initialize collections
         studentAttendanceGroups = new HashMap<>();
         currentStudentsList = new ArrayList<>();
+        
+        // Initial load only if not in test mode
         SwingUtilities.invokeLater(() -> {
             if (!isTestMode && studentController != null) {
-                loadStudentsFromDatabase();
-                refreshAttendancePanelStudents();
+                try {
+                    loadStudentsFromDatabase();
+                    refreshAttendancePanelStudents();
+                } catch (Exception e) {
+                    System.err.println("Init failed: " + e.getMessage());
+                }
             }
         });
     }
@@ -705,7 +710,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             textFieldrollno.setText("");
             
             // Reset flag after 3 seconds (or faster in test mode)
-            int delay = isTestMode ? 100 : 3000;
+            int delay = isTestMode ? 10 : 3000;
             new Timer(delay, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -723,8 +728,8 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     
     public void setStudentController(StudentController studentController) {
         this.studentController = studentController;
-        // ONLY LOAD IF NOT IN TEST MODE
-        if (!isTestMode) {
+        // ONLY LOAD IF NOT IN TEST MODE AND NOT NULL
+        if (!isTestMode && studentController != null) {
             loadStudentsFromDatabase();
             refreshAttendancePanelStudents();
         }
@@ -818,7 +823,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             String currentMessage = lblerror.getText();
             if (currentMessage.contains("Student added") || currentMessage.contains("Student deleted")) {
                 // Wait 2 seconds then load (or fast in test mode)
-                int delay = isTestMode ? 50 : 2000;
+                int delay = isTestMode ? 10 : 2000;
                 new Timer(delay, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
