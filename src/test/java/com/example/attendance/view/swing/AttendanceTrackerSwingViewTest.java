@@ -109,7 +109,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         window.button("addButton").requireEnabled();
     }
 
-    // INTERFACE IMPLEMENTATION tests
+    // INTERFACE IMPLEMENTATION Testt
     @Test
     public void shouldDisplaySuccessMessageWhenStudentIsAdded() {
         if (GraphicsEnvironment.isHeadless())
