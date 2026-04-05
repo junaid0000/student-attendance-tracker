@@ -1,5 +1,7 @@
 package com.example.attendance.app;
 
+import javax.swing.SwingUtilities;
+
 import com.example.attendance.controller.AttendanceController;
 import com.example.attendance.controller.StudentController;
 import com.example.attendance.repository.AttendanceRepository;
@@ -7,7 +9,6 @@ import com.example.attendance.repository.mongo.AttendanceMongoRepository;
 import com.example.attendance.repository.mongo.StudentMongoRepository;
 import com.example.attendance.view.swing.AttendanceTrackerSwingView;
 import com.mongodb.MongoClient;
-import javax.swing.SwingUtilities;
 
 public class AttendanceTrackerApp {
     public static void main(String[] args) {
@@ -30,13 +31,13 @@ public class AttendanceTrackerApp {
                 MongoClient mongoClient = new MongoClient(mongoHost, mongoPort);
 
                 // Create repository
-                StudentMongoRepository studentRepository = new StudentMongoRepository(
-                        mongoClient, databaseName, studentCollection);
+                StudentMongoRepository studentRepository = new StudentMongoRepository(mongoClient, databaseName,
+                        studentCollection);
 
                 // Create controller
                 StudentController studentController = new StudentController(studentRepository);
-                AttendanceRepository attendanceRepository = new AttendanceMongoRepository(
-                        mongoClient, databaseName, attendanceCollection);
+                AttendanceRepository attendanceRepository = new AttendanceMongoRepository(mongoClient, databaseName,
+                        attendanceCollection);
                 AttendanceController attendanceController = new AttendanceController(attendanceRepository,
                         studentRepository);
 
@@ -70,9 +71,8 @@ public class AttendanceTrackerApp {
             } catch (Exception e) {
                 e.printStackTrace();
                 javax.swing.JOptionPane.showMessageDialog(null,
-                        "Failed to connect to database. Please start MongoDB.\n" +
-                                "Host: " + mongoHost + " Port: " + mongoPort + "\n" +
-                                "Error: " + e.getMessage(),
+                        "Failed to connect to database. Please start MongoDB.\n" + "Host: " + mongoHost + " Port: "
+                                + mongoPort + "\n" + "Error: " + e.getMessage(),
                         "Database Error", javax.swing.JOptionPane.ERROR_MESSAGE);
 
                 // Show UI without database

@@ -58,19 +58,20 @@ jobs:
         run: |
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
           export DISPLAY=:99
+          sleep 5
           mvn clean verify -Pjacoco
         env:
           TESTCONTAINERS_RYUK_DISABLED: true
 
       - name: Build with Maven (Windows)
         if: matrix.os == 'windows-latest'
-        run: mvn clean verify -Pjacoco -DskipITs
+        run: mvn clean test -Pjacoco -DskipITs
         env:
           TESTCONTAINERS_RYUK_DISABLED: true
 
       - name: Build with Maven (macOS)
         if: matrix.os == 'macos-latest'
-        run: mvn clean verify -Pjacoco -DskipITs
+        run: mvn clean test -Pjacoco -DskipITs
         env:
           TESTCONTAINERS_RYUK_DISABLED: true
 
@@ -83,6 +84,7 @@ jobs:
         run: |
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
           export DISPLAY=:99
+          sleep 5
           mvn coveralls:report -Pjacoco -DrepoToken=$COVERALLS_REPO_TOKEN
 
       # Generate JUnit Report
