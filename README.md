@@ -1,5 +1,9 @@
 # Student Attendance Tracker
 
+[![Java CI with Maven](https://github.com/junaid0000/student-attendance-tracker/actions/workflows/maven.yml/badge.svg)](https://github.com/junaid0000/student-attendance-tracker/actions/workflows/maven.yml)
+[![Coverage Status](https://coveralls.io/repos/github/junaid0000/student-attendance-tracker/badge.svg?branch=main)](https://coveralls.io/github/junaid0000/student-attendance-tracker?branch=main)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=junaid0000_student-attendance-tracker&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=junaid0000_student-attendance-tracker)
+
 Advanced Programming Exam Project - Student Attendance Tracker with TDD
 
 ## Project Overview

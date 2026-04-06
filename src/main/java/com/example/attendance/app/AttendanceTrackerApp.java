@@ -46,14 +46,8 @@ public class AttendanceTrackerApp {
                 frame.setStudentController(studentController);
                 frame.setAttendanceController(attendanceController);
 
-                // delay to ensure students are loaded before tests start
+                // Set visible immediately - SwingUtilities.invokeLater is enough
                 SwingUtilities.invokeLater(() -> {
-                    try {
-                        // Give UI time to load students from database
-                        Thread.sleep(500); // Half second delay
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
                     frame.setVisible(true);
                 });
 
