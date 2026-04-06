@@ -18,6 +18,16 @@
 
         <assertj.version>3.24.2</assertj.version>
         <log4j.version>2.20.0</log4j.version>
+         <!-- I am adding sonarQube properties here -->
+         <sonar.coverage.exclusions>
+        **/model/*.*,
+        **/AttendanceTrackerApp.*
+    </sonar.coverage.exclusions>
+    <sonar.junit.reportPaths>
+        ${project.build.directory}/surefire-reports,
+        ${project.build.directory}/failsafe-reports
+    </sonar.junit.reportPaths>
+    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
     </properties>
     
     <dependencies>
