@@ -18,16 +18,16 @@
 
         <assertj.version>3.24.2</assertj.version>
         <log4j.version>2.20.0</log4j.version>
-         <!-- I am adding sonarQube properties here -->
-         <sonar.coverage.exclusions>
-        **/model/*.*,
-        **/AttendanceTrackerApp.*
-    </sonar.coverage.exclusions>
-    <sonar.junit.reportPaths>
-        ${project.build.directory}/surefire-reports,
-        ${project.build.directory}/failsafe-reports
-    </sonar.junit.reportPaths>
-    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <!-- I am adding sonarQube properties here -->
+        <sonar.coverage.exclusions>
+            **/model/*.*,
+            **/AttendanceTrackerApp.*
+        </sonar.coverage.exclusions>
+        <sonar.junit.reportPaths>
+            ${project.build.directory}/surefire-reports,
+            ${project.build.directory}/failsafe-reports
+        </sonar.junit.reportPaths>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
     </properties>
     
     <dependencies>
@@ -56,13 +56,13 @@
         </dependency>
         
         <!-- AssertJ Swing for UI tests -->
-		<dependency>
-		    <groupId>org.assertj</groupId>
-		    <artifactId>assertj-swing-junit</artifactId>
-		    <version>3.17.1</version>
-		    <scope>test</scope>
-		</dependency>
-		
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-swing-junit</artifactId>
+            <version>3.17.1</version>
+            <scope>test</scope>
+        </dependency>
+        
         <!-- Log4j -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -92,32 +92,32 @@
         </dependency>
         
         <!-- Add MongoDB Dependency-->
-		<dependency>
-		    <groupId>org.mongodb</groupId>
-		    <artifactId>mongo-java-driver</artifactId>
-		    <version>3.12.7</version>
-		</dependency>
-		
-		<!-- Testcontainers for MongoDB integration test -->
-		<dependency>
-		    <groupId>org.testcontainers</groupId>
-		    <artifactId>testcontainers</artifactId>
-		    <version>1.19.0</version>
-		    <scope>test</scope>
-		</dependency>
-		<dependency>
-		    <groupId>org.testcontainers</groupId>
-		    <artifactId>mongodb</artifactId>
-		    <version>1.19.0</version>
-		    <scope>test</scope>
-		</dependency>
-		<!-- SLF4J Warnings -->
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-simple</artifactId>
-		    <version>1.7.36</version>
-		    <scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.12.7</version>
+        </dependency>
+        
+        <!-- Testcontainers for MongoDB integration test -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>1.19.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mongodb</artifactId>
+            <version>1.19.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- SLF4J Warnings -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.36</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     
     <build>
@@ -179,39 +179,39 @@
                 </executions>
             </plugin>
             
-           <!-- JaCoCo for Code Coverage -->
-<plugin>
-    <groupId>org.jacoco</groupId>
-    <artifactId>jacoco-maven-plugin</artifactId>
-    <version>${jacoco.version}</version>
-    <configuration>
-        <excludes>
-            <exclude>**/model/*.*</exclude>
-            <exclude>**/AttendanceTrackerApp.*</exclude>
-        </excludes>
-    </configuration>
-    <executions>
-        <execution>
-            <goals>
-                <goal>prepare-agent</goal>
-            </goals>
-        </execution>
-        <execution>
-            <id>report</id>
-            <phase>test</phase>
-            <goals>
-                <goal>report</goal>
-            </goals>
-        </execution>
-    </executions>
-</plugin>
+            <!-- JaCoCo for Code Coverage -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/model/*.*</exclude>
+                        <exclude>**/AttendanceTrackerApp.*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
-<!-- SonarQube Maven Plugin -->
-<plugin>
-    <groupId>org.sonarsource.scanner.maven</groupId>
-    <artifactId>sonar-maven-plugin</artifactId>
-    <version>3.9.1.2184</version>
-</plugin>
+            <!-- SonarQube Maven Plugin -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.10.0.2594</version>
+            </plugin>
             
             <!-- PIT for Mutation Testing -->
             <plugin>
@@ -286,11 +286,25 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco.version}</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/model/*.*</exclude>
+                                <exclude>**/AttendanceTrackerApp.*</exclude>
+                            </excludes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
         </profile>
-        
         
         <!-- Docker profile for building docker images  same as prof did -->
         <profile>
