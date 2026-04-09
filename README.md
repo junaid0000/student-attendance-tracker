@@ -1,4 +1,4 @@
-# Student Attendance Tracker
+# Student Attendance Tracker.
 
 #BUILD PROJECT [![Java CI with Maven](https://github.com/junaid0000/student-attendance-tracker/actions/workflows/maven.yml/badge.svg?branch=main)](https://github.com/junaid0000/student-attendance-tracker/actions/workflows/maven.yml)
 
