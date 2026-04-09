@@ -22,7 +22,7 @@ import com.example.attendance.model.Student;
 @RunWith(GUITestRunner.class)
 public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
     static {
-        // FORCE TEST MODE AT THE EARLIEST POSSIBLE MOMENT (CLASS LOADING)
+        // Force the test mode to turn on immediately
         System.setProperty("test.mode", "true");
     }
     private FrameFixture window;
@@ -30,7 +30,8 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
     @Override
     protected void onSetUp() {
-        // DETECT HEADLESS AND SKIP IF NO DISPLAY - THIS PREVENTS CI CRASHES
+        // detect headless and skipp t if not its display
+
         if (GraphicsEnvironment.isHeadless()) {
             return;
         }
@@ -58,6 +59,8 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
         window = new FrameFixture(robot(), view);
         window.show(); // This should now work without MongoDB connection attempts
+        // Wait for window to fully initialize
+        robot().waitForIdle();
     }
     // GUI TESTS
 

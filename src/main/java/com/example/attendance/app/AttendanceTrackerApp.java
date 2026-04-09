@@ -46,7 +46,7 @@ public class AttendanceTrackerApp {
                 frame.setStudentController(studentController);
                 frame.setAttendanceController(attendanceController);
 
-                // Set visible immediately - SwingUtilities.invokeLater is enough
+                // Set windows visible
                 SwingUtilities.invokeLater(() -> {
                     frame.setVisible(true);
                 });

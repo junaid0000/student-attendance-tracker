@@ -285,7 +285,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         studentsLabel.setBounds(20, 90, 180, 20);
         panel.add(studentsLabel);
 
-        // Create a panel to hold student attendance controls - DYNAMIC CONTENT
+        // Create a panel to hold student attendance controls.
         studentsAttendancePanel = new JPanel();
         studentsAttendancePanel.setLayout(new BoxLayout(studentsAttendancePanel, BoxLayout.Y_AXIS));
 
@@ -384,7 +384,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         return panel;
     }
 
-    // NEW METHOD: Refresh attendance panel with students from database
+    // Refresh attendance panel with students from database
     private void refreshAttendancePanelStudents() {
         if (studentController == null)
             return;
@@ -490,7 +490,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         if (attendanceController == null)
             return;
         try {
-            // Prompt the user for a roll number to calculate the cumulative attendance
+            // ask the user for a roll number to calculate the cumulative attendance
             // percentage
             String rollNo = javax.swing.JOptionPane.showInputDialog(this, "Enter Student Roll Number for Summary:");
             if (rollNo != null && !rollNo.trim().isEmpty()) {
@@ -533,8 +533,8 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         }
 
         if (anyMarked) {
-            // Success: Update the status label and show a confirmation popup (only if not
-            // in test mode)
+            // Update the status label and show a confirmation popup (only if not in test
+            // mode)
             attendanceErrorLabel.setText("Attendance marked for " + markedCount + " student(s)");
             if (!isTestMode) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Attendance marked successfully!", "Success",
