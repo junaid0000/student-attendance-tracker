@@ -18,7 +18,10 @@
 
         <assertj.version>3.24.2</assertj.version>
         <log4j.version>2.20.0</log4j.version>
-        <!-- I am adding sonarQube properties here -->
+        <!-- SonarQube properties -->
+        <sonar.projectKey>junaid0000_student-attendance-tracker</sonar.projectKey>
+        <sonar.organization>junaid0000</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.sources>src/main/java</sonar.sources>
         <sonar.tests>src/test/java,src/it/java,src/e2e/java</sonar.tests>
         <sonar.coverage.exclusions>
