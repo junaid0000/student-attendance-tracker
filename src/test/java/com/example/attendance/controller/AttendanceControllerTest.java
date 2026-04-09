@@ -48,8 +48,6 @@ public class AttendanceControllerTest {
         closeable.close();
     }
 
-    // Test for Practicing Mocking
-
     @Test
     public void testMarkAttendancePresent() {
         // Arrange
@@ -89,10 +87,8 @@ public class AttendanceControllerTest {
     @Test
     public void testGetAttendanceByDate() {
         // ARRANGE
-        List<AttendanceRecord> mockRecords = Arrays.asList(
-            new AttendanceRecord("STU001", new Date(), true),
-            new AttendanceRecord("STU002", new Date(), false)
-        );
+        List<AttendanceRecord> mockRecords = Arrays.asList(new AttendanceRecord("STU001", new Date(), true),
+                new AttendanceRecord("STU002", new Date(), false));
         when(attendanceRepository.findByDate(any(Date.class))).thenReturn(mockRecords);
 
         // ACT
@@ -111,9 +107,8 @@ public class AttendanceControllerTest {
         when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
 
         List<AttendanceRecord> mockRecords = Arrays.asList(
-            new AttendanceRecord(student.getStudentId(), new Date(), true),
-            new AttendanceRecord(student.getStudentId(), new Date(), false)
-        );
+                new AttendanceRecord(student.getStudentId(), new Date(), true),
+                new AttendanceRecord(student.getStudentId(), new Date(), false));
         when(attendanceRepository.findByStudentId(student.getStudentId())).thenReturn(mockRecords);
 
         // ACT
@@ -133,9 +128,9 @@ public class AttendanceControllerTest {
         when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
 
         List<AttendanceRecord> mockRecords = Arrays.asList(
-            new AttendanceRecord(student.getStudentId(), new Date(), true),  // Present
-            new AttendanceRecord(student.getStudentId(), new Date(), true),  // Present
-            new AttendanceRecord(student.getStudentId(), new Date(), false)  // Absent
+                new AttendanceRecord(student.getStudentId(), new Date(), true), // Present
+                new AttendanceRecord(student.getStudentId(), new Date(), true), // Present
+                new AttendanceRecord(student.getStudentId(), new Date(), false) // Absent
         );
         when(attendanceRepository.findByStudentId(student.getStudentId())).thenReturn(mockRecords);
 

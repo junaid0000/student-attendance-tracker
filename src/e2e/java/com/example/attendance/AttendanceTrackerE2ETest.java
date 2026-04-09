@@ -44,9 +44,9 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
 
     @Override
     protected void onSetUp() {
-        // Clear test.mode to prevent unit test side-effects
+        // Clear test.mode to prevent unit test
         System.clearProperty("test.mode");
-        
+
         String containerIpAddress = mongo.getContainerIpAddress();
         Integer mappedPort = mongo.getFirstMappedPort();
 
@@ -152,7 +152,7 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
             Thread.currentThread().interrupt();
         }
 
-        // Verify error message will check already exists"
+        // Verify error message will check already exists
         assertThat(window.label("errorLabel").text()).contains("already exists");
     }
 

@@ -1,35 +1,36 @@
 package com.example.attendance.view.swing;
 
-import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JList;
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
+import java.awt.EventQueue;
 import java.awt.Font;
-import javax.swing.SwingConstants;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.awt.event.ActionEvent;
-import java.util.List;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-import javax.swing.BoxLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import com.example.attendance.model.Student;
-import com.example.attendance.controller.StudentController;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+
 import com.example.attendance.controller.AttendanceController;
+import com.example.attendance.controller.StudentController;
 import com.example.attendance.model.AttendanceRecord;
+import com.example.attendance.model.Student;
 import com.example.attendance.view.AttendanceTrackerView;
 
 public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrackerView {
@@ -123,7 +124,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         studentAttendanceGroups = new HashMap<>();
         currentStudentsList = new ArrayList<>();
 
-        // Note: Students will be loaded when setStudentController is called
+        // ok this is Note: Students will be loaded when setStudentController is called
     }
 
     // SETTER METHOD FOR TEST MODE
@@ -152,7 +153,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         panel.add(lblname);
 
         textFieldname = new JTextField();
-        textFieldname.setName("studentnameTextBox"); // DO NOT CHANGE THIS NAME - IT IS USED IN TESTS
+        textFieldname.setName("studentnameTextBox"); // so now do not chnage the this name it is used in tests
         textFieldname.setBounds(90, 50, 200, 20);
         panel.add(textFieldname);
         textFieldname.setColumns(10);
@@ -171,7 +172,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         panel.add(lblrollno);
 
         textFieldrollno = new JTextField();
-        textFieldrollno.setName("rollnumberTxtBox"); // DO NOT CHANGE THIS NAME - IT IS USED IN TESTS
+        textFieldrollno.setName("rollnumberTxtBox"); // so now do not chnage the this name it is used in tests
         textFieldrollno.setBounds(90, 80, 200, 20);
         panel.add(textFieldrollno);
         textFieldrollno.setColumns(10);
@@ -457,9 +458,8 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     }
 
     /**
-     * Action performed when clicking the 'View Attendance' button.
-     * Supports filtering by date (from the date field) or by student (via input
-     * dialog).
+     * Action performed when clicking the 'View Attendance' button. Supports
+     * filtering by date (from the date field) or by student (via input dialog).
      */
     private void viewAttendanceAction() {
         if (attendanceController == null)
@@ -483,8 +483,8 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     }
 
     /**
-     * Action performed when clicking the 'Get Summary' button.
-     * Calculates and displays the attendance percentage for a specific student.
+     * Action performed when clicking the 'Get Summary' button. Calculates and
+     * displays the attendance percentage for a specific student.
      */
     private void getSummaryAction() {
         if (attendanceController == null)
@@ -523,8 +523,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                 if (group != null && group.getSelection() != null) {
                     isPresent = group.getSelection().getActionCommand().equals("Present");
                 }
-                AttendanceRecord record = attendanceController.markAttendance(
-                        student.getRollNumber(), date, isPresent);
+                AttendanceRecord record = attendanceController.markAttendance(student.getRollNumber(), date, isPresent);
                 markedCount++;
                 anyMarked = true;
             } catch (Exception e) {
@@ -638,8 +637,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             for (AttendanceRecord record : records) {
                 String status = record.isPresent() ? "Present" : "Absent";
                 String studentDetails = getStudentDetails(record.getStudentId());
-                sb.append("Date: ").append(sdf.format(record.getDate()))
-                        .append(" | ").append(studentDetails)
+                sb.append("Date: ").append(sdf.format(record.getDate())).append(" | ").append(studentDetails)
                         .append(" - ").append(status).append("\n");
             }
             attendanceRecordsArea.setText(sb.toString());
@@ -655,8 +653,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             for (AttendanceRecord record : records) {
                 String status = record.isPresent() ? "Present" : "Absent";
                 String studentDetails = getStudentDetails(record.getStudentId());
-                sb.append("Date: ").append(sdf.format(record.getDate()))
-                        .append(" | ").append(studentDetails)
+                sb.append("Date: ").append(sdf.format(record.getDate())).append(" | ").append(studentDetails)
                         .append(" - ").append(status).append("\n");
             }
             attendanceRecordsArea.setText(sb.toString());
@@ -741,7 +738,8 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         try {
             Student student = studentController.addStudent(name, rollNumber);
 
-            // Increment again after DB call to invalidate loads that started during the call
+            // Increment again after DB call to invalidate loads that started during the
+            // call
             currentMessageId++;
             showingSuccessMessage = true;
             lblerror.setText("Student added: " + student.getName());
@@ -834,10 +832,8 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                 // updated error label ONLY if it's currently showing a status/loaded message
                 // AND no newer action has occurred
                 String currentStatus = lblerror.getText();
-                boolean isStatusMsg = currentStatus.startsWith("Loaded") ||
-                        currentStatus.equals("No errors") ||
-                        currentStatus.equals("Error: No errors") ||
-                        currentStatus.isEmpty();
+                boolean isStatusMsg = currentStatus.startsWith("Loaded") || currentStatus.equals("No errors")
+                        || currentStatus.equals("Error: No errors") || currentStatus.isEmpty();
 
                 if (isStatusMsg && !showingSuccessMessage && !showingErrorMessage && msgId == currentMessageId) {
                     lblerror.setText("Loaded " + students.size() + " students from database");
