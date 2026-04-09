@@ -347,6 +347,13 @@
                                 <goals>
                                     <goal>report</goal>
                                 </goals>
+                                <configuration>
+                                    <excludes>
+                                        <exclude>**/view/swing/**/*</exclude>
+                                        <exclude>**/model/**/*</exclude>
+                                        <exclude>**/AttendanceTrackerApp.*</exclude>
+                                    </excludes>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
