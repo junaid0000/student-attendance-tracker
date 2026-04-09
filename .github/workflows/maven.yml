@@ -87,6 +87,19 @@ jobs:
           sleep 5
           mvn coveralls:report -Pjacoco -DrepoToken=$COVERALLS_REPO_TOKEN
 
+      # Analyze with SonarCloud to upload coverage data
+      - name: Analyze with SonarCloud
+        if: matrix.os == 'ubuntu-latest' && matrix.java == 17
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          export DISPLAY=:99
+          sleep 5
+          mvn sonar:sonar -Pjacoco -Dsonar.projectKey=junaid0000_student-attendance-tracker -Dsonar.organization=junaid0000 -Dsonar.host.url=https://sonarcloud.io -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+
+
       # Generate JUnit Report
       - name: Generate JUnit Report
         run: >

@@ -166,6 +166,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
+                    <argLine>-Dtest.mode=true @{argLine}</argLine>
                     <includes>
                         <include>**/*IT.java</include>
                         <include>**/*E2ETest.java</include>
