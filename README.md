@@ -1,18 +1,18 @@
 # Student Attendance Tracker
 
-#BUILD PROJECT [![Build Status](https://img.shields.io/github/actions/workflow/status/junaid0000/student-attendance-tracker/maven.yml?branch=main&label=Build&v=3)](https://github.com/junaid0000/student-attendance-tracker/actions/workflows/maven.yml)
+#BUILD PROJECT [![Java CI with Maven](https://github.com/junaid0000/student-attendance-tracker/actions/workflows/maven.yml/badge.svg?branch=main&v=4)](https://github.com/junaid0000/student-attendance-tracker/actions/workflows/maven.yml)
 
-#COVERAGE REPORT WITH COVERALLS [![Coverage Status](https://img.shields.io/coveralls/github/junaid0000/student-attendance-tracker/main?label=Coverage&v=3)](https://coveralls.io/github/junaid0000/student-attendance-tracker?branch=main)
+#COVERAGE REPORT WITH COVERALLS [![Coverage Status](https://img.shields.io/coveralls/github/junaid0000/student-attendance-tracker/main?label=Coverage&v=4)](https://coveralls.io/github/junaid0000/student-attendance-tracker?branch=main)
 
-#QUALITY GATE WITH SONARCLOUD [![Quality Gate](https://img.shields.io/sonar/quality_gate/junaid0000_student-attendance-tracker?sonar_url=https%3A%2F%2Fsonarcloud.io&label=Quality%20Gate&v=3)](https://sonarcloud.io/summary/new_code?id=junaid0000_student-attendance-tracker)
+#QUALITY GATE WITH SONARCLOUD [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=junaid0000_student-attendance-tracker&metric=alert_status&branch=main&bust=1)](https://sonarcloud.io/summary/new_code?id=junaid0000_student-attendance-tracker)
 
-#CODE SMELLS WITH SONARCLOUD [![Code Smells](https://img.shields.io/sonar/violations/junaid0000_student-attendance-tracker?sonar_url=https%3A%2F%2Fsonarcloud.io&v=3)](https://sonarcloud.io/summary/new_code?id=junaid0000_student-attendance-tracker)
+#CODE SMELLS WITH SONARCLOUD [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=junaid0000_student-attendance-tracker&metric=code_smells&branch=main&bust=1)](https://sonarcloud.io/summary/new_code?id=junaid0000_student-attendance-tracker)
 
-#COVERAGE REPORT WITH SONARCLOUD [![Sonar Coverage](https://img.shields.io/sonar/coverage/junaid0000_student-attendance-tracker?sonar_url=https%3A%2F%2Fsonarcloud.io&v=3)](https://sonarcloud.io/summary/new_code?id=junaid0000_student-attendance-tracker)
+#COVERAGE REPORT WITH SONARCLOUD(The Badge color is #GREY by default) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=junaid0000_student-attendance-tracker&metric=coverage&branch=main&bust=1)](https://sonarcloud.io/summary/new_code?id=junaid0000_student-attendance-tracker)
 
-#TECHNICAL DEBT STATUS WITH SONARCLOUD [![Technical Debt](https://img.shields.io/sonar/tech_debt/junaid0000_student-attendance-tracker?sonar_url=https%3A%2F%2Fsonarcloud.io&v=3)](https://sonarcloud.io/summary/new_code?id=junaid0000_student-attendance-tracker)
+#TECHNICAL DEBT STATUS WITH SONARCLOUD [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=junaid0000_student-attendance-tracker&metric=sqale_index&branch=main&bust=1)](https://sonarcloud.io/summary/new_code?id=junaid0000_student-attendance-tracker)
 
-#VULNERABILITIES IN SONARCLOUD [![Vulnerabilities](https://img.shields.io/sonar/vulnerabilities/junaid0000_student-attendance-tracker?sonar_url=https%3A%2F%2Fsonarcloud.io&v=3)](https://sonarcloud.io/summary/new_code?id=junaid0000_student-attendance-tracker)
+#VULNERABILITIES IN SONARCLOUD [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=junaid0000_student-attendance-tracker&metric=vulnerabilities&branch=main&bust=1)](https://sonarcloud.io/summary/new_code?id=junaid0000_student-attendance-tracker)
 
 Advanced Programming Exam Project - Student Attendance Tracker with TDD
 
