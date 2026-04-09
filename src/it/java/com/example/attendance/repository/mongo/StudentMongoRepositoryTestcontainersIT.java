@@ -22,16 +22,12 @@ public class StudentMongoRepositoryTestcontainersIT {
 
     // Connect to MongoDB container
     @SuppressWarnings("deprecation")
-	@Before
+    @Before
     public void setup() {
-        client = new MongoClient(
-            new ServerAddress(
-                mongo.getContainerIpAddress(),
-                mongo.getMappedPort(27017)
-            )
-        );
+        client = new MongoClient(new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017)));
         studentRepository = new StudentMongoRepository(client, "attendance_db", "students");
-     // I am adding thisline for Clean the database before each test because its added more record in database
+        // I am adding thisline for Clean the database before each test because its
+        // added more record in database
         client.getDatabase("attendance_db").getCollection("students").deleteMany(new org.bson.Document());
     }
 
@@ -40,34 +36,24 @@ public class StudentMongoRepositoryTestcontainersIT {
         client.close();
     }
 
-    // /check that we can connect to the container like  check test Connectivity
+    // check that we can connect to the container like check test Connectivity
     @Test
     public void testConnectivity() {
         client.getDatabase("test").getName();
     }
 
     @SuppressWarnings("deprecation")
-	private void addTestStudentToDatabase(String studentId, String name, String rollNumber) {
+    private void addTestStudentToDatabase(String studentId, String name, String rollNumber) {
         MongoClient tempClient = new MongoClient(
-            new ServerAddress(
-                mongo.getContainerIpAddress(),
-                mongo.getMappedPort(27017)
-            )
-        );
+                new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017)));
 
-        tempClient.getDatabase("attendance_db")
-            .getCollection("students")
-            .insertOne(
-                new org.bson.Document()
-                    .append("studentId", studentId)
-                    .append("name", name)
-                    .append("rollNumber", rollNumber)
-            );
+        tempClient.getDatabase("attendance_db").getCollection("students").insertOne(new org.bson.Document()
+                .append("studentId", studentId).append("name", name).append("rollNumber", rollNumber));
 
         tempClient.close();
     }
 
-    //  Add Student
+    // Add Student
     @Test
     public void testSave() {
         Student student = new Student("S1", "Junaid", "7131056");
@@ -79,7 +65,7 @@ public class StudentMongoRepositoryTestcontainersIT {
         assertThat(saved.getRollNumber()).isEqualTo("7131056");
     }
 
-    //  Edit Student
+    // Edit Student
     @Test
     public void testUpdate() {
         // First add a student
@@ -94,7 +80,7 @@ public class StudentMongoRepositoryTestcontainersIT {
         assertThat(found.getName()).isEqualTo("Ahmed Khan");
     }
 
-    //  Delete Student
+    // Delete Student
     @Test
     public void testDelete() {
         // First add a student
