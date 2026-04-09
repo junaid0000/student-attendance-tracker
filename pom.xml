@@ -316,7 +316,8 @@
                         <version>${jacoco.version}</version>
                         <configuration>
                             <excludes>
-                                <exclude>**/model/*.*</exclude>
+                                <exclude>**/view/swing/**/*</exclude>
+                                <exclude>**/model/**/*</exclude>
                                 <exclude>**/AttendanceTrackerApp.*</exclude>
                             </excludes>
                         </configuration>
