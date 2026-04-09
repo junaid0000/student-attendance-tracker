@@ -49,8 +49,7 @@ public class StudentController {
     }
 
     public void deleteStudent(String rollNumber) {
-        Student student = studentRepository.findByRollNumber(rollNumber).get();
-        studentRepository.delete(student);
+        studentRepository.findByRollNumber(rollNumber).ifPresent(studentRepository::delete);
     }
     public Optional<Student> getStudentByRollNumber(String rollNumber) {
         return studentRepository.findByRollNumber(rollNumber);

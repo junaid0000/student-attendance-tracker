@@ -20,7 +20,8 @@ public class AttendanceController {
     }
 
     public AttendanceRecord markAttendance(String rollNumber, Date date, boolean present) {
-        Student student = studentRepository.findByRollNumber(rollNumber).get();
+        Student student = studentRepository.findByRollNumber(rollNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found: " + rollNumber));
         AttendanceRecord record = new AttendanceRecord(student.getStudentId(), date, present);
         return attendanceRepository.markAttendance(record);
     }
@@ -33,13 +34,15 @@ public class AttendanceController {
 
     // get attendance by student
     public List<AttendanceRecord> getAttendanceByStudent(String rollNumber) {
-        Student student = studentRepository.findByRollNumber(rollNumber).get();
+        Student student = studentRepository.findByRollNumber(rollNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found: " + rollNumber));
         return attendanceRepository.findByStudentId(student.getStudentId());
     }
 
     // Implement Percentage Calculation
     public double getAttendancePercentage(String rollNumber) {
-        Student student = studentRepository.findByRollNumber(rollNumber).get();
+        Student student = studentRepository.findByRollNumber(rollNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found: " + rollNumber));
         List<AttendanceRecord> records = attendanceRepository.findByStudentId(student.getStudentId());
 
         long presentCount = 0;
