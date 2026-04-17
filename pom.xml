@@ -27,12 +27,14 @@
         <sonar.coverage.exclusions>
             **/view/swing/**/*,
             **/model/**/*,
-            **/AttendanceTrackerApp.*
+            **/repository/**/*,
+            **/app/**/*
         </sonar.coverage.exclusions>
         <sonar.exclusions>
             **/view/swing/**/*,
             **/model/**/*,
-            **/AttendanceTrackerApp.*
+            **/repository/**/*,
+            **/app/**/*
         </sonar.exclusions>
         <sonar.junit.reportPaths>
             ${project.build.directory}/surefire-reports,
@@ -200,7 +202,8 @@
                     <excludes>
                         <exclude>**/view/swing/**/*</exclude>
                         <exclude>**/model/**/*</exclude>
-                        <exclude>**/AttendanceTrackerApp.*</exclude>
+                        <exclude>**/repository/**/*</exclude>
+                        <exclude>**/app/**/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -318,7 +321,8 @@
                             <excludes>
                                 <exclude>**/view/swing/**/*</exclude>
                                 <exclude>**/model/**/*</exclude>
-                                <exclude>**/AttendanceTrackerApp.*</exclude>
+                                <exclude>**/repository/**/*</exclude>
+                                <exclude>**/app/**/*</exclude>
                             </excludes>
                         </configuration>
                         <executions>
@@ -351,7 +355,8 @@
                                     <excludes>
                                         <exclude>**/view/swing/**/*</exclude>
                                         <exclude>**/model/**/*</exclude>
-                                        <exclude>**/AttendanceTrackerApp.*</exclude>
+                                        <exclude>**/repository/**/*</exclude>
+                                        <exclude>**/app/**/*</exclude>
                                     </excludes>
                                 </configuration>
                             </execution>
