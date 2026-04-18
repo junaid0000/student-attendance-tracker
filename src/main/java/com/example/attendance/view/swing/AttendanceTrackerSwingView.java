@@ -79,7 +79,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private JPanel studentsAttendancePanel;
     private Map<String, ButtonGroup> studentAttendanceGroups;
     private List<Student> currentStudentsList;
-    // it will showin the success message
+    // it will showing the success message
     private boolean showingSuccessMessage = false;
     private boolean showingErrorMessage = false;
     private int currentMessageId = 0;
@@ -164,7 +164,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         panel.add(lblName);
 
         textFieldName = new JTextField();
-        textFieldName.setName("studentnameTextBox"); // so now do not chnage the this name it is used in tests
+        textFieldName.setName("studentnameTextBox"); // so now do not change this name it is used in tests
         textFieldName.setBounds(90, 50, 200, 20);
         panel.add(textFieldName);
         textFieldName.setColumns(10);
@@ -183,7 +183,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         panel.add(lblRollNo);
 
         textFieldRollNo = new JTextField();
-        textFieldRollNo.setName("rollnumberTxtBox"); // so now do not chnage the this name it is used in tests
+        textFieldRollNo.setName("rollnumberTxtBox"); // so now do not change this name it is used in tests
         textFieldRollNo.setBounds(90, 80, 200, 20);
         panel.add(textFieldRollNo);
         textFieldRollNo.setColumns(10);
@@ -219,13 +219,13 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         btnDelete.addActionListener(e -> deleteSelectedStudent());
 
         // Student List label
-        JTextArea txtrStudentList = new JTextArea();
-        txtrStudentList.setFont(new Font(FONT_MONOSPACED, Font.BOLD, 13));
-        txtrStudentList.setText("Student List:");
-        txtrStudentList.setBounds(20, 160, 150, 20);
-        txtrStudentList.setEditable(false);
-        txtrStudentList.setOpaque(false);
-        panel.add(txtrStudentList);
+        JTextArea txtStudentList = new JTextArea();
+        txtStudentList.setFont(new Font(FONT_MONOSPACED, Font.BOLD, 13));
+        txtStudentList.setText("Student List:");
+        txtStudentList.setBounds(20, 160, 150, 20);
+        txtStudentList.setEditable(false);
+        txtStudentList.setOpaque(false);
+        panel.add(txtStudentList);
 
         // Student List with scroll
         JScrollPane studentScrollPane = new JScrollPane();
@@ -274,7 +274,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
 
         dateFieldAttendance = new JTextField();
         dateFieldAttendance.setName("dateTextField"); // Add component name for testing
-        dateFieldAttendance.setText("dd/mm/yyyy");
+        dateFieldAttendance.setText(DATE_FORMAT);
         dateFieldAttendance.setBounds(70, 50, 120, 20);
         panel.add(dateFieldAttendance);
 
@@ -680,27 +680,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         showingSuccessMessage = true;
         lblError.setText(message);
 
-        // Reset flag after a delay. In test mode, we use a slightly shorter delay
-        // but still long enough for tests to see the message (500ms).
-        int delay = isTestMode ? 500 : 3000;
-        new Timer(delay, e -> {
-            // Only act if this is still the most recent message
-            if (msgId == currentMessageId) {
-                showingSuccessMessage = false;
-                // Just update the label instead of full reload to avoid selection flickering
-                if (studentController != null) {
-                    try {
-                        int count = studentController.getAllStudents().size();
-                        // Only update if no error message has appeared in the meantime
-                        if (!showingErrorMessage) {
-                            lblError.setText(LOADED_MSG + count + LOADED_SUFFIX);
-                        }
-                    } catch (Exception ex) {
-                        // Ignore exception during background list update
-                    }
-                }
-            }
-        }).start();
+        resetStatusAfterDelay(msgId);
     }
 
     private void addStudentAction() {
@@ -738,24 +718,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             textFieldName.setText("");
             textFieldRollNo.setText("");
 
-            // Reset flag after a delay. In test mode, we use a slightly shorter delay
-            // but still long enough for tests to see the message (500ms).
-            int delay = isTestMode ? 500 : 3000;
-            new Timer(delay, e -> {
-                // Only act if this is still the most recent message
-                if (msgId == currentMessageId) {
-                    showingSuccessMessage = false;
-                    // Just update the label if no error message has appeared in the meantime
-                    if (studentController != null && !showingErrorMessage) {
-                        try {
-                            int count = studentController.getAllStudents().size();
-                            lblError.setText(LOADED_MSG + count + LOADED_SUFFIX);
-                        } catch (Exception ex) {
-                            LOGGER.log(Level.FINE, "Background update failed", ex);
-                        }
-                    }
-                }
-            }).start();
+            resetStatusAfterDelay(msgId);
 
         } catch (IllegalArgumentException ex) {
             currentMessageId++;
@@ -854,15 +817,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                 loadStudentsFromDatabase(); // Refresh the list
                 refreshAttendancePanelStudents(); // Also refresh attendance panel
                 
-                // Reset flag after delay
-                int delay = isTestMode ? 500 : 3000;
-                new javax.swing.Timer(delay, e -> {
-                    if (msgId == currentMessageId) {
-                        showingSuccessMessage = false;
-                        loadStudentsFromDatabase();
-                    }
-                }).start();
-
+                resetStatusAfterDelay(msgId);
             } else {
                 showStudentError("Student not found: " + rollNumber, null);
             }
@@ -899,4 +854,27 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         }
     }
 
+    private void resetStatusAfterDelay(int msgId) {
+        // Reset flag after a delay. In test mode, we use a slightly shorter delay
+        // but still long enough for tests to see the message (500ms).
+        int delay = isTestMode ? 500 : 3000;
+        new Timer(delay, e -> {
+            // Only act if this is still the most recent message
+            if (msgId == currentMessageId) {
+                showingSuccessMessage = false;
+                // Just update the label instead of full reload to avoid selection flickering
+                if (studentController != null) {
+                    try {
+                        int count = studentController.getAllStudents().size();
+                        // Only update if no error message has appeared in the meantime
+                        if (!showingErrorMessage) {
+                            lblError.setText(LOADED_MSG + count + LOADED_SUFFIX);
+                        }
+                    } catch (Exception ex) {
+                        // Ignore exception during background list update
+                    }
+                }
+            }
+        }).start();
+    }
 }

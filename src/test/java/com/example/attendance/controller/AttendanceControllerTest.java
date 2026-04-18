@@ -144,4 +144,18 @@ public class AttendanceControllerTest {
         verify(studentRepository).findByRollNumber(UNUSED_ROLL_NUMBER);
         verify(attendanceRepository).findByStudentId(student.getStudentId());
     }
+
+    @Test
+    public void testGetAttendancePercentageWithEmptyRecords() {
+        // ARRANGE
+        Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
+        when(studentRepository.findByRollNumber(UNUSED_ROLL_NUMBER)).thenReturn(Optional.of(student));
+        when(attendanceRepository.findByStudentId(student.getStudentId())).thenReturn(Arrays.asList());
+
+        // ACT
+        double result = attendanceController.getAttendancePercentage(UNUSED_ROLL_NUMBER);
+
+        // ASSERT
+        assertEquals(0.0, result, 0.01);
+    }
 }
