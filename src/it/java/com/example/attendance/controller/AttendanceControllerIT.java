@@ -31,7 +31,7 @@ public class AttendanceControllerIT {
     @Before
     public void setup() {
         client = new MongoClient(
-            new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017))
+            new ServerAddress(mongo.getHost(), mongo.getMappedPort(27017))
         );
 
         attendanceRepository = new AttendanceMongoRepository(client, "attendance_db", "attendance_records");

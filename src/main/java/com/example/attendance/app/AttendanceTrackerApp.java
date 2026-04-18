@@ -10,7 +10,12 @@ import com.example.attendance.repository.mongo.StudentMongoRepository;
 import com.example.attendance.view.swing.AttendanceTrackerSwingView;
 import com.mongodb.MongoClient;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class AttendanceTrackerApp {
+    private static final Logger LOGGER = Logger.getLogger(AttendanceTrackerApp.class.getName());
+
     public static void main(String[] args) {
         // Parse arguments before lambda
         final String mongoHost = getArgValue(args, "--mongo-host=", "localhost");
@@ -21,11 +26,11 @@ public class AttendanceTrackerApp {
 
         java.awt.EventQueue.invokeLater(() -> {
             try {
-                System.out.println("Starting Attendance Tracker Application...");
-                System.out.println("MongoDB Host: " + mongoHost);
-                System.out.println("MongoDB Port: " + mongoPort);
-                System.out.println("Database: " + databaseName);
-                System.out.println("Student Collection: " + studentCollection);
+                LOGGER.info("Starting Attendance Tracker Application...");
+                LOGGER.info(() -> "MongoDB Host: " + mongoHost);
+                LOGGER.info(() -> "MongoDB Port: " + mongoPort);
+                LOGGER.info(() -> "Database: " + databaseName);
+                LOGGER.info(() -> "Student Collection: " + studentCollection);
 
                 // Create MongoDB connection
                 MongoClient mongoClient = new MongoClient(mongoHost, mongoPort);
@@ -55,22 +60,22 @@ public class AttendanceTrackerApp {
                 frame.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.out.println("Closing database connection...");
+                        LOGGER.info("Closing database connection...");
                         mongoClient.close();
                     }
                 });
 
-                System.out.println("Application started successfully!");
+                LOGGER.info("Application started successfully!");
 
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Exception occurred", e);
                 javax.swing.JOptionPane.showMessageDialog(null,
                         "Failed to connect to database. Please start MongoDB.\n" + "Host: " + mongoHost + " Port: "
                                 + mongoPort + "\n" + "Error: " + e.getMessage(),
                         "Database Error", javax.swing.JOptionPane.ERROR_MESSAGE);
 
                 // Show UI without database
-                System.out.println("Falling back to UI-only mode (no database)");
+                LOGGER.info("Falling back to UI-only mode (no database)");
                 AttendanceTrackerSwingView frame = new AttendanceTrackerSwingView();
                 frame.setVisible(true);
             }

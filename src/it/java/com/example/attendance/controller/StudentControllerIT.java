@@ -26,7 +26,7 @@ public class StudentControllerIT {
     @Before
     public void setup() {
         client = new MongoClient(
-            new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017))
+            new ServerAddress(mongo.getHost(), mongo.getMappedPort(27017))
         );
 
         studentRepository = new StudentMongoRepository(client, "attendance_db", "students");

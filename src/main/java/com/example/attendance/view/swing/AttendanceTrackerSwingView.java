@@ -36,6 +36,8 @@ import com.example.attendance.view.AttendanceTrackerView;
 public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrackerView {
 
     private static final long serialVersionUID = 1L;
+    private static final String FONT_TAHOMA = "Tahoma";
+    private static final String FONT_MONOSPACED = "Monospaced";
     private JTabbedPane tabbedPane;
     private boolean isTestMode = false;
 
@@ -72,14 +74,12 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private int currentMessageId = 0;
 
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    AttendanceTrackerSwingView frame = new AttendanceTrackerSwingView();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        EventQueue.invokeLater(() -> {
+            try {
+                AttendanceTrackerSwingView frame = new AttendanceTrackerSwingView();
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
@@ -109,7 +109,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         // Add title at top
         JPanel titlePanel = new JPanel();
         JLabel titleLabel = new JLabel("Student Attendance Tracker");
-        titleLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
+        titleLabel.setFont(new Font(FONT_TAHOMA, Font.BOLD, 16));
         titlePanel.add(titleLabel);
 
         // Add everything to frame
@@ -138,7 +138,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
 
         // Title for Students tab
         JTextArea txtStudentsTab = new JTextArea();
-        txtStudentsTab.setFont(new Font("Monospaced", Font.BOLD, 13));
+        txtStudentsTab.setFont(new Font(FONT_MONOSPACED, Font.BOLD, 13));
         txtStudentsTab.setText("============== STUDENTS TAB ==============");
         txtStudentsTab.setBounds(190, 11, 400, 20);
         txtStudentsTab.setEditable(false);
@@ -147,7 +147,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
 
         // Name label and field
         JLabel lblname = new JLabel("Name:");
-        lblname.setFont(new Font("Tahoma", Font.BOLD, 11));
+        lblname.setFont(new Font(FONT_TAHOMA, Font.BOLD, 11));
         lblname.setHorizontalAlignment(SwingConstants.RIGHT);
         lblname.setBounds(20, 51, 60, 20);
         panel.add(lblname);
@@ -166,7 +166,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
 
         // Roll No label and field
         JLabel lblrollno = new JLabel("Roll No:");
-        lblrollno.setFont(new Font("Tahoma", Font.BOLD, 11));
+        lblrollno.setFont(new Font(FONT_TAHOMA, Font.BOLD, 11));
         lblrollno.setHorizontalAlignment(SwingConstants.RIGHT);
         lblrollno.setBounds(20, 80, 60, 20);
         panel.add(lblrollno);
@@ -191,37 +191,25 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         panel.add(btnAdd);
 
         // Adding LISTENER
-        btnAdd.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                addStudentAction();
-            }
-        });
+        btnAdd.addActionListener(e -> addStudentAction());
 
         btnUpdate = new JButton("Update");
         btnUpdate.setName("updateButton"); // Add component name for testing
         btnUpdate.setBounds(150, 120, 120, 25);
         panel.add(btnUpdate);
 
-        btnUpdate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                updateSelectedStudent();
-            }
-        });
+        btnUpdate.addActionListener(e -> updateSelectedStudent());
 
         btnDelete = new JButton("Delete");
         btnDelete.setName("deleteButton"); // Add component name for testing
         btnDelete.setBounds(280, 120, 120, 25);
         panel.add(btnDelete);
 
-        btnDelete.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                deleteSelectedStudent();
-            }
-        });
+        btnDelete.addActionListener(e -> deleteSelectedStudent());
 
         // Student List label
         JTextArea txtrStudentList = new JTextArea();
-        txtrStudentList.setFont(new Font("Monospaced", Font.BOLD, 13));
+        txtrStudentList.setFont(new Font(FONT_MONOSPACED, Font.BOLD, 13));
         txtrStudentList.setText("Student List:");
         txtrStudentList.setBounds(20, 160, 150, 20);
         txtrStudentList.setEditable(false);
@@ -240,7 +228,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         // Error label
         lblerror = new JLabel("No errors");
         lblerror.setName("errorLabel"); // Add component name for testing
-        lblerror.setFont(new Font("Tahoma", Font.BOLD, 11));
+        lblerror.setFont(new Font(FONT_TAHOMA, Font.BOLD, 11));
         lblerror.setHorizontalAlignment(SwingConstants.LEFT);
         lblerror.setBounds(20, 400, 350, 20);
         panel.add(lblerror);
@@ -261,7 +249,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         // Title for Attendance tab
         JTextArea txtAttendanceTab = new JTextArea();
         txtAttendanceTab.setText("============== ATTENDANCE TAB ==============");
-        txtAttendanceTab.setFont(new Font("Monospaced", Font.BOLD, 13));
+        txtAttendanceTab.setFont(new Font(FONT_MONOSPACED, Font.BOLD, 13));
         txtAttendanceTab.setBounds(190, 11, 400, 20);
         txtAttendanceTab.setEditable(false);
         txtAttendanceTab.setOpaque(false);
@@ -269,7 +257,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
 
         // Date section
         JLabel dateLabel = new JLabel("Date:");
-        dateLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        dateLabel.setFont(new Font(FONT_TAHOMA, Font.PLAIN, 12));
         dateLabel.setBounds(20, 50, 50, 20);
         panel.add(dateLabel);
 
@@ -281,7 +269,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
 
         // Students attendance area title
         JLabel studentsLabel = new JLabel("Students for Attendance:");
-        studentsLabel.setFont(new Font("Tahoma", Font.BOLD, 10));
+        studentsLabel.setFont(new Font(FONT_TAHOMA, Font.BOLD, 10));
         studentsLabel.setBounds(20, 90, 180, 20);
         panel.add(studentsLabel);
 
@@ -297,18 +285,14 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         // Mark Attendance button
         btnmarkAttendance = new JButton("Mark Attendance");
         btnmarkAttendance.setName("markAttendanceButton"); // Add component name for testing
-        btnmarkAttendance.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                markAttendanceAction();
-            }
-        });
-        btnmarkAttendance.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        btnmarkAttendance.addActionListener(e -> markAttendanceAction());
+        btnmarkAttendance.setFont(new Font(FONT_TAHOMA, Font.PLAIN, 11));
         btnmarkAttendance.setBounds(20, 290, 150, 30);
         panel.add(btnmarkAttendance);
 
         // View Attendance section
         JLabel viewLabel = new JLabel("View Attendance:");
-        viewLabel.setFont(new Font("Tahoma", Font.BOLD, 10));
+        viewLabel.setFont(new Font(FONT_TAHOMA, Font.BOLD, 10));
         viewLabel.setBounds(20, 340, 120, 20);
         panel.add(viewLabel);
 
@@ -329,30 +313,22 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         // View Attendance button
         btnviewByDate = new JButton("View Attendance");
         btnviewByDate.setName("viewByDateButton"); // Add compnent name for testing
-        btnviewByDate.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        btnviewByDate.setFont(new Font(FONT_TAHOMA, Font.PLAIN, 11));
         btnviewByDate.setBounds(20, 370, 150, 30);
-        btnviewByDate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                viewAttendanceAction();
-            }
-        });
+        btnviewByDate.addActionListener(e -> viewAttendanceAction());
         panel.add(btnviewByDate);
 
         // Get Summary button
         btngetSummary = new JButton("Get Summary");
         btngetSummary.setName("getSummaryButton"); // Add component name for testing
-        btngetSummary.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        btngetSummary.setFont(new Font(FONT_TAHOMA, Font.PLAIN, 11));
         btngetSummary.setBounds(180, 370, 150, 30);
-        btngetSummary.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                getSummaryAction();
-            }
-        });
+        btngetSummary.addActionListener(e -> getSummaryAction());
         panel.add(btngetSummary);
 
         // Attendance records display
         JLabel recordsLabel = new JLabel("Attendance Records:");
-        recordsLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
+        recordsLabel.setFont(new Font(FONT_TAHOMA, Font.BOLD, 12));
         recordsLabel.setBounds(20, 411, 150, 20);
         panel.add(recordsLabel);
 
@@ -369,14 +345,14 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         // Summary label
         summaryLabel = new JLabel("Attendance: 0%");
         summaryLabel.setName("summaryLabel"); // Add compnent name for testing
-        summaryLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+        summaryLabel.setFont(new Font(FONT_TAHOMA, Font.BOLD, 14));
         summaryLabel.setBounds(20, 540, 200, 30);
         panel.add(summaryLabel);
 
         // Error label
         attendanceErrorLabel = new JLabel("");
         attendanceErrorLabel.setName("attendanceErrorLabel"); // Add compnent name for testing
-        attendanceErrorLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        attendanceErrorLabel.setFont(new Font(FONT_TAHOMA, Font.PLAIN, 11));
         attendanceErrorLabel.setForeground(java.awt.Color.RED);
         attendanceErrorLabel.setBounds(20, 570, 450, 20);
         panel.add(attendanceErrorLabel);
@@ -694,22 +670,19 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         // Reset flag after a delay. In test mode, we use a slightly shorter delay
         // but still long enough for tests to see the message (500ms).
         int delay = isTestMode ? 500 : 3000;
-        new Timer(delay, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Only act if this is still the most recent message
-                if (msgId == currentMessageId) {
-                    showingSuccessMessage = false;
-                    // Just update the label instead of full reload to avoid selection flickering
-                    if (studentController != null) {
-                        try {
-                            int count = studentController.getAllStudents().size();
-                            // Only update if no error message has appeared in the meantime
-                            if (!showingErrorMessage) {
-                                lblerror.setText("Loaded " + count + " students from database");
-                            }
-                        } catch (Exception ex) {
+        new Timer(delay, e -> {
+            // Only act if this is still the most recent message
+            if (msgId == currentMessageId) {
+                showingSuccessMessage = false;
+                // Just update the label instead of full reload to avoid selection flickering
+                if (studentController != null) {
+                    try {
+                        int count = studentController.getAllStudents().size();
+                        // Only update if no error message has appeared in the meantime
+                        if (!showingErrorMessage) {
+                            lblerror.setText("Loaded " + count + " students from database");
                         }
+                    } catch (Exception ex) {
                     }
                 }
             }
@@ -754,19 +727,16 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             // Reset flag after a delay. In test mode, we use a slightly shorter delay
             // but still long enough for tests to see the message (500ms).
             int delay = isTestMode ? 500 : 3000;
-            new Timer(delay, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Only act if this is still the most recent message
-                    if (msgId == currentMessageId) {
-                        showingSuccessMessage = false;
-                        // Just update the label if no error message has appeared in the meantime
-                        if (studentController != null && !showingErrorMessage) {
-                            try {
-                                int count = studentController.getAllStudents().size();
-                                lblerror.setText("Loaded " + count + " students from database");
-                            } catch (Exception ex) {
-                            }
+            new Timer(delay, e -> {
+                // Only act if this is still the most recent message
+                if (msgId == currentMessageId) {
+                    showingSuccessMessage = false;
+                    // Just update the label if no error message has appeared in the meantime
+                    if (studentController != null && !showingErrorMessage) {
+                        try {
+                            int count = studentController.getAllStudents().size();
+                            lblerror.setText("Loaded " + count + " students from database");
+                        } catch (Exception ex) {
                         }
                     }
                 }

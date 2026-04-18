@@ -17,22 +17,23 @@ import com.mongodb.client.model.Indexes;
 
 public class StudentMongoRepository implements StudentRepository {
 
-    private MongoClient client;
-    private MongoDatabase database;
     private MongoCollection<Document> studentCollection;
+    
+    private static final String STUDENT_ID = "studentId";
+    private static final String NAME = "name";
+    private static final String ROLL_NUMBER = "rollNumber";
 
     public StudentMongoRepository(MongoClient client, String databaseName, String collectionName) {
-        this.client = client;
-        this.database = client.getDatabase(databaseName);
+        MongoDatabase database = client.getDatabase(databaseName);
         this.studentCollection = database.getCollection(collectionName);
         studentCollection.createIndex(Indexes.ascending("rollNumber"), new IndexOptions().unique(true));
     }
     @Override
     public Student save(Student student) {
         Document doc = new Document()
-            .append("studentId", student.getStudentId())
-            .append("name", student.getName())
-            .append("rollNumber", student.getRollNumber());
+            .append(STUDENT_ID, student.getStudentId())
+            .append(NAME, student.getName())
+            .append(ROLL_NUMBER, student.getRollNumber());
         
         studentCollection.insertOne(doc);
         return student;
@@ -40,7 +41,7 @@ public class StudentMongoRepository implements StudentRepository {
 
     public Student findById(String studentId) {
         Document doc = studentCollection.find(
-            Filters.eq("studentId", studentId)
+            Filters.eq(STUDENT_ID, studentId)
         ).first();
 
         if (doc == null) {
@@ -48,33 +49,33 @@ public class StudentMongoRepository implements StudentRepository {
         }
 
         return new Student(
-            doc.getString("studentId"),
-            doc.getString("name"),
-            doc.getString("rollNumber")
+            doc.getString(STUDENT_ID),
+            doc.getString(NAME),
+            doc.getString(ROLL_NUMBER)
         );
     }
     @Override
     public void update(Student student) {
         Document doc = new Document()
-            .append("studentId", student.getStudentId())
-            .append("name", student.getName())
-            .append("rollNumber", student.getRollNumber());
+            .append(STUDENT_ID, student.getStudentId())
+            .append(NAME, student.getName())
+            .append(ROLL_NUMBER, student.getRollNumber());
 
         studentCollection.replaceOne(
-            Filters.eq("studentId", student.getStudentId()),
+            Filters.eq(STUDENT_ID, student.getStudentId()),
             doc
         );
     }
     public void delete(String studentId) {
         studentCollection.deleteOne(
-            Filters.eq("studentId", studentId)
+            Filters.eq(STUDENT_ID, studentId)
         );
     }
 
     @Override
 	public Optional<Student> findByRollNumber(String rollNumber) {
         Document doc = studentCollection.find(
-            Filters.eq("rollNumber", rollNumber)
+            Filters.eq(ROLL_NUMBER, rollNumber)
         ).first();
 
         if (doc == null) {
@@ -82,9 +83,9 @@ public class StudentMongoRepository implements StudentRepository {
         }
 
         Student student = new Student(
-            doc.getString("studentId"),
-            doc.getString("name"),
-            doc.getString("rollNumber")
+            doc.getString(STUDENT_ID),
+            doc.getString(NAME),
+            doc.getString(ROLL_NUMBER)
         );
 
         return Optional.of(student);
@@ -99,9 +100,9 @@ public class StudentMongoRepository implements StudentRepository {
         List<Student> students = new ArrayList<>();
         for (Document doc : studentCollection.find()) {
             Student student = new Student(
-                doc.getString("studentId"),
-                doc.getString("name"),
-                doc.getString("rollNumber")
+                doc.getString(STUDENT_ID),
+                doc.getString(NAME),
+                doc.getString(ROLL_NUMBER)
             );
             students.add(student);
         }
