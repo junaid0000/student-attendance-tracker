@@ -12,7 +12,6 @@ public class StudentController {
     public StudentController(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
-    @javax.annotation.processing.Generated("Ignore for JaCoCo")
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
@@ -20,7 +19,7 @@ public class StudentController {
     public Student addStudent(String name, String rollNumber) {
         Optional<Student> existingStudent = studentRepository.findByRollNumber(rollNumber);
         if (existingStudent.isPresent()) {
-            throwStudentExists(rollNumber);
+            throw new IllegalArgumentException("Student with roll number '" + rollNumber + "' already exists");
         }
         Student student = new Student(name, rollNumber);
         return studentRepository.save(student);
@@ -29,7 +28,7 @@ public class StudentController {
     public Student updateStudent(String rollNumber, String newName, String newRollNumber) {
         Optional<Student> existingStudent = studentRepository.findByRollNumber(rollNumber);
         if (!existingStudent.isPresent()) {
-            throwStudentNotFound(rollNumber);
+            throw new IllegalArgumentException("Student not found with roll number: " + rollNumber);
         }
         
         Student student = existingStudent.get();
@@ -38,7 +37,7 @@ public class StudentController {
         if (!rollNumber.equals(newRollNumber)) {
             Optional<Student> studentWithNewRoll = studentRepository.findByRollNumber(newRollNumber);
             if (studentWithNewRoll.isPresent()) {
-                throwStudentExists(newRollNumber);
+                throw new IllegalArgumentException("Student with roll number '" + newRollNumber + "' already exists");
             }
         }
         
@@ -52,18 +51,7 @@ public class StudentController {
     public void deleteStudent(String rollNumber) {
         studentRepository.findByRollNumber(rollNumber).ifPresent(studentRepository::delete);
     }
-    @javax.annotation.processing.Generated("Ignore for JaCoCo")
     public Optional<Student> getStudentByRollNumber(String rollNumber) {
         return studentRepository.findByRollNumber(rollNumber);
-    }
-
-    @javax.annotation.processing.Generated("Ignore for JaCoCo")
-    private void throwStudentExists(String rollNumber) {
-        throw new IllegalArgumentException("Student with roll number '" + rollNumber + "' already exists");
-    }
-
-    @javax.annotation.processing.Generated("Ignore for JaCoCo")
-    private void throwStudentNotFound(String rollNumber) {
-        throw new IllegalArgumentException("Student not found with roll number: " + rollNumber);
     }
 }

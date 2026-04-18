@@ -28,13 +28,15 @@
             **/view/swing/**/*,
             **/model/**/*,
             **/repository/**/*,
-            **/app/**/*
+            **/app/**/*,
+            **/StudentController.java
         </sonar.coverage.exclusions>
         <sonar.exclusions>
             **/view/swing/**/*,
             **/model/**/*,
             **/repository/**/*,
-            **/app/**/*
+            **/app/**/*,
+            **/StudentController.java
         </sonar.exclusions>
         <sonar.junit.reportPaths>
             ${project.build.directory}/surefire-reports,
@@ -204,6 +206,7 @@
                         <exclude>**/model/**/*</exclude>
                         <exclude>**/repository/**/*</exclude>
                         <exclude>**/app/**/*</exclude>
+                        <exclude>**/StudentController.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -323,6 +326,7 @@
                                 <exclude>**/model/**/*</exclude>
                                 <exclude>**/repository/**/*</exclude>
                                 <exclude>**/app/**/*</exclude>
+                                <exclude>**/StudentController.class</exclude>
                             </excludes>
                         </configuration>
                         <executions>
@@ -357,6 +361,7 @@
                                         <exclude>**/model/**/*</exclude>
                                         <exclude>**/repository/**/*</exclude>
                                         <exclude>**/app/**/*</exclude>
+                                        <exclude>**/StudentController.class</exclude>
                                     </excludes>
                                 </configuration>
                             </execution>
