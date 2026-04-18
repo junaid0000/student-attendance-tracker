@@ -58,10 +58,10 @@ public class AttendanceControllerIT {
 
         // Mark attendance as present
         Date today = new Date();
-        AttendanceRecord record = attendanceController.markAttendance("7131056", today, true);
+        AttendanceRecord attendanceRecord = attendanceController.markAttendance("7131056", today, true);
 
-        assertThat(record).isNotNull();
-        assertThat(record.isPresent()).isTrue();
+        assertThat(attendanceRecord).isNotNull();
+        assertThat(attendanceRecord.isPresent()).isTrue();
     }
 
     // Mark Attendance Absent
@@ -72,10 +72,10 @@ public class AttendanceControllerIT {
 
         // Mark attendance as absent
         Date today = new Date();
-        AttendanceRecord record = attendanceController.markAttendance("7131057", today, false);
+        AttendanceRecord attendanceRecord = attendanceController.markAttendance("7131057", today, false);
 
-        assertThat(record).isNotNull();
-        assertThat(record.isPresent()).isFalse();
+        assertThat(attendanceRecord).isNotNull();
+        assertThat(attendanceRecord.isPresent()).isFalse();
     }
 
     // Get Attendance By Date

@@ -26,7 +26,7 @@ public class StudentMongoRepository implements StudentRepository {
     public StudentMongoRepository(MongoClient client, String databaseName, String collectionName) {
         MongoDatabase database = client.getDatabase(databaseName);
         this.studentCollection = database.getCollection(collectionName);
-        studentCollection.createIndex(Indexes.ascending("rollNumber"), new IndexOptions().unique(true));
+        studentCollection.createIndex(Indexes.ascending(ROLL_NUMBER), new IndexOptions().unique(true));
     }
     @Override
     public Student save(Student student) {

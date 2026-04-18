@@ -23,8 +23,8 @@ public class AttendanceController {
     public AttendanceRecord markAttendance(String rollNumber, Date date, boolean present) {
         Student student = studentRepository.findByRollNumber(rollNumber)
                 .orElseThrow(() -> new IllegalArgumentException(STUDENT_NOT_FOUND_MSG + rollNumber));
-        AttendanceRecord record = new AttendanceRecord(student.getStudentId(), date, present);
-        return attendanceRepository.markAttendance(record);
+        AttendanceRecord attendanceRecord = new AttendanceRecord(student.getStudentId(), date, present);
+        return attendanceRepository.markAttendance(attendanceRecord);
     }
 
     // get attendance by date
@@ -47,8 +47,8 @@ public class AttendanceController {
         List<AttendanceRecord> records = attendanceRepository.findByStudentId(student.getStudentId());
 
         long presentCount = 0;
-        for (AttendanceRecord record : records) {
-            if (record.isPresent()) {
+        for (AttendanceRecord attendanceRecord : records) {
+            if (attendanceRecord.isPresent()) {
                 presentCount++;
             }
         }

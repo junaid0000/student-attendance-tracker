@@ -38,6 +38,10 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private static final long serialVersionUID = 1L;
     private static final String FONT_TAHOMA = "Tahoma";
     private static final String FONT_MONOSPACED = "Monospaced";
+    private static final String ERROR_PREFIX = "Error: ";
+    private static final String DATE_FORMAT = "dd/MM/yyyy";
+    private static final String STATUS_PRESENT = "Present";
+    private static final String STATUS_ABSENT = "Absent";
     private JTabbedPane tabbedPane;
     private boolean isTestMode = false;
 
@@ -91,7 +95,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         }
 
         setTitle("Student Attendance Tracker");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(800, 600);
 
         // Create the tabbed pane
@@ -385,13 +389,13 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                 studentLabel.setBounds(10, 5, 150, 20);
                 studentPanel.add(studentLabel);
 
-                JRadioButton presentRadio = new JRadioButton("Present");
-                presentRadio.setActionCommand("Present");
+                JRadioButton presentRadio = new JRadioButton(STATUS_PRESENT);
+                presentRadio.setActionCommand(STATUS_PRESENT);
                 presentRadio.setBounds(170, 5, 70, 20);
                 studentPanel.add(presentRadio);
 
-                JRadioButton absentRadio = new JRadioButton("Absent");
-                absentRadio.setActionCommand("Absent");
+                JRadioButton absentRadio = new JRadioButton(STATUS_ABSENT);
+                absentRadio.setActionCommand(STATUS_ABSENT);
                 absentRadio.setBounds(250, 5, 70, 20);
                 studentPanel.add(absentRadio);
 
@@ -424,10 +428,10 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private java.util.Date parseDate() {
         try {
             String dateTxt = dateFieldattendance.getText();
-            if (dateTxt.equals("dd/mm/yyyy") || dateTxt.isEmpty()) {
+            if (dateTxt.equals(DATE_FORMAT) || dateTxt.isEmpty()) {
                 return new java.util.Date();
             }
-            return new SimpleDateFormat("dd/MM/yyyy").parse(dateTxt);
+            return new SimpleDateFormat(DATE_FORMAT).parse(dateTxt);
         } catch (Exception e) {
             return new java.util.Date(); // Fallback to current date
         }
@@ -497,13 +501,13 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                 ButtonGroup group = studentAttendanceGroups.get(student.getRollNumber());
                 boolean isPresent = true;
                 if (group != null && group.getSelection() != null) {
-                    isPresent = group.getSelection().getActionCommand().equals("Present");
+                    isPresent = group.getSelection().getActionCommand().equals(STATUS_PRESENT);
                 }
-                AttendanceRecord record = attendanceController.markAttendance(student.getRollNumber(), date, isPresent);
+                AttendanceRecord attendanceRecord = attendanceController.markAttendance(student.getRollNumber(), date, isPresent);
                 markedCount++;
                 anyMarked = true;
             } catch (Exception e) {
-                attendanceErrorLabel.setText("Error: " + e.getMessage());
+                attendanceErrorLabel.setText(ERROR_PREFIX + e.getMessage());
                 return;
             }
         }
@@ -564,7 +568,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         Runnable r = () -> {
             showingSuccessMessage = false;
             showingErrorMessage = true;
-            lblerror.setText("Error: " + message);
+            lblerror.setText(ERROR_PREFIX + message);
         };
         if (SwingUtilities.isEventDispatchThread()) {
             r.run();
@@ -574,16 +578,16 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     }
 
     @Override
-    public void attendanceMarked(AttendanceRecord record) {
+    public void attendanceMarked(AttendanceRecord attendanceRecord) {
         SwingUtilities.invokeLater(() -> {
-            attendanceErrorLabel.setText("Attendance marked for student ID: " + record.getStudentId());
+            attendanceErrorLabel.setText("Attendance marked for student ID: " + attendanceRecord.getStudentId());
         });
     }
 
     @Override
-    public void attendanceUpdated(AttendanceRecord record) {
+    public void attendanceUpdated(AttendanceRecord attendanceRecord) {
         SwingUtilities.invokeLater(() -> {
-            attendanceErrorLabel.setText("Attendance updated for: " + record.getStudentId());
+            attendanceErrorLabel.setText("Attendance updated for: " + attendanceRecord.getStudentId());
         });
     }
 
@@ -600,6 +604,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                     }
                 }
             } catch (Exception e) {
+                // Ignore exception to fallback to printing ID
             }
         }
         return "ID: " + studentId;
@@ -609,11 +614,11 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     public void showAttendanceByDate(List<AttendanceRecord> records) {
         SwingUtilities.invokeLater(() -> {
             StringBuilder sb = new StringBuilder();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            for (AttendanceRecord record : records) {
-                String status = record.isPresent() ? "Present" : "Absent";
-                String studentDetails = getStudentDetails(record.getStudentId());
-                sb.append("Date: ").append(sdf.format(record.getDate())).append(" | ").append(studentDetails)
+            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+            for (AttendanceRecord attendanceRecord : records) {
+                String status = attendanceRecord.isPresent() ? STATUS_PRESENT : STATUS_ABSENT;
+                String studentDetails = getStudentDetails(attendanceRecord.getStudentId());
+                sb.append("Date: ").append(sdf.format(attendanceRecord.getDate())).append(" | ").append(studentDetails)
                         .append(" - ").append(status).append("\n");
             }
             attendanceRecordsArea.setText(sb.toString());
@@ -625,11 +630,11 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     public void showAttendanceByStudent(List<AttendanceRecord> records) {
         SwingUtilities.invokeLater(() -> {
             StringBuilder sb = new StringBuilder();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            for (AttendanceRecord record : records) {
-                String status = record.isPresent() ? "Present" : "Absent";
-                String studentDetails = getStudentDetails(record.getStudentId());
-                sb.append("Date: ").append(sdf.format(record.getDate())).append(" | ").append(studentDetails)
+            SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+            for (AttendanceRecord attendanceRecord : records) {
+                String status = attendanceRecord.isPresent() ? STATUS_PRESENT : STATUS_ABSENT;
+                String studentDetails = getStudentDetails(attendanceRecord.getStudentId());
+                sb.append("Date: ").append(sdf.format(attendanceRecord.getDate())).append(" | ").append(studentDetails)
                         .append(" - ").append(status).append("\n");
             }
             attendanceRecordsArea.setText(sb.toString());
@@ -652,7 +657,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     @Override
     public void showAttendanceError(String message) {
         SwingUtilities.invokeLater(() -> {
-            attendanceErrorLabel.setText("Error: " + message);
+            attendanceErrorLabel.setText(ERROR_PREFIX + message);
         });
     }
 
@@ -683,6 +688,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                             lblerror.setText("Loaded " + count + " students from database");
                         }
                     } catch (Exception ex) {
+                        // Ignore exception during background list update
                     }
                 }
             }
@@ -737,6 +743,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                             int count = studentController.getAllStudents().size();
                             lblerror.setText("Loaded " + count + " students from database");
                         } catch (Exception ex) {
+                            // Ignore exception during background list update
                         }
                     }
                 }
@@ -767,6 +774,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             try {
                 Thread.sleep(50);
             } catch (Exception e) {
+                // Ignore interruption in test synchronization
             }
         }
     }

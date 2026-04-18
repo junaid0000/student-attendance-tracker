@@ -54,8 +54,8 @@ public class AttendanceControllerTest {
         Student student = new Student("Junaid", "7131056");
         when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
 
-        AttendanceRecord record = new AttendanceRecord(student.getStudentId(), new Date(), true);
-        when(attendanceRepository.markAttendance(any(AttendanceRecord.class))).thenReturn(record);
+        AttendanceRecord attendanceRecord = new AttendanceRecord(student.getStudentId(), new Date(), true);
+        when(attendanceRepository.markAttendance(any(AttendanceRecord.class))).thenReturn(attendanceRecord);
 
         // Act
         AttendanceRecord result = attendanceController.markAttendance("7131056", new Date(), true);
@@ -72,8 +72,8 @@ public class AttendanceControllerTest {
         Student student = new Student("Junaid", "7131056");
         when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
 
-        AttendanceRecord record = new AttendanceRecord(student.getStudentId(), new Date(), false);
-        when(attendanceRepository.markAttendance(any(AttendanceRecord.class))).thenReturn(record);
+        AttendanceRecord attendanceRecord = new AttendanceRecord(student.getStudentId(), new Date(), false);
+        when(attendanceRepository.markAttendance(any(AttendanceRecord.class))).thenReturn(attendanceRecord);
 
         // Act
         AttendanceRecord result = attendanceController.markAttendance("7131056", new Date(), false);

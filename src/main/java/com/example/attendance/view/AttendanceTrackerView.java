@@ -14,8 +14,8 @@ public interface AttendanceTrackerView {
     void showStudentError(String message, Student student);
     
     // Attendance operations as per project featur
-    void attendanceMarked(AttendanceRecord record);
-    void attendanceUpdated(AttendanceRecord record);
+    void attendanceMarked(AttendanceRecord attendanceRecord);
+    void attendanceUpdated(AttendanceRecord attendanceRecord);
     void showAttendanceByDate(List<AttendanceRecord> records);
     void showAttendanceByStudent(List<AttendanceRecord> records);
     void showAttendancePercentage(double percentage);

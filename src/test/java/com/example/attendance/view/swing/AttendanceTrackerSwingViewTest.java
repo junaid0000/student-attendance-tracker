@@ -129,6 +129,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
         Student student = new Student("Ahmed", "123");
         view.studentAdded(student);
+        window.robot().waitForIdle();
         window.label("errorLabel").requireText("Student added: Ahmed");
         org.junit.Assert.assertTrue(true);
     }
@@ -140,6 +141,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
         Student student = new Student("Umer", "456");
         view.studentUpdated(student);
+        window.robot().waitForIdle();
         window.label("errorLabel").requireText("Student updated: Umer");
         org.junit.Assert.assertTrue(true);
     }
@@ -151,6 +153,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
         Student student = new Student("Sarim", "789");
         view.studentDeleted(student);
+        window.robot().waitForIdle();
         window.label("errorLabel").requireText("Student deleted: Sarim");
         org.junit.Assert.assertTrue(true);
     }
@@ -162,6 +165,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
         Student student = new Student("sadii", "999");
         view.showStudentError("Test error", student);
+        window.robot().waitForIdle();
         window.label("errorLabel").requireText("Error: Test error");
         org.junit.Assert.assertTrue(true);
     }
@@ -171,11 +175,15 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         if (GraphicsEnvironment.isHeadless())
             return;
 
-        window.tabbedPane().selectTab(1);
-        try { Thread.sleep(1000); } catch (InterruptedException e) {}
-        window.robot().waitForIdle();
-        AttendanceRecord record = new AttendanceRecord("123", new Date(), true);
-        view.attendanceMarked(record);
+        boolean switched = false;
+        for(int i=0; i<3 && !switched; i++) {
+            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            window.tabbedPane().selectTab(1);
+            window.robot().waitForIdle();
+            if (window.tabbedPane().target().getSelectedIndex() == 1) switched = true;
+        }
+        AttendanceRecord attendanceRecord = new AttendanceRecord("123", new Date(), true);
+        view.attendanceMarked(attendanceRecord);
         window.label("attendanceErrorLabel").requireText("Attendance marked for student ID: 123");
         org.junit.Assert.assertTrue(true);
     }
@@ -185,13 +193,16 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         if (GraphicsEnvironment.isHeadless())
             return;
 
-        window.tabbedPane().selectTab(1);
-        try { Thread.sleep(1000); } catch (InterruptedException e) {}
-        // Adding a small pause to ensure the tab is fully rendered in the UI
-        try { Thread.sleep(200); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
-        window.robot().waitForIdle();
+        boolean switched = false;
+        for(int i=0; i<3 && !switched; i++) {
+            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            window.tabbedPane().selectTab(1);
+            window.robot().waitForIdle();
+            if (window.tabbedPane().target().getSelectedIndex() == 1) switched = true;
+        }
         
         view.showAttendancePercentage(85.5);
+        window.robot().waitForIdle();
         window.label("summaryLabel").requireText("Overall Attendance: 85.5%");
         org.junit.Assert.assertTrue(true);
     }

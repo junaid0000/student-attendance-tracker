@@ -26,7 +26,7 @@ public class AttendanceMongoRepositoryTestcontainersIT {
     @Before
     public void setup() {
         client = new MongoClient(
-            new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017))
+            new ServerAddress(mongo.getHost(), mongo.getMappedPort(27017))
         );
         repository = new AttendanceMongoRepository(client, "attendance_db", "attendance_records");
 
@@ -42,15 +42,15 @@ public class AttendanceMongoRepositoryTestcontainersIT {
     //  check that  connect to the container check test Connectivity
     @Test
     public void testConnectivity() {
-        client.getDatabase("test").getName();
+        assertThat(client.getDatabase("test").getName()).isEqualTo("test");
     }
 
     //  Mark attendance TDD .
     @Test
     public void testMarkAttendance() {
         Date today = new Date();
-        AttendanceRecord record = new AttendanceRecord("R1", today, true, "S1");
-        repository.markAttendance(record);
+        AttendanceRecord attendanceRecord = new AttendanceRecord("R1", today, true, "S1");
+        repository.markAttendance(attendanceRecord);
 
         List<AttendanceRecord> found = repository.findByDate(today);
         assertThat(found).hasSize(1);
@@ -60,10 +60,10 @@ public class AttendanceMongoRepositoryTestcontainersIT {
     @Test
     public void testFindAttendanceByDate() {
         Date today = new Date();
-        AttendanceRecord record1 = new AttendanceRecord("R1", today, true, "S1");
-        AttendanceRecord record2 = new AttendanceRecord("R2", today, false, "S2");
-        repository.markAttendance(record1);
-        repository.markAttendance(record2);
+        AttendanceRecord attendanceRecord1 = new AttendanceRecord("R1", today, true, "S1");
+        AttendanceRecord attendanceRecord2 = new AttendanceRecord("R2", today, false, "S2");
+        repository.markAttendance(attendanceRecord1);
+        repository.markAttendance(attendanceRecord2);
 
         List<AttendanceRecord> found = repository.findByDate(today);
         assertThat(found).hasSize(2);
@@ -72,10 +72,10 @@ public class AttendanceMongoRepositoryTestcontainersIT {
     @Test
     public void testFindAttendanceByStudent() {
         Date today = new Date();
-        AttendanceRecord record1 = new AttendanceRecord("R1", today, true, "S1");
-        AttendanceRecord record2 = new AttendanceRecord("R2", today, true, "S1");
-        repository.markAttendance(record1);
-        repository.markAttendance(record2);
+        AttendanceRecord attendanceRecord1 = new AttendanceRecord("R1", today, true, "S1");
+        AttendanceRecord attendanceRecord2 = new AttendanceRecord("R2", today, true, "S1");
+        repository.markAttendance(attendanceRecord1);
+        repository.markAttendance(attendanceRecord2);
 
         List<AttendanceRecord> found = repository.findByStudentId("S1");
         assertThat(found).hasSize(2);

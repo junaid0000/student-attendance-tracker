@@ -15,6 +15,11 @@ import com.mongodb.client.model.Filters;
 
 public class AttendanceMongoRepository implements AttendanceRepository {
 
+    private static final String RECORD_ID = "recordId";
+    private static final String DATE = "date";
+    private static final String PRESENT = "present";
+    private static final String STUDENT_ID = "studentId";
+
     private MongoDatabase database;
     private MongoCollection<Document> attendanceCollection;
 
@@ -24,27 +29,27 @@ public class AttendanceMongoRepository implements AttendanceRepository {
     }
 
     @Override
-	public AttendanceRecord markAttendance(AttendanceRecord record) {
+	public AttendanceRecord markAttendance(AttendanceRecord attendanceRecord) {
         Document doc = new Document()
-            .append("recordId", record.getRecordId())
-            .append("date", record.getDate())
-            .append("present", record.isPresent())
-            .append("studentId", record.getStudentId());
+            .append(RECORD_ID, attendanceRecord.getRecordId())
+            .append(DATE, attendanceRecord.getDate())
+            .append(PRESENT, attendanceRecord.isPresent())
+            .append(STUDENT_ID, attendanceRecord.getStudentId());
 
         attendanceCollection.insertOne(doc);
-        return record;
+        return attendanceRecord;
     }
 
     @Override
 	public List<AttendanceRecord> findByDate(Date date) {
         List<AttendanceRecord> results = new ArrayList<>();
 
-        for (Document doc : attendanceCollection.find(Filters.eq("date", date))) {
+        for (Document doc : attendanceCollection.find(Filters.eq(DATE, date))) {
             results.add(new AttendanceRecord(
-                doc.getString("recordId"),
-                doc.getDate("date"),
-                doc.getBoolean("present"),
-                doc.getString("studentId")
+                doc.getString(RECORD_ID),
+                doc.getDate(DATE),
+                doc.getBoolean(PRESENT),
+                doc.getString(STUDENT_ID)
             ));
         }
 
@@ -55,12 +60,12 @@ public class AttendanceMongoRepository implements AttendanceRepository {
 	public List<AttendanceRecord> findByStudentId(String studentId) {
         List<AttendanceRecord> results = new ArrayList<>();
 
-        for (Document doc : attendanceCollection.find(Filters.eq("studentId", studentId))) {
+        for (Document doc : attendanceCollection.find(Filters.eq(STUDENT_ID, studentId))) {
             results.add(new AttendanceRecord(
-                doc.getString("recordId"),
-                doc.getDate("date"),
-                doc.getBoolean("present"),
-                doc.getString("studentId")
+                doc.getString(RECORD_ID),
+                doc.getDate(DATE),
+                doc.getBoolean(PRESENT),
+                doc.getString(STUDENT_ID)
             ));
         }
 
@@ -70,8 +75,8 @@ public class AttendanceMongoRepository implements AttendanceRepository {
     public int getAttendanceSummary(String studentId) {
         int presentCount = 0;
 
-        for (Document doc : attendanceCollection.find(Filters.eq("studentId", studentId))) {
-            if (doc.getBoolean("present")) {
+        for (Document doc : attendanceCollection.find(Filters.eq(STUDENT_ID, studentId))) {
+            if (doc.getBoolean(PRESENT)) {
                 presentCount++;
             }
         }

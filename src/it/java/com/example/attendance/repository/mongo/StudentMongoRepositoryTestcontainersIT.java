@@ -21,10 +21,9 @@ public class StudentMongoRepositoryTestcontainersIT {
     private StudentMongoRepository studentRepository;
 
     // Connect to MongoDB container
-    @SuppressWarnings("deprecation")
     @Before
     public void setup() {
-        client = new MongoClient(new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017)));
+        client = new MongoClient(new ServerAddress(mongo.getHost(), mongo.getMappedPort(27017)));
         studentRepository = new StudentMongoRepository(client, "attendance_db", "students");
         // I am adding thisline for Clean the database before each test because its
         // added more record in database
@@ -39,13 +38,12 @@ public class StudentMongoRepositoryTestcontainersIT {
     // check that we can connect to the container like check test Connectivity
     @Test
     public void testConnectivity() {
-        client.getDatabase("test").getName();
+        assertThat(client.getDatabase("test").getName()).isEqualTo("test");
     }
 
-    @SuppressWarnings("deprecation")
     private void addTestStudentToDatabase(String studentId, String name, String rollNumber) {
         MongoClient tempClient = new MongoClient(
-                new ServerAddress(mongo.getContainerIpAddress(), mongo.getMappedPort(27017)));
+                new ServerAddress(mongo.getHost(), mongo.getMappedPort(27017)));
 
         tempClient.getDatabase("attendance_db").getCollection("students").insertOne(new org.bson.Document()
                 .append("studentId", studentId).append("name", name).append("rollNumber", rollNumber));
