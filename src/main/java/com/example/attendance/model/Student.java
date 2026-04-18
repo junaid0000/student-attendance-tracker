@@ -53,9 +53,6 @@ public class Student {
     }
     @Override
     public int hashCode() {
-        if (studentId == null) {
-            return 0;
-        }
-        return studentId.hashCode();
+        return Objects.hash(rollNumber);
     }
 }

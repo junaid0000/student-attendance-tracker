@@ -15,6 +15,12 @@ import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 
 public class StudentControllerIT {
+    private static final String ATTENDANCE_DB = "attendance_db";
+    private static final String STUDENTS_COLLECTION = "students";
+    private static final String STUDENT_JUNAID_NAME = "Junaid";
+    private static final String STUDENT_JUNAID_ROLL = "7131056";
+    private static final String STUDENT_JUNAID_UPDATED_NAME = "Junaid Updated";
+    private static final String STUDENT_7131057_ROLL = "7131057";
 
     @ClassRule
     public static final MongoDBContainer mongo = new MongoDBContainer("mongo:4.4.3");
@@ -29,10 +35,10 @@ public class StudentControllerIT {
             new ServerAddress(mongo.getHost(), mongo.getMappedPort(27017))
         );
 
-        studentRepository = new StudentMongoRepository(client, "attendance_db", "students");
+        studentRepository = new StudentMongoRepository(client, ATTENDANCE_DB, STUDENTS_COLLECTION);
         studentController = new StudentController(studentRepository);
 
-        client.getDatabase("attendance_db").getCollection("students").deleteMany(new org.bson.Document());
+        client.getDatabase(ATTENDANCE_DB).getCollection(STUDENTS_COLLECTION).deleteMany(new org.bson.Document());
     }
 
     @After
@@ -42,28 +48,28 @@ public class StudentControllerIT {
     // add studeent
     @Test
     public void testAddStudent() {
-        Student student = studentController.addStudent("Junaid", "7131056");
+        Student student = studentController.addStudent(STUDENT_JUNAID_NAME, STUDENT_JUNAID_ROLL);
 
         assertThat(student).isNotNull();
-        assertThat(student.getName()).isEqualTo("Junaid");
-        assertThat(student.getRollNumber()).isEqualTo("7131056");
+        assertThat(student.getName()).isEqualTo(STUDENT_JUNAID_NAME);
+        assertThat(student.getRollNumber()).isEqualTo(STUDENT_JUNAID_ROLL);
     }
     // update student
     @Test
     public void testUpdateStudent() {
-        studentController.addStudent("Junaid", "7131056");
-        Student updated = studentController.updateStudent("7131056", "Junaid Updated", "7131057");
+        studentController.addStudent(STUDENT_JUNAID_NAME, STUDENT_JUNAID_ROLL);
+        Student updated = studentController.updateStudent(STUDENT_JUNAID_ROLL, STUDENT_JUNAID_UPDATED_NAME, STUDENT_7131057_ROLL);
 
-        assertThat(updated.getName()).isEqualTo("Junaid Updated");
-        assertThat(updated.getRollNumber()).isEqualTo("7131057");
+        assertThat(updated.getName()).isEqualTo(STUDENT_JUNAID_UPDATED_NAME);
+        assertThat(updated.getRollNumber()).isEqualTo(STUDENT_7131057_ROLL);
     }
     // delete student
     @Test
     public void testDeleteStudent() {
-        studentController.addStudent("Junaid", "7131056");
-        studentController.deleteStudent("7131056");
+        studentController.addStudent(STUDENT_JUNAID_NAME, STUDENT_JUNAID_ROLL);
+        studentController.deleteStudent(STUDENT_JUNAID_ROLL);
 
-        boolean exists = studentRepository.findByRollNumber("7131056").isPresent();
+        boolean exists = studentRepository.findByRollNumber(STUDENT_JUNAID_ROLL).isPresent();
         assertThat(exists).isFalse();
     }
 }

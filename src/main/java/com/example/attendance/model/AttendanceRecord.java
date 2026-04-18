@@ -11,7 +11,7 @@ public class AttendanceRecord {
     // constructor
     public AttendanceRecord(String recordId, Date date, boolean present, String studentId) {
         this.recordId = recordId;
-        this.date = date;
+        this.date = date != null ? new Date(date.getTime()) : null;
         this.present = present;
         this.studentId = studentId;
     }
@@ -19,7 +19,7 @@ public class AttendanceRecord {
     // constructor
     public AttendanceRecord(String studentId, Date date, boolean present) {
         this.studentId = studentId;
-        this.date = date;
+        this.date = date != null ? new Date(date.getTime()) : null;
         this.present = present;
         this.recordId = "ATT001";
     }
@@ -31,13 +31,13 @@ public class AttendanceRecord {
         return studentId;
     }
     public Date getDate() {
-        return date;
+        return date != null ? new Date(date.getTime()) : null;
     }
     public boolean isPresent() {
         return present;
     }
     public void setDate(Date date) {
-        this.date = date;
+        this.date = date != null ? new Date(date.getTime()) : null;
     }
     public void setPresent(boolean present) {
         this.present = present;

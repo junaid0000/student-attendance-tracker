@@ -174,11 +174,17 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
         window.list(LIST_STUDENT).selectItem(Pattern.compile(".*" + STUDENT_1_ROLL + ".*"));
         window.button(BTN_DELETE).click();
 
-        // Wait for deletion
+        // Wait for deletion message
+        org.assertj.swing.timing.Pause.pause(500);
         window.robot().waitForIdle();
-
-        // Verify success message
-        assertThat(window.label(LBL_ERROR).text()).contains("Loaded");
+        
+        // Verify success message - it might say "Student deleted" or already "Loaded"
+        String labelText = window.label(LBL_ERROR).text();
+        assertThat(labelText).matches(".*(Student deleted|Loaded).*");
+        
+        // Final wait for database to be cleaned and UI to refresh
+        org.assertj.swing.timing.Pause.pause(500);
+        window.robot().waitForIdle();
 
         // Verify removed from database
         Document studentDoc = mongoClient.getDatabase(DB_NAME).getCollection(STUDENT_COLLECTION)

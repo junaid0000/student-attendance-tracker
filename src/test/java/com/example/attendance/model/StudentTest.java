@@ -70,16 +70,13 @@ public class StudentTest {
     public void testStudentHashCode() {
         // setup
         Student student1 = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
-        Student student2 = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
-
-        // exercise
-        student2.setStudentId(student1.getStudentId());
+        Student student2 = new Student("Other Name", UNUSED_ROLL_NUMBER);
 
         // verify
-        assertEquals("Equal students should have same hashcode", student1.hashCode(), student2.hashCode());
+        assertEquals("Students with same roll number should have same hashcode", student1.hashCode(), student2.hashCode());
+        
         Student student3 = new Student("Bob", "R003");
-        student3.setStudentId(null);
-        assertEquals(0, student3.hashCode());
+        assertThat(student3.hashCode()).isNotEqualTo(student1.hashCode());
     }
 
     @Test
