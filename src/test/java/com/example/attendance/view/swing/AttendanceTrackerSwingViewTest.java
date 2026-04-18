@@ -179,7 +179,10 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
             return;
 
         window.tabbedPane().selectTab("Attendance");
+        // Adding a small pause to ensure the tab is fully rendered in the UI
+        try { Thread.sleep(200); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
         window.robot().waitForIdle();
+        
         view.showAttendancePercentage(85.5);
         window.label("summaryLabel").requireText("Overall Attendance: 85.5%");
         org.junit.Assert.assertTrue(true);
