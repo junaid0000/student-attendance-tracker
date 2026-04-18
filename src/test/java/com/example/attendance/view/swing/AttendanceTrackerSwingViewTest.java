@@ -36,8 +36,8 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
             return;
         }
 
-        // Increase robot timeout for slow CI environments
-        robot().settings().delayBetweenEvents(50);
+        // Increase robot timeouts for slow CI environments
+        robot().settings().delayBetweenEvents(60);
         robot().settings().timeoutToBeVisible(10000);
 
         // Create fake controllers that will not connect to database
@@ -78,7 +78,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
             return;
 
         // Students tab
-        window.tabbedPane().selectTab("Students");
+        window.tabbedPane().selectTab(0);
         window.robot().waitForIdle();
         window.textBox("studentnameTextBox").requireVisible();
         window.textBox("rollnumberTxtBox").requireVisible();
@@ -88,9 +88,15 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         window.list("studentlist").requireVisible();
         window.label("errorLabel").requireVisible();
 
-        // Attendance tab
-        window.tabbedPane().selectTab("Attendance");
-        window.robot().waitForIdle();
+        // Attendance tab - Switch with retry logic for Windows stability
+        boolean switched = false;
+        for(int i=0; i<3 && !switched; i++) {
+            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            window.tabbedPane().selectTab(1);
+            window.robot().waitForIdle();
+            if (window.tabbedPane().target().getSelectedIndex() == 1) switched = true;
+        }
+
         window.textBox("dateTextField").requireVisible();
         window.button("markAttendanceButton").requireVisible();
         window.button("viewByDateButton").requireVisible();
@@ -106,7 +112,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         if (GraphicsEnvironment.isHeadless())
             return;
 
-        window.tabbedPane().selectTab("Students");
+        window.tabbedPane().selectTab(0);
         window.button("addButton").requireDisabled();
 
         window.textBox("studentnameTextBox").enterText("JJ");
@@ -165,7 +171,8 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         if (GraphicsEnvironment.isHeadless())
             return;
 
-        window.tabbedPane().selectTab("Attendance");
+        window.tabbedPane().selectTab(1);
+        try { Thread.sleep(1000); } catch (InterruptedException e) {}
         window.robot().waitForIdle();
         AttendanceRecord record = new AttendanceRecord("123", new Date(), true);
         view.attendanceMarked(record);
@@ -178,7 +185,8 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         if (GraphicsEnvironment.isHeadless())
             return;
 
-        window.tabbedPane().selectTab("Attendance");
+        window.tabbedPane().selectTab(1);
+        try { Thread.sleep(1000); } catch (InterruptedException e) {}
         // Adding a small pause to ensure the tab is fully rendered in the UI
         try { Thread.sleep(200); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
         window.robot().waitForIdle();
@@ -193,7 +201,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
     public void shouldAllowUserInteractionWithStudentForm() {
         if (GraphicsEnvironment.isHeadless())
             return;
-        window.tabbedPane().selectTab("Students");
+        window.tabbedPane().selectTab(0);
         window.textBox("studentnameTextBox").enterText("Test");
         window.textBox("rollnumberTxtBox").enterText("123");
         window.button("addButton").click();

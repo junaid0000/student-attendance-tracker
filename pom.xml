@@ -165,7 +165,15 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <argLine>-Dtest.mode=true @{argLine}</argLine>
+                    <argLine>
+                        -Dtest.mode=true 
+                        -Xms512m -Xmx1024m
+                        --add-opens java.base/java.util=ALL-UNNAMED 
+                        --add-opens java.desktop/sun.awt=ALL-UNNAMED 
+                        --add-opens java.desktop/sun.swing=ALL-UNNAMED 
+                        --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED 
+                        @{argLine}
+                    </argLine>
                     <excludes>
                         <exclude>**/*IT.java</exclude>
                         <exclude>**/*E2ETest.java</exclude>
@@ -179,7 +187,15 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <argLine>-Dtest.mode=true @{argLine}</argLine>
+                    <argLine>
+                        -Dtest.mode=true 
+                        -Xms512m -Xmx1024m
+                        --add-opens java.base/java.util=ALL-UNNAMED 
+                        --add-opens java.desktop/sun.awt=ALL-UNNAMED 
+                        --add-opens java.desktop/sun.swing=ALL-UNNAMED 
+                        --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED 
+                        @{argLine}
+                    </argLine>
                     <includes>
                         <include>**/*IT.java</include>
                         <include>**/*E2ETest.java</include>
