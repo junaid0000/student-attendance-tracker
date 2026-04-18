@@ -3,7 +3,6 @@ package com.example.attendance;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.swing.launcher.ApplicationLauncher.application;
 
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
@@ -104,7 +103,7 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
     // Verify students from database are shown on startup
     @Test
     @GUITest
-    public void testOnStartAllDatabaseStudentsAreShown() throws InterruptedException {
+    public void testOnStartAllDatabaseStudentsAreShown() {
         window.tabbedPane().selectTab(TAB_STUDENTS);
 
         // Wait longer for students to load

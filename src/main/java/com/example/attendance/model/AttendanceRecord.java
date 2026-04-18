@@ -1,6 +1,7 @@
 package com.example.attendance.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class AttendanceRecord {
     private String recordId;
@@ -47,24 +48,17 @@ public class AttendanceRecord {
         if (this == obj) {
             return true;
         }
-        if ((obj == null) || (getClass() != obj.getClass())) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
         AttendanceRecord other = (AttendanceRecord) obj;
-        if (recordId == null) {
-            return other.recordId == null;
-        } else {
-            return recordId.equals(other.recordId);
-        }
+        return Objects.equals(recordId, other.recordId);
     }
     public void setRecordId(String recordId) {
         this.recordId = recordId;
     }
     @Override
     public int hashCode() {
-        if (recordId == null) {
-            return 0;
-        }
-        return recordId.hashCode();
+        return Objects.hashCode(recordId);
     }
 }

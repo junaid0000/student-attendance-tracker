@@ -45,6 +45,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private static final String STATUS_PRESENT = "Present";
     private static final String STATUS_ABSENT = "Absent";
     private static final String LOADED_MSG = "Loaded ";
+    private static final String LOADED_SUFFIX = " students from database";
     private static final String TAB_STUDENTS = "Students";
     private static final String ATTENDANCE_DB = "attendance_db";
     private static final Logger LOGGER = Logger.getLogger(AttendanceTrackerSwingView.class.getName());
@@ -156,11 +157,11 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         panel.add(txtStudentsTab);
 
         // Name label and field
-        JLabel lblname = new JLabel("Name:");
-        lblname.setFont(new Font(FONT_TAHOMA, Font.BOLD, 11));
-        lblname.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblname.setBounds(20, 51, 60, 20);
-        panel.add(lblname);
+        JLabel lblName = new JLabel("Name:");
+        lblName.setFont(new Font(FONT_TAHOMA, Font.BOLD, 11));
+        lblName.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblName.setBounds(20, 51, 60, 20);
+        panel.add(lblName);
 
         textFieldName = new JTextField();
         textFieldName.setName("studentnameTextBox"); // so now do not chnage the this name it is used in tests
@@ -175,11 +176,11 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         });
 
         // Roll No label and field
-        JLabel lblrollno = new JLabel("Roll No:");
-        lblrollno.setFont(new Font(FONT_TAHOMA, Font.BOLD, 11));
-        lblrollno.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblrollno.setBounds(20, 80, 60, 20);
-        panel.add(lblrollno);
+        JLabel lblRollNo = new JLabel("Roll No:");
+        lblRollNo.setFont(new Font(FONT_TAHOMA, Font.BOLD, 11));
+        lblRollNo.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblRollNo.setBounds(20, 80, 60, 20);
+        panel.add(lblRollNo);
 
         textFieldRollNo = new JTextField();
         textFieldRollNo.setName("rollnumberTxtBox"); // so now do not chnage the this name it is used in tests
@@ -381,8 +382,9 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
 
         try {
             List<Student> students = studentController.getAllStudents();
-            if (students == null)
+            if (students == null) {
                 return; // Guard against mock returning null
+            }
 
             currentStudentsList = students;
 
@@ -691,7 +693,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                         int count = studentController.getAllStudents().size();
                         // Only update if no error message has appeared in the meantime
                         if (!showingErrorMessage) {
-                            lblError.setText("Loaded " + count + " students from database");
+                            lblError.setText(LOADED_MSG + count + LOADED_SUFFIX);
                         }
                     } catch (Exception ex) {
                         // Ignore exception during background list update
@@ -747,7 +749,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                     if (studentController != null && !showingErrorMessage) {
                         try {
                             int count = studentController.getAllStudents().size();
-                            lblError.setText("Loaded " + count + " students from database");
+                            lblError.setText(LOADED_MSG + count + LOADED_SUFFIX);
                         } catch (Exception ex) {
                             LOGGER.log(Level.FINE, "Background update failed", ex);
                         }
@@ -821,7 +823,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                         || currentStatus.equals("Error: No errors") || currentStatus.isEmpty();
 
                 if (isStatusMsg && !showingSuccessMessage && !showingErrorMessage && msgId == currentMessageId) {
-                    lblError.setText("Loaded " + students.size() + " students from database");
+                    lblError.setText(LOADED_MSG + students.size() + LOADED_SUFFIX);
                 }
             } catch (Exception e) {
                 showStudentError("Failed to load students: " + e.getMessage(), null);

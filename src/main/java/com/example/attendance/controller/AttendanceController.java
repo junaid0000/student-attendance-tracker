@@ -53,6 +53,9 @@ public class AttendanceController {
             }
         }
 
+        if (records.isEmpty()) {
+            return 0.0;
+        }
         return (presentCount * 100.0) / records.size();
     }
 }
