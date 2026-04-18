@@ -21,6 +21,19 @@ import com.example.attendance.model.Student;
 
 @RunWith(GUITestRunner.class)
 public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
+    private static final String TB_STUDENT_NAME = "studentnameTextBox";
+    private static final String TB_ROLL_NUMBER = "rollnumberTxtBox";
+    private static final String BTN_ADD = "addButton";
+    private static final String LBL_ERROR = "errorLabel";
+    private static final String LIST_STUDENT = "studentlist";
+    private static final String TB_DATE = "dateTextField";
+    private static final String BTN_MARK = "markAttendanceButton";
+    private static final String BTN_VIEW_BY_DATE = "viewByDateButton";
+    private static final String BTN_GET_SUMMARY = "getSummaryButton";
+    private static final String TA_RECORDS = "attendanceRecordsArea";
+    private static final String LBL_SUMMARY = "summaryLabel";
+    private static final String LBL_ATTENDANCE_ERROR = "attendanceErrorLabel";
+    
     static {
         // Force the test mode to turn on immediately
         System.setProperty("test.mode", "true");
@@ -69,7 +82,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         if (GraphicsEnvironment.isHeadless())
             return;
         window.requireVisible();
-        org.junit.Assert.assertTrue(true);
+        
     }
 
     @Test
@@ -80,31 +93,32 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         // Students tab
         window.tabbedPane().selectTab(0);
         window.robot().waitForIdle();
-        window.textBox("studentnameTextBox").requireVisible();
-        window.textBox("rollnumberTxtBox").requireVisible();
-        window.button("addButton").requireVisible();
+        window.textBox(TB_STUDENT_NAME).requireVisible();
+        window.textBox(TB_ROLL_NUMBER).requireVisible();
+        window.button(BTN_ADD).requireVisible();
         window.button("updateButton").requireVisible();
         window.button("deleteButton").requireVisible();
-        window.list("studentlist").requireVisible();
-        window.label("errorLabel").requireVisible();
+        window.list(LIST_STUDENT).requireVisible();
+        window.label(LBL_ERROR).requireVisible();
 
         // Attendance tab - Switch with retry logic for Windows stability
         boolean switched = false;
         for(int i=0; i<3 && !switched; i++) {
-            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            org.assertj.swing.timing.Pause.pause(1000);
             window.tabbedPane().selectTab(1);
             window.robot().waitForIdle();
             if (window.tabbedPane().target().getSelectedIndex() == 1) switched = true;
         }
 
-        window.textBox("dateTextField").requireVisible();
-        window.button("markAttendanceButton").requireVisible();
-        window.button("viewByDateButton").requireVisible();
-        window.button("getSummaryButton").requireVisible();
-        window.textBox("attendanceRecordsArea").requireVisible();
-        window.label("summaryLabel").requireVisible();
-        window.label("attendanceErrorLabel").requireVisible();
-        org.junit.Assert.assertTrue(true);
+        window.robot().waitForIdle();
+        window.textBox(TB_DATE).requireVisible();
+        window.button(BTN_MARK).requireVisible();
+        window.button(BTN_VIEW_BY_DATE).requireVisible();
+        window.button(BTN_GET_SUMMARY).requireVisible();
+        window.textBox(TA_RECORDS).requireVisible();
+        window.label(LBL_SUMMARY).requireVisible();
+        window.label(LBL_ATTENDANCE_ERROR).requireVisible();
+        
     }
 
     @Test
@@ -118,7 +132,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         window.textBox("studentnameTextBox").enterText("JJ");
         window.textBox("rollnumberTxtBox").enterText("123");
         window.button("addButton").requireEnabled();
-        org.junit.Assert.assertTrue(true);
+        
     }
 
     // INTERFACE IMPLEMENTATION Testt
@@ -130,8 +144,8 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         Student student = new Student("Ahmed", "123");
         view.studentAdded(student);
         window.robot().waitForIdle();
-        window.label("errorLabel").requireText("Student added: Ahmed");
-        org.junit.Assert.assertTrue(true);
+        window.label(LBL_ERROR).requireText("Student added: Ahmed");
+        
     }
 
     @Test
@@ -142,8 +156,8 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         Student student = new Student("Umer", "456");
         view.studentUpdated(student);
         window.robot().waitForIdle();
-        window.label("errorLabel").requireText("Student updated: Umer");
-        org.junit.Assert.assertTrue(true);
+        window.label(LBL_ERROR).requireText("Student updated: Umer");
+        
     }
 
     @Test
@@ -154,8 +168,8 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         Student student = new Student("Sarim", "789");
         view.studentDeleted(student);
         window.robot().waitForIdle();
-        window.label("errorLabel").requireText("Student deleted: Sarim");
-        org.junit.Assert.assertTrue(true);
+        window.label(LBL_ERROR).requireText("Student deleted: Sarim");
+        
     }
 
     @Test
@@ -166,8 +180,8 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         Student student = new Student("sadii", "999");
         view.showStudentError("Test error", student);
         window.robot().waitForIdle();
-        window.label("errorLabel").requireText("Error: Test error");
-        org.junit.Assert.assertTrue(true);
+        window.label(LBL_ERROR).requireText("Error: Test error");
+        
     }
 
     @Test
@@ -177,15 +191,16 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
         boolean switched = false;
         for(int i=0; i<3 && !switched; i++) {
-            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            org.assertj.swing.timing.Pause.pause(1000);
             window.tabbedPane().selectTab(1);
             window.robot().waitForIdle();
             if (window.tabbedPane().target().getSelectedIndex() == 1) switched = true;
         }
         AttendanceRecord attendanceRecord = new AttendanceRecord("123", new Date(), true);
         view.attendanceMarked(attendanceRecord);
-        window.label("attendanceErrorLabel").requireText("Attendance marked for student ID: 123");
-        org.junit.Assert.assertTrue(true);
+        window.robot().waitForIdle();
+        window.label(LBL_ATTENDANCE_ERROR).requireText("Attendance marked for student ID: 123");
+        
     }
 
     @Test
@@ -195,7 +210,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
         boolean switched = false;
         for(int i=0; i<3 && !switched; i++) {
-            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            org.assertj.swing.timing.Pause.pause(1000);
             window.tabbedPane().selectTab(1);
             window.robot().waitForIdle();
             if (window.tabbedPane().target().getSelectedIndex() == 1) switched = true;
@@ -203,8 +218,8 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         
         view.showAttendancePercentage(85.5);
         window.robot().waitForIdle();
-        window.label("summaryLabel").requireText("Overall Attendance: 85.5%");
-        org.junit.Assert.assertTrue(true);
+        window.label(LBL_SUMMARY).requireText("Overall Attendance: 85.5%");
+        
     }
 
     // now it is UI integration test and integration verification
@@ -216,7 +231,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         window.textBox("studentnameTextBox").enterText("Test");
         window.textBox("rollnumberTxtBox").enterText("123");
         window.button("addButton").click();
-        org.junit.Assert.assertTrue(true);
+        
     }
 
     // now multithreading but
@@ -230,6 +245,6 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         });
         window.robot().waitForIdle();
         window.label("errorLabel").requireText("Student added: EDT");
-        org.junit.Assert.assertTrue(true);
+        
     }
 }

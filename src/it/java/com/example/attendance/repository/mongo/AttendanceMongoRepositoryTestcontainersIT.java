@@ -16,6 +16,8 @@ import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 
 public class AttendanceMongoRepositoryTestcontainersIT {
+    private static final String ATTENDANCE_DB = "attendance_db";
+    private static final String ATTENDANCE_COLLECTION = "attendance_records";
 
     @ClassRule
     public static final MongoDBContainer mongo = new MongoDBContainer("mongo:4.4.3");
@@ -28,10 +30,10 @@ public class AttendanceMongoRepositoryTestcontainersIT {
         client = new MongoClient(
             new ServerAddress(mongo.getHost(), mongo.getMappedPort(27017))
         );
-        repository = new AttendanceMongoRepository(client, "attendance_db", "attendance_records");
+        repository = new AttendanceMongoRepository(client, ATTENDANCE_DB, ATTENDANCE_COLLECTION);
 
         // I am adding this line for Clean the database before each test because its added more record in database
-        client.getDatabase("attendance_db").getCollection("attendance_records").deleteMany(new org.bson.Document());
+        client.getDatabase(ATTENDANCE_DB).getCollection(ATTENDANCE_COLLECTION).deleteMany(new org.bson.Document());
     }
 
     @After

@@ -26,6 +26,8 @@ import com.example.attendance.repository.AttendanceRepository;
 import com.example.attendance.repository.StudentRepository;
 
 public class AttendanceControllerTest {
+    private static final String UNUSED_ROLL_NUMBER = "7131056";
+    private static final String UNUSED_NAME = "Junaid";
 
     @Mock
     private AttendanceRepository attendanceRepository;
@@ -51,8 +53,8 @@ public class AttendanceControllerTest {
     @Test
     public void testMarkAttendancePresent() {
         // Arrange
-        Student student = new Student("Junaid", "7131056");
-        when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
+        Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
+        when(studentRepository.findByRollNumber(UNUSED_ROLL_NUMBER)).thenReturn(Optional.of(student));
 
         AttendanceRecord attendanceRecord = new AttendanceRecord(student.getStudentId(), new Date(), true);
         when(attendanceRepository.markAttendance(any(AttendanceRecord.class))).thenReturn(attendanceRecord);
@@ -69,8 +71,8 @@ public class AttendanceControllerTest {
     @Test
     public void testMarkAttendanceAbsent() {
         // Arrange
-        Student student = new Student("Junaid", "7131056");
-        when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
+        Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
+        when(studentRepository.findByRollNumber(UNUSED_ROLL_NUMBER)).thenReturn(Optional.of(student));
 
         AttendanceRecord attendanceRecord = new AttendanceRecord(student.getStudentId(), new Date(), false);
         when(attendanceRepository.markAttendance(any(AttendanceRecord.class))).thenReturn(attendanceRecord);
@@ -103,8 +105,8 @@ public class AttendanceControllerTest {
     @Test
     public void testGetAttendanceByStudent() {
         // ARRANGE
-        Student student = new Student("Junaid", "7131056");
-        when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
+        Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
+        when(studentRepository.findByRollNumber(UNUSED_ROLL_NUMBER)).thenReturn(Optional.of(student));
 
         List<AttendanceRecord> mockRecords = Arrays.asList(
                 new AttendanceRecord(student.getStudentId(), new Date(), true),
@@ -112,20 +114,20 @@ public class AttendanceControllerTest {
         when(attendanceRepository.findByStudentId(student.getStudentId())).thenReturn(mockRecords);
 
         // ACT
-        List<AttendanceRecord> result = attendanceController.getAttendanceByStudent("7131056");
+        List<AttendanceRecord> result = attendanceController.getAttendanceByStudent(UNUSED_ROLL_NUMBER);
 
         // ASSERT
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(studentRepository).findByRollNumber("7131056");
+        verify(studentRepository).findByRollNumber(UNUSED_ROLL_NUMBER);
         verify(attendanceRepository).findByStudentId(student.getStudentId());
     }
 
     @Test
     public void testGetAttendancePercentage() {
         // ARRANGE
-        Student student = new Student("Junaid", "7131056");
-        when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
+        Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
+        when(studentRepository.findByRollNumber(UNUSED_ROLL_NUMBER)).thenReturn(Optional.of(student));
 
         List<AttendanceRecord> mockRecords = Arrays.asList(
                 new AttendanceRecord(student.getStudentId(), new Date(), true), // Present
@@ -135,11 +137,11 @@ public class AttendanceControllerTest {
         when(attendanceRepository.findByStudentId(student.getStudentId())).thenReturn(mockRecords);
 
         // ACT
-        double result = attendanceController.getAttendancePercentage("7131056");
+        double result = attendanceController.getAttendancePercentage(UNUSED_ROLL_NUMBER);
 
         // ASSERT: 2 out of 3 = 66.66%
         assertEquals(66.66, result, 0.01);
-        verify(studentRepository).findByRollNumber("7131056");
+        verify(studentRepository).findByRollNumber(UNUSED_ROLL_NUMBER);
         verify(attendanceRepository).findByStudentId(student.getStudentId());
     }
 }

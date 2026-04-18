@@ -18,6 +18,8 @@ import com.example.attendance.model.Student;
 import com.example.attendance.repository.StudentRepository;
 
 public class StudentControllerTest {
+    private static final String UNUSED_NAME = "Junaid";
+    private static final String UNUSED_ROLL_NUMBER = "7131056";
 
     @Mock
     private StudentRepository studentRepository;
@@ -40,9 +42,9 @@ public class StudentControllerTest {
     // Add student
     @Test
     public void testAddStudent() {
-        Student student = new Student("Junaid", "7131056");
+        Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
         when(studentRepository.save(any(Student.class))).thenReturn(student);
-        Student result = studentController.addStudent("Junaid", "7131056");
+        Student result = studentController.addStudent(UNUSED_NAME, UNUSED_ROLL_NUMBER);
 
         assertNotNull(result);
         verify(studentRepository).save(any(Student.class));
@@ -51,12 +53,12 @@ public class StudentControllerTest {
     // Edit student
     @Test
     public void testUpdateStudent() {
-        Student student = new Student("Junaid", "7131056");
-        when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
-        Student result = studentController.updateStudent("7131056", "Junaid Updated", "7131056");
+        Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
+        when(studentRepository.findByRollNumber(UNUSED_ROLL_NUMBER)).thenReturn(Optional.of(student));
+        Student result = studentController.updateStudent(UNUSED_ROLL_NUMBER, UNUSED_NAME + " Updated", UNUSED_ROLL_NUMBER);
 
         assertNotNull(result);
-        verify(studentRepository).findByRollNumber("7131056");
+        verify(studentRepository).findByRollNumber(UNUSED_ROLL_NUMBER);
         verify(studentRepository).update(any(Student.class));
     }
 
@@ -64,12 +66,12 @@ public class StudentControllerTest {
     // Delete student
     @Test
     public void testDeleteStudent() {
-        Student student = new Student("Junaid", "7131056");
-        when(studentRepository.findByRollNumber("7131056")).thenReturn(Optional.of(student));
+        Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
+        when(studentRepository.findByRollNumber(UNUSED_ROLL_NUMBER)).thenReturn(Optional.of(student));
 
-        studentController.deleteStudent("7131056");
+        studentController.deleteStudent(UNUSED_ROLL_NUMBER);
 
-        verify(studentRepository).findByRollNumber("7131056");
+        verify(studentRepository).findByRollNumber(UNUSED_ROLL_NUMBER);
         verify(studentRepository).delete(student);
     }
 }

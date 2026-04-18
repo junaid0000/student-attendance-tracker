@@ -9,11 +9,13 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class StudentTest {
+    private static final String UNUSED_NAME = "Junaid";
+    private static final String UNUSED_ROLL_NUMBER = "7131056";
 
     @Test
     public void testCreateStudentWithAutoId() {
         // setup
-        Student student = new Student("Junaid", "7131056");
+        Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
 
         // verify
         assertThat(student.getStudentId()).as("Student ID should be automatically assigned").isNotNull();
@@ -22,8 +24,8 @@ public class StudentTest {
     @Test
     public void testStudentEquals() {
         // setup
-        Student student1 = new Student("Junaid", "7131056");
-        Student student2 = new Student("Junaid", "7131056");
+        Student student1 = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
+        Student student2 = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
 
         // exercise so here Give them same ID for equality test
         student2.setStudentId(student1.getStudentId());
@@ -38,7 +40,7 @@ public class StudentTest {
     @Test
     public void testStudentGetId() {
         // setup
-        Student student = new Student("Junaid", "7131056");
+        Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
         String id = student.getStudentId();
 
         // verify
@@ -49,26 +51,26 @@ public class StudentTest {
     @Test
     public void testStudentGetName() {
         // setup
-        Student student = new Student("Junaid", "7131056");
+        Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
 
         // verify
-        assertEquals("Student name should match", "Junaid", student.getName());
+        assertEquals("Student name should match", UNUSED_NAME, student.getName());
     }
 
     @Test
     public void testStudentGetRollNumber() {
         // setup
-        Student student = new Student("Junaid", "7131056");
+        Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
 
         // verify
-        assertEquals("Student roll number should match", "7131056", student.getRollNumber());
+        assertEquals("Student roll number should match", UNUSED_ROLL_NUMBER, student.getRollNumber());
     }
 
     @Test
     public void testStudentHashCode() {
         // setup
-        Student student1 = new Student("Junaid", "7131056");
-        Student student2 = new Student("Junaid", "7131056");
+        Student student1 = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
+        Student student2 = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
 
         // exercise
         student2.setStudentId(student1.getStudentId());

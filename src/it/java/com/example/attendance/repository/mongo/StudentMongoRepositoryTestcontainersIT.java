@@ -13,6 +13,10 @@ import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 
 public class StudentMongoRepositoryTestcontainersIT {
+    private static final String ATTENDANCE_DB = "attendance_db";
+    private static final String STUDENTS_COLLECTION = "students";
+    private static final String JUNAID = "Junaid";
+    private static final String ROLL_NUMBER_JUNAID = "7131056";
 
     @ClassRule
     public static final MongoDBContainer mongo = new MongoDBContainer("mongo:4.4.3");
@@ -24,10 +28,10 @@ public class StudentMongoRepositoryTestcontainersIT {
     @Before
     public void setup() {
         client = new MongoClient(new ServerAddress(mongo.getHost(), mongo.getMappedPort(27017)));
-        studentRepository = new StudentMongoRepository(client, "attendance_db", "students");
+        studentRepository = new StudentMongoRepository(client, ATTENDANCE_DB, STUDENTS_COLLECTION);
         // I am adding thisline for Clean the database before each test because its
         // added more record in database
-        client.getDatabase("attendance_db").getCollection("students").deleteMany(new org.bson.Document());
+        client.getDatabase(ATTENDANCE_DB).getCollection(STUDENTS_COLLECTION).deleteMany(new org.bson.Document());
     }
 
     @After
@@ -45,7 +49,7 @@ public class StudentMongoRepositoryTestcontainersIT {
         MongoClient tempClient = new MongoClient(
                 new ServerAddress(mongo.getHost(), mongo.getMappedPort(27017)));
 
-        tempClient.getDatabase("attendance_db").getCollection("students").insertOne(new org.bson.Document()
+        tempClient.getDatabase(ATTENDANCE_DB).getCollection(STUDENTS_COLLECTION).insertOne(new org.bson.Document()
                 .append("studentId", studentId).append("name", name).append("rollNumber", rollNumber));
 
         tempClient.close();
@@ -54,13 +58,13 @@ public class StudentMongoRepositoryTestcontainersIT {
     // Add Student
     @Test
     public void testSave() {
-        Student student = new Student("S1", "Junaid", "7131056");
+        Student student = new Student("S1", JUNAID, ROLL_NUMBER_JUNAID);
         studentRepository.save(student);
 
         Student saved = studentRepository.findById("S1");
         assertThat(saved.getStudentId()).isEqualTo("S1");
-        assertThat(saved.getName()).isEqualTo("Junaid");
-        assertThat(saved.getRollNumber()).isEqualTo("7131056");
+        assertThat(saved.getName()).isEqualTo(JUNAID);
+        assertThat(saved.getRollNumber()).isEqualTo(ROLL_NUMBER_JUNAID);
     }
 
     // Edit Student

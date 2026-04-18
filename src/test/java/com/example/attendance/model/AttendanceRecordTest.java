@@ -9,11 +9,14 @@ import java.util.Date;
 import org.junit.Test;
 
 public class AttendanceRecordTest {
+    private static final String UNUSED_STU001 = "STU001";
+    private static final String CUSTOM_ID = "CUSTOM";
+    private static final String ATT001 = "ATT001";
 
 	@Test
 	public void testAttendanceEquals() {
 	    // setup
-	    AttendanceRecord att1 = new AttendanceRecord("STU001", new Date(), true);
+	    AttendanceRecord att1 = new AttendanceRecord(UNUSED_STU001, new Date(), true);
 	    AttendanceRecord att2 = new AttendanceRecord("STU002", new Date(), false);
 	    AttendanceRecord attNullId1 = new AttendanceRecord("STU003", new Date(), true);
 	    AttendanceRecord attNullId2 = new AttendanceRecord("STU004", new Date(), false);
@@ -23,8 +26,8 @@ public class AttendanceRecordTest {
 	    // exercise
 	    attNullId1.setRecordId(null);
 	    attNullId2.setRecordId(null);
-	    attCustomId1.setRecordId("CUSTOM");
-	    attCustomId2.setRecordId("CUSTOM");
+	    attCustomId1.setRecordId(CUSTOM_ID);
+	    attCustomId2.setRecordId(CUSTOM_ID);
 
 	    // verify
 	    // Multiple assertions in one test as in book example Money Example.
@@ -41,7 +44,7 @@ public class AttendanceRecordTest {
 	public void testAttendanceGetDate() {
     	// setup
 	    Date date = new Date();
-	    AttendanceRecord attendance = new AttendanceRecord("STU001", date, true);
+	    AttendanceRecord attendance = new AttendanceRecord(UNUSED_STU001, date, true);
 
 	    // verify
 	    assertEquals("Attendance date should match",
@@ -51,26 +54,26 @@ public class AttendanceRecordTest {
     @Test
 	public void testAttendanceGetStudentId() {
     	// setup
-	    AttendanceRecord attendance = new AttendanceRecord("STU001", new Date(), true);
+	    AttendanceRecord attendance = new AttendanceRecord(UNUSED_STU001, new Date(), true);
 
 	    // verify
 	    assertEquals("Attendance student ID should match",
-	                "STU001", attendance.getStudentId());
+	                UNUSED_STU001, attendance.getStudentId());
 	}
 
     @Test
     public void testAttendanceHashCode() {
         // setup
-        AttendanceRecord att1 = new AttendanceRecord("STU001", new Date(), true);
+        AttendanceRecord att1 = new AttendanceRecord(UNUSED_STU001, new Date(), true);
         AttendanceRecord att2 = new AttendanceRecord("STU002", new Date(), false);
 
         // exercise
         att1.setRecordId(null);
-        att2.setRecordId("ATT001");
+        att2.setRecordId(ATT001);
 
         // verify
         assertEquals(0, att1.hashCode());
-        assertEquals("ATT001".hashCode(), att2.hashCode());
+        assertEquals(ATT001.hashCode(), att2.hashCode());
     }
 
     @Test
@@ -112,10 +115,10 @@ public class AttendanceRecordTest {
     @Test
     public void testCreateAttendanceWithAutoId() {
         // setup
-        AttendanceRecord attendance = new AttendanceRecord("STU001", new Date(), true);
+        AttendanceRecord attendance = new AttendanceRecord(UNUSED_STU001, new Date(), true);
 
         // verify
-        assertThat(attendance.getRecordId()).isEqualTo("ATT001");
+        assertThat(attendance.getRecordId()).isEqualTo(ATT001);
     }
 
 }

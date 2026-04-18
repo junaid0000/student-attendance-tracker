@@ -42,12 +42,22 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
     private static final String STUDENT_2_ROLL = "7131057";
     private static final String STUDENT_2_NAME = "Awais";
 
+    private static final String TAB_STUDENTS = "Students";
+    private static final String BTN_ADD = "addButton";
+    private static final String BTN_DELETE = "deleteButton";
+    private static final String TB_STUDENT_NAME = "studentnameTextBox";
+    private static final String TB_ROLL_NUMBER = "rollnumberTxtBox";
+    private static final String LBL_ERROR = "errorLabel";
+    private static final String LIST_STUDENT = "studentlist";
+    private static final String FIELD_ROLL_NUMBER = "rollNumber";
+    private static final String FIELD_NAME = "name";
+
     @Override
     protected void onSetUp() {
         // Clear test.mode to prevent unit test
         System.clearProperty("test.mode");
 
-        String containerIpAddress = mongo.getContainerIpAddress();
+        String containerIpAddress = mongo.getHost();
         Integer mappedPort = mongo.getFirstMappedPort();
 
         mongoClient = new MongoClient(containerIpAddress, mappedPort);
@@ -87,7 +97,7 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
 
     private void addTestStudentToDatabase(String rollNumber, String name) {
         mongoClient.getDatabase(DB_NAME).getCollection(STUDENT_COLLECTION)
-                .insertOne(new Document().append("rollNumber", rollNumber).append("name", name).append("studentId",
+                .insertOne(new Document().append(FIELD_ROLL_NUMBER, rollNumber).append(FIELD_NAME, name).append("studentId",
                         java.util.UUID.randomUUID().toString()));
     }
 
@@ -95,15 +105,14 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
     @Test
     @GUITest
     public void testOnStartAllDatabaseStudentsAreShown() throws InterruptedException {
-        window.tabbedPane().selectTab("Students");
+        window.tabbedPane().selectTab(TAB_STUDENTS);
 
         // Wait longer for students to load
         window.robot().waitForIdle();
-        Thread.sleep(1000);
+        org.assertj.swing.timing.Pause.pause(1000);
 
         // Get list contents
-        String[] listContents = window.list("studentlist").contents();
-        System.out.println("List contents: " + Arrays.toString(listContents)); // Debug
+        String[] listContents = window.list(LIST_STUDENT).contents();
 
         assertThat(listContents).anySatisfy(e -> assertThat(e).contains(STUDENT_1_ROLL))
                 .anySatisfy(e -> assertThat(e).contains(STUDENT_2_ROLL));
@@ -113,75 +122,67 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
     @Test
     @GUITest
     public void testAddNewStudentSuccess() {
-        window.tabbedPane().selectTab("Students");
-        window.textBox("studentnameTextBox").enterText("New Student");
-        window.textBox("rollnumberTxtBox").enterText("1001");
+        window.tabbedPane().selectTab(TAB_STUDENTS);
+        window.textBox(TB_STUDENT_NAME).enterText("New Student");
+        window.textBox(TB_ROLL_NUMBER).enterText("1001");
 
         // Click Add button
-        window.button("addButton").click();
+        window.button(BTN_ADD).click();
         window.robot().waitForIdle();
 
         // Verify success message in UI
-        assertThat(window.label("errorLabel").text()).contains("Student added");
+        assertThat(window.label(LBL_ERROR).text()).contains("Student added");
 
         // Verify student saved in database
         Document studentDoc = mongoClient.getDatabase(DB_NAME).getCollection(STUDENT_COLLECTION)
-                .find(Filters.eq("rollNumber", "1001")).first();
+                .find(Filters.eq(FIELD_ROLL_NUMBER, "1001")).first();
 
         assertThat(studentDoc).isNotNull();
-        assertThat(studentDoc.getString("name")).isEqualTo("New Student");
+        assertThat(studentDoc.getString(FIELD_NAME)).isEqualTo("New Student");
     }
 
     // Test duplicate student error
     @Test
     @GUITest
     public void testAddDuplicateStudentShowsError() {
-        window.tabbedPane().selectTab("Students");
+        window.tabbedPane().selectTab(TAB_STUDENTS);
         window.robot().waitForIdle();
 
         // Try to add student that already exists in database
-        window.textBox("studentnameTextBox").enterText("Duplicate");
-        window.textBox("rollnumberTxtBox").enterText(STUDENT_1_ROLL);
-        window.button("addButton").click();
+        window.textBox(TB_STUDENT_NAME).enterText("Duplicate");
+        window.textBox(TB_ROLL_NUMBER).enterText(STUDENT_1_ROLL);
+        window.button(BTN_ADD).click();
         window.robot().waitForIdle();
 
         // ADD A SMALL DELAY TO ERROR APPEAR
-        try {
-            Thread.sleep(1000); // Wait 1 second for error message
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        org.assertj.swing.timing.Pause.pause(1000);
 
         // Verify error message will check already exists
-        assertThat(window.label("errorLabel").text()).contains("already exists");
+        assertThat(window.label(LBL_ERROR).text()).contains("already exists");
     }
 
     // Delete student through UI
     @Test
     @GUITest
     public void testDeleteStudentFunctionality() {
-        window.tabbedPane().selectTab("Students");
+        window.tabbedPane().selectTab(TAB_STUDENTS);
         window.robot().waitForIdle();
 
         // Wait for list to load
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        org.assertj.swing.timing.Pause.pause(500);
 
-        window.list("studentlist").selectItem(Pattern.compile(".*" + STUDENT_1_ROLL + ".*"));
-        window.button("deleteButton").click();
+        window.list(LIST_STUDENT).selectItem(Pattern.compile(".*" + STUDENT_1_ROLL + ".*"));
+        window.button(BTN_DELETE).click();
 
         // Wait for deletion
         window.robot().waitForIdle();
 
         // Verify success message
-        assertThat(window.label("errorLabel").text()).contains("Loaded");
+        assertThat(window.label(LBL_ERROR).text()).contains("Loaded");
 
         // Verify removed from database
         Document studentDoc = mongoClient.getDatabase(DB_NAME).getCollection(STUDENT_COLLECTION)
-                .find(Filters.eq("rollNumber", STUDENT_1_ROLL)).first();
+                .find(Filters.eq(FIELD_ROLL_NUMBER, STUDENT_1_ROLL)).first();
 
         assertThat(studentDoc).isNull();
     }

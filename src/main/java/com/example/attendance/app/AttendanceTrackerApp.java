@@ -57,13 +57,7 @@ public class AttendanceTrackerApp {
                 });
 
                 // Close connection when window closes
-                frame.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        LOGGER.info("Closing database connection...");
-                        mongoClient.close();
-                    }
-                });
+                frame.addWindowListener(new DatabaseConnectionCloser(mongoClient));
 
                 LOGGER.info("Application started successfully!");
 
@@ -80,6 +74,22 @@ public class AttendanceTrackerApp {
                 frame.setVisible(true);
             }
         });
+    }
+
+    private static class DatabaseConnectionCloser extends java.awt.event.WindowAdapter {
+        private final MongoClient mongoClient;
+
+        public DatabaseConnectionCloser(MongoClient mongoClient) {
+            this.mongoClient = mongoClient;
+        }
+
+        @Override
+        public void windowClosing(java.awt.event.WindowEvent e) {
+            LOGGER.info("Closing database connection...");
+            if (mongoClient != null) {
+                mongoClient.close();
+            }
+        }
     }
 
     private static String getArgValue(String[] args, String prefix, String defaultValue) {

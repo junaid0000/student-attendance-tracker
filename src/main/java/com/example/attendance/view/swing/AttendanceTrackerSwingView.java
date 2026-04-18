@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -42,6 +44,8 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final String STATUS_PRESENT = "Present";
     private static final String STATUS_ABSENT = "Absent";
+    private static final String LOADED_MSG = "Loaded ";
+    private static final Logger LOGGER = Logger.getLogger(AttendanceTrackerSwingView.class.getName());
     private JTabbedPane tabbedPane;
     private boolean isTestMode = false;
 
@@ -83,7 +87,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                 AttendanceTrackerSwingView frame = new AttendanceTrackerSwingView();
                 frame.setVisible(true);
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Exception occurred while starting AttendanceTrackerSwingView", e);
             }
         });
     }
@@ -622,7 +626,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                         .append(" - ").append(status).append("\n");
             }
             attendanceRecordsArea.setText(sb.toString());
-            attendanceErrorLabel.setText("Showing " + records.size() + " records by date");
+            attendanceErrorLabel.setText(LOADED_MSG + records.size() + " records by date");
         });
     }
 
@@ -638,7 +642,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                         .append(" - ").append(status).append("\n");
             }
             attendanceRecordsArea.setText(sb.toString());
-            attendanceErrorLabel.setText("Showing attendance for selected student");
+            attendanceErrorLabel.setText(LOADED_MSG + "attendance for selected student");
         });
     }
 
@@ -772,7 +776,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         // window
         if (isTestMode) {
             try {
-                Thread.sleep(50);
+                java.util.concurrent.TimeUnit.MILLISECONDS.sleep(50);
             } catch (Exception e) {
                 // Ignore interruption in test synchronization
             }
