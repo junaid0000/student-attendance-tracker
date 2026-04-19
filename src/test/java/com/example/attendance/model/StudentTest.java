@@ -80,9 +80,9 @@ public class StudentTest {
         Student student2 = new Student("Other Name", UNUSED_ROLL_NUMBER);
 
         // verify
-        assertThat(student1.hashCode())
+        assertThat(student1)
             .as("Students with same roll number should have same hashcode")
-            .isEqualTo(student2.hashCode());
+            .hasSameHashCodeAs(student2);
         
         Student student3 = new Student("Bob", "R003");
         assertThat(student3.hashCode()).isNotEqualTo(student1.hashCode());

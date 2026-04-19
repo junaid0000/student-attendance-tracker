@@ -33,8 +33,9 @@ public class AttendanceRecordTest {
 	        .isNotEqualTo("String")
 	        .isEqualTo(att2);
 	        
-	    assertThat(attNullId1).isEqualTo(attNullId2);
-	    assertThat(attNullId1).isNotEqualTo(att1);
+	    assertThat(attNullId1)
+	        .isEqualTo(attNullId2)
+	        .isNotEqualTo(att1);
 	    assertThat(attCustomId1).isEqualTo(attCustomId2);
 	}
 
@@ -73,7 +74,7 @@ public class AttendanceRecordTest {
 
         // verify
         assertThat(att1.hashCode()).isZero();
-        assertThat(att2.hashCode()).isEqualTo(ATT001.hashCode());
+        assertThat(att2).hasSameHashCodeAs(ATT001);
     }
 
     @Test
