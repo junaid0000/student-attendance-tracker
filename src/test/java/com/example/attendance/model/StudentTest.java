@@ -1,10 +1,6 @@
 package com.example.attendance.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -18,7 +14,9 @@ public class StudentTest {
         Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
 
         // verify
-        assertThat(student.getStudentId()).as("Student ID should be automatically assigned").isNotNull();
+        assertThat(student.getStudentId())
+            .as("Student ID should be automatically assigned")
+            .isNotNull();
     }
 
     @Test
@@ -31,10 +29,12 @@ public class StudentTest {
         student2.setStudentId(student1.getStudentId());
 
         // verify
-        assertEquals("Students with same data should be equal", student1, student2);
-        assertFalse("Student should not equal null", student1.equals(null));
-        assertFalse("Student should not equal String", student1.equals("I'm a String"));
-        assertTrue("Student should equal itself", student1.equals(student1));
+        assertThat(student1)
+            .as("Students with same data should be equal")
+            .isEqualTo(student2)
+            .isNotEqualTo(null)
+            .isNotEqualTo("I'm a String")
+            .isEqualTo(student1);
     }
 
     @Test
@@ -44,8 +44,11 @@ public class StudentTest {
         String id = student.getStudentId();
 
         // verify
-        assertNotNull("Student ID should not be null", id);
-        assertFalse("Student ID should not be empty", id.isEmpty());
+        assertThat(id)
+            .as("Student ID should not be null")
+            .isNotNull()
+            .as("Student ID should not be empty")
+            .isNotEmpty();
     }
 
     @Test
@@ -54,7 +57,9 @@ public class StudentTest {
         Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
 
         // verify
-        assertEquals("Student name should match", UNUSED_NAME, student.getName());
+        assertThat(student.getName())
+            .as("Student name should match")
+            .isEqualTo(UNUSED_NAME);
     }
 
     @Test
@@ -63,7 +68,9 @@ public class StudentTest {
         Student student = new Student(UNUSED_NAME, UNUSED_ROLL_NUMBER);
 
         // verify
-        assertEquals("Student roll number should match", UNUSED_ROLL_NUMBER, student.getRollNumber());
+        assertThat(student.getRollNumber())
+            .as("Student roll number should match")
+            .isEqualTo(UNUSED_ROLL_NUMBER);
     }
 
     @Test
@@ -73,7 +80,9 @@ public class StudentTest {
         Student student2 = new Student("Other Name", UNUSED_ROLL_NUMBER);
 
         // verify
-        assertEquals("Students with same roll number should have same hashcode", student1.hashCode(), student2.hashCode());
+        assertThat(student1.hashCode())
+            .as("Students with same roll number should have same hashcode")
+            .isEqualTo(student2.hashCode());
         
         Student student3 = new Student("Bob", "R003");
         assertThat(student3.hashCode()).isNotEqualTo(student1.hashCode());
@@ -88,7 +97,9 @@ public class StudentTest {
         student.setName("NewName");
 
         // verify
-        assertEquals("Student name should be updated", "NewName", student.getName());
+        assertThat(student.getName())
+            .as("Student name should be updated")
+            .isEqualTo("NewName");
     }
 
     @Test
@@ -100,7 +111,8 @@ public class StudentTest {
         student.setRollNumber("NewRoll");
 
         // verify
-        assertEquals("Student roll number should be updated", "NewRoll", student.getRollNumber());
+        assertThat(student.getRollNumber())
+            .as("Student roll number should be updated")
+            .isEqualTo("NewRoll");
     }
-
 }

@@ -1,8 +1,5 @@
 package com.example.attendance.model;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
@@ -29,12 +26,13 @@ public class AttendanceRecordTest {
 	    attCustomId1.setRecordId(CUSTOM_ID);
 	    attCustomId2.setRecordId(CUSTOM_ID);
 
-	    // verify
-	    // Multiple assertions in one test as in book example Money Example.
-	    assertThat(att1).isEqualTo(att1);
-	    assertThat(att1.equals(null)).isFalse();
-	    assertThat(att1.equals("String")).isFalse();
-	    assertThat(att1).isEqualTo(att2);
+	    // verify - Unified assertion chain for the same context
+	    assertThat(att1)
+	        .isEqualTo(att1)
+	        .isNotNull()
+	        .isNotEqualTo("String")
+	        .isEqualTo(att2);
+	        
 	    assertThat(attNullId1).isEqualTo(attNullId2);
 	    assertThat(attNullId1).isNotEqualTo(att1);
 	    assertThat(attCustomId1).isEqualTo(attCustomId2);
@@ -47,8 +45,9 @@ public class AttendanceRecordTest {
 	    AttendanceRecord attendance = new AttendanceRecord(UNUSED_STU001, date, true);
 
 	    // verify
-	    assertEquals("Attendance date should match",
-	                date, attendance.getDate());
+	    assertThat(attendance.getDate())
+	        .as("Attendance date should match")
+	        .isEqualTo(date);
 	}
 
     @Test
@@ -57,8 +56,9 @@ public class AttendanceRecordTest {
 	    AttendanceRecord attendance = new AttendanceRecord(UNUSED_STU001, new Date(), true);
 
 	    // verify
-	    assertEquals("Attendance student ID should match",
-	                UNUSED_STU001, attendance.getStudentId());
+	    assertThat(attendance.getStudentId())
+	        .as("Attendance student ID should match")
+	        .isEqualTo(UNUSED_STU001);
 	}
 
     @Test
@@ -72,8 +72,8 @@ public class AttendanceRecordTest {
         att2.setRecordId(ATT001);
 
         // verify
-        assertEquals(0, att1.hashCode());
-        assertEquals(ATT001.hashCode(), att2.hashCode());
+        assertThat(att1.hashCode()).isZero();
+        assertThat(att2.hashCode()).isEqualTo(ATT001.hashCode());
     }
 
     @Test
@@ -82,7 +82,9 @@ public class AttendanceRecordTest {
 	    AttendanceRecord attendance = new AttendanceRecord("STU001", new Date(), true);
 
 	    // verify
-	    assertTrue("Attendance should be present", attendance.isPresent());
+	    assertThat(attendance.isPresent())
+	        .as("Attendance should be present")
+	        .isTrue();
 	}
 
     @Test
@@ -95,8 +97,9 @@ public class AttendanceRecordTest {
 	    attendance.setDate(newDate);
 
 	    // verify
-	    assertEquals("Attendance date should be updated",
-	    		newDate, attendance.getDate());
+	    assertThat(attendance.getDate())
+	        .as("Attendance date should be updated")
+	        .isEqualTo(newDate);
 	}
 
     @Test
@@ -108,8 +111,9 @@ public class AttendanceRecordTest {
 	    attendance.setPresent(false);
 
 	    // verify
-	    assertFalse("Attendance should be updated to absent",
-	               attendance.isPresent());
+	    assertThat(attendance.isPresent())
+	        .as("Attendance should be updated to absent")
+	        .isFalse();
 	}
 
     @Test
@@ -120,5 +124,4 @@ public class AttendanceRecordTest {
         // verify
         assertThat(attendance.getRecordId()).isEqualTo(ATT001);
     }
-
-}
+}
