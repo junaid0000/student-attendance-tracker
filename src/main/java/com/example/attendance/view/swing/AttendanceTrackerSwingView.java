@@ -740,17 +740,6 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             loadStudentsFromDatabase();
             refreshAttendancePanelStudents();
         }
-
-        // In test mode, we add a very small sync pause to allow the robot to see the
-        // window
-        if (isTestMode) {
-            try {
-                java.util.concurrent.TimeUnit.MILLISECONDS.sleep(50);
-            } catch (Exception e) {
-                Thread.currentThread().interrupt();
-                LOGGER.log(Level.FINE, "Interrupted", e);
-            }
-        }
     }
 
     public void setAttendanceController(AttendanceController attendanceController) {
