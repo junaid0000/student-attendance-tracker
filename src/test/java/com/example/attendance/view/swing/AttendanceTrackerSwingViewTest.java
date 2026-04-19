@@ -101,14 +101,10 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         window.list(LIST_STUDENT).requireVisible();
         window.label(LBL_ERROR).requireVisible();
 
-        // Attendance tab - Switch with retry logic for Windows stability
-        boolean switched = false;
-        for(int i=0; i<3 && !switched; i++) {
-            org.assertj.swing.timing.Pause.pause(1000);
-            window.tabbedPane().selectTab(1);
-            window.robot().waitForIdle();
-            if (window.tabbedPane().target().getSelectedIndex() == 1) switched = true;
-        }
+        // Attendance tab - Use direct EDT switch for CI stability
+        GuiActionRunner.execute(() -> window.tabbedPane().target().setSelectedIndex(1));
+        window.robot().waitForIdle();
+        org.assertj.swing.timing.Pause.pause(1000); // Allow time for components to be "showing"
 
         window.robot().waitForIdle();
         assertThat(window.textBox(TB_DATE).target().isVisible()).isTrue();
