@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -48,6 +49,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private static final String LOADED_SUFFIX = " students from database";
     private static final String TAB_STUDENTS = "Students";
     private static final String ATTENDANCE_DB = "attendance_db";
+    private static final String SEPARATOR = " - ";
     private static final Logger LOGGER = Logger.getLogger(AttendanceTrackerSwingView.class.getName());
     private JTabbedPane tabbedPane;
     private boolean isTestMode = false;
@@ -58,7 +60,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private JButton btnAdd;
     private JButton btnUpdate;
     private JButton btnDelete;
-    private JList listStudent;
+    private JList<String> listStudent;
     private JLabel lblError;
 
     // Attendance Tab Components
@@ -68,7 +70,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private JButton btnGetSummary;
     private JRadioButton byDateRadio;
     private JRadioButton byStudentRadio;
-    private JList attendanceList;
+    private JList<String> attendanceList;
     private JTextArea attendanceRecordsArea;
     private JLabel attendanceErrorLabel;
     private JLabel summaryLabel;
@@ -102,7 +104,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         }
 
         setTitle("Student Attendance Tracker");
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(800, 600);
 
         // Create the tabbed pane
@@ -229,10 +231,10 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
 
         // Student List with scroll
         JScrollPane studentScrollPane = new JScrollPane();
-        studentScrollPane.setBounds(20, 190, 350, 200);
+        studentScrollPane.setBounds(20, 180, 270, 150);
         panel.add(studentScrollPane);
 
-        listStudent = new JList();
+        listStudent = new JList<>();
         listStudent.setName("studentlist");
         studentScrollPane.setViewportView(listStudent);
 
@@ -459,7 +461,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                 showAttendanceByDate(records);
             } else if (byStudentRadio.isSelected()) {
                 // Prompt the user for a roll number and filter records by that student
-                String rollNo = javax.swing.JOptionPane.showInputDialog(this, "Enter Student Roll Number:");
+                String rollNo = JOptionPane.showInputDialog(this, "Enter Student Roll Number:");
                 if (rollNo != null && !rollNo.trim().isEmpty()) {
                     List<AttendanceRecord> records = attendanceController.getAttendanceByStudent(rollNo);
                     showAttendanceByStudent(records);
@@ -480,7 +482,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         try {
             // ask the user for a roll number to calculate the cumulative attendance
             // percentage
-            String rollNo = javax.swing.JOptionPane.showInputDialog(this, "Enter Student Roll Number for Summary:");
+            String rollNo = JOptionPane.showInputDialog(this, "Enter Student Roll Number for Summary:");
             if (rollNo != null && !rollNo.trim().isEmpty()) {
                 double perc = attendanceController.getAttendancePercentage(rollNo);
                 showAttendancePercentage(perc);
@@ -525,8 +527,8 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             // mode)
             attendanceErrorLabel.setText("Attendance marked for " + markedCount + " student(s)");
             if (!isTestMode) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Attendance marked successfully!", "Success",
-                        javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Attendance marked successfully!", "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
 
             // Trigger UI update through the attendanceMarked listener
@@ -627,7 +629,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                 String status = attendanceRecord.isPresent() ? STATUS_PRESENT : STATUS_ABSENT;
                 String studentDetails = getStudentDetails(attendanceRecord.getStudentId());
                 sb.append("Date: ").append(sdf.format(attendanceRecord.getDate())).append(" | ").append(studentDetails)
-                        .append(" - ").append(status).append("\n");
+                        .append(SEPARATOR).append(status).append("\n");
             }
             attendanceRecordsArea.setText(sb.toString());
             attendanceErrorLabel.setText(LOADED_MSG + records.size() + " records by date");
@@ -643,7 +645,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                 String status = attendanceRecord.isPresent() ? STATUS_PRESENT : STATUS_ABSENT;
                 String studentDetails = getStudentDetails(attendanceRecord.getStudentId());
                 sb.append("Date: ").append(sdf.format(attendanceRecord.getDate())).append(" | ").append(studentDetails)
-                        .append(" - ").append(status).append("\n");
+                        .append(SEPARATOR).append(status).append("\n");
             }
             attendanceRecordsArea.setText(sb.toString());
             attendanceErrorLabel.setText(LOADED_MSG + "attendance for selected student");
@@ -656,8 +658,8 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             String formatted = String.format("Overall Attendance: %.1f%%", percentage);
             summaryLabel.setText(formatted);
             if (!isTestMode) {
-                javax.swing.JOptionPane.showMessageDialog(this, formatted, "Attendance Summary",
-                        javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, formatted, "Attendance Summary",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }
@@ -670,7 +672,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     }
 
     // Helper method for testing
-    public JList getStudentList() {
+    public JList<String> getStudentList() {
         return listStudent;
     }
 
@@ -764,9 +766,9 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                     return;
 
                 String[] studentArray = new String[students.size()];
-                for (int i = 0; i < students.size(); i++) {
+                for (int i = 0; i < studentArray.length; i++) {
                     Student s = students.get(i);
-                    studentArray[i] = s.getRollNumber() + " - " + s.getName();
+                    studentArray[i] = s.getRollNumber() + SEPARATOR + s.getName();
                 }
 
                 // Store current selection to restore it after reload
@@ -803,7 +805,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         }
 
         try {
-            String rollNumber = selected.split(" - ")[0];
+            String rollNumber = selected.split(SEPARATOR)[0];
 
             java.util.Optional<Student> studentOpt = studentController.getStudentByRollNumber(rollNumber);
 
@@ -834,7 +836,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             return;
         }
 
-        String oldRollNumber = selected.split(" - ")[0];
+        String oldRollNumber = selected.split(SEPARATOR)[0];
         String newName = textFieldName.getText().trim();
         String newRollNumber = textFieldRollNo.getText().trim();
 
