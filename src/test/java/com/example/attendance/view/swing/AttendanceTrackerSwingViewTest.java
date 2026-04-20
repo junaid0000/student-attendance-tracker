@@ -34,7 +34,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
     private static final String TA_RECORDS = "attendanceRecordsArea";
     private static final String LBL_SUMMARY = "summaryLabel";
     private static final String LBL_ATTENDANCE_ERROR = "attendanceErrorLabel";
-    
+
     static {
         // Force the test mode to turn on immediately
         System.setProperty("test.mode", "true");
@@ -50,7 +50,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
             return;
         }
 
-        // Increase robot timeouts for slow CI environments
+        // Restore original delay for maximum stability on slow machines
         robot().settings().delayBetweenEvents(60);
         robot().settings().timeoutToBeVisible(10000);
 
@@ -64,17 +64,20 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         view = GuiActionRunner.execute(() -> {
             AttendanceTrackerSwingView v = new AttendanceTrackerSwingView();
             v.setTestMode(true);
+            // DO NOT call setVisible(true) here; let FrameFixture.show() handle it safely
             return v;
         });
 
-        // Set the fake controllers
+        // Set the fake controllers before showing the window
         view.setStudentController(fakeStudentController);
         view.setAttendanceController(fakeAttendanceController);
 
+        // Create the fixture and show the window robustly
         window = new FrameFixture(robot(), view);
-        window.show(); // This should now work without MongoDB connection attempts
-        // Wait for window to fully initialize
-        robot().waitForIdle();
+        window.show(); // Activates window on EDT and waits
+        
+        // Ensure window is at the front
+        window.moveToFront();
     }
     // GUI TESTS
 
@@ -103,21 +106,22 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
         // Attendance tab - Switch with retry logic for Windows stability
         boolean switched = false;
-        for(int i=0; i<3 && !switched; i++) {
+        for (int i = 0; i < 3 && !switched; i++) {
             org.assertj.swing.timing.Pause.pause(1000);
             window.tabbedPane().selectTab(1);
             window.robot().waitForIdle();
-            if (window.tabbedPane().target().getSelectedIndex() == 1) switched = true;
+            if (window.tabbedPane().target().getSelectedIndex() == 1)
+                switched = true;
         }
 
         window.robot().waitForIdle();
-        assertThat(window.textBox(TB_DATE).target().isVisible()).isTrue();
-        assertThat(window.button(BTN_MARK).target().isVisible()).isTrue();
-        assertThat(window.button(BTN_VIEW_BY_DATE).target().isVisible()).isTrue();
-        assertThat(window.button(BTN_GET_SUMMARY).target().isVisible()).isTrue();
-        assertThat(window.textBox(TA_RECORDS).target().isVisible()).isTrue();
-        assertThat(window.label(LBL_SUMMARY).target().isVisible()).isTrue();
-        assertThat(window.label(LBL_ATTENDANCE_ERROR).target().isVisible()).isTrue();
+        window.textBox(TB_DATE).requireVisible();
+        window.button(BTN_MARK).requireVisible();
+        window.button(BTN_VIEW_BY_DATE).requireVisible();
+        window.button(BTN_GET_SUMMARY).requireVisible();
+        window.textBox(TA_RECORDS).requireVisible();
+        window.label(LBL_SUMMARY).requireVisible();
+        window.label(LBL_ATTENDANCE_ERROR).requireVisible();
     }
 
     @Test
@@ -126,11 +130,11 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
             return;
 
         window.tabbedPane().selectTab(0);
-        assertThat(window.button(BTN_ADD).target().isEnabled()).isFalse();
+        window.button(BTN_ADD).requireDisabled();
 
         window.textBox(TB_STUDENT_NAME).enterText("JJ");
         window.textBox(TB_ROLL_NUMBER).enterText("123");
-        assertThat(window.button(BTN_ADD).target().isEnabled()).isTrue();
+        window.button(BTN_ADD).requireEnabled();
     }
 
     // INTERFACE IMPLEMENTATION Testt
@@ -184,11 +188,12 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
             return;
 
         boolean switched = false;
-        for(int i=0; i<3 && !switched; i++) {
+        for (int i = 0; i < 3 && !switched; i++) {
             org.assertj.swing.timing.Pause.pause(1000);
             window.tabbedPane().selectTab(1);
             window.robot().waitForIdle();
-            if (window.tabbedPane().target().getSelectedIndex() == 1) switched = true;
+            if (window.tabbedPane().target().getSelectedIndex() == 1)
+                switched = true;
         }
         AttendanceRecord attendanceRecord = new AttendanceRecord("123", new Date(), true);
         view.attendanceMarked(attendanceRecord);
@@ -202,13 +207,14 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
             return;
 
         boolean switched = false;
-        for(int i=0; i<3 && !switched; i++) {
+        for (int i = 0; i < 3 && !switched; i++) {
             org.assertj.swing.timing.Pause.pause(1000);
             window.tabbedPane().selectTab(1);
             window.robot().waitForIdle();
-            if (window.tabbedPane().target().getSelectedIndex() == 1) switched = true;
+            if (window.tabbedPane().target().getSelectedIndex() == 1)
+                switched = true;
         }
-        
+
         view.showAttendancePercentage(85.5);
         window.robot().waitForIdle();
         assertThat(window.label(LBL_SUMMARY).text()).isEqualTo("Overall Attendance: 85.5%");
@@ -223,7 +229,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         window.textBox(TB_STUDENT_NAME).enterText("Test");
         window.textBox(TB_ROLL_NUMBER).enterText("123");
         window.button(BTN_ADD).click();
-        assertThat(window.button(BTN_ADD).target().isShowing()).isTrue();
+        window.button(BTN_ADD).requireVisible();
     }
 
     // now multithreading but

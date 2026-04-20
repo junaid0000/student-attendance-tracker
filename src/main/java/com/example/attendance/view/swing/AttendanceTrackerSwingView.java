@@ -70,7 +70,6 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private JButton btnGetSummary;
     private JRadioButton byDateRadio;
     private JRadioButton byStudentRadio;
-    private JList<String> attendanceList;
     private JTextArea attendanceRecordsArea;
     private JLabel attendanceErrorLabel;
     private JLabel summaryLabel;
@@ -105,6 +104,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
 
         setTitle("Student Attendance Tracker");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setName("mainFrame");
         setSize(800, 600);
 
         // Create the tabbed pane
@@ -674,6 +674,10 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     // Helper method for testing
     public JList<String> getStudentList() {
         return listStudent;
+    }
+
+    public JTabbedPane getTabbedPane() {
+        return tabbedPane;
     }
 
     private void displaySuccessMessage(String message) {
