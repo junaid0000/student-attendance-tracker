@@ -61,20 +61,20 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         // Ensure test mode is set for properties
         System.setProperty("test.mode", "true");
 
+        // Use standard Direct Visibility pattern for maximum stability in suite runs
         view = GuiActionRunner.execute(() -> {
             AttendanceTrackerSwingView v = new AttendanceTrackerSwingView();
             v.setTestMode(true);
-            // DO NOT call setVisible(true) here; let FrameFixture.show() handle it safely
             return v;
         });
 
-        // Set the fake controllers before showing the window
+        // Set the fake controllers
         view.setStudentController(fakeStudentController);
         view.setAttendanceController(fakeAttendanceController);
 
-        // Create the fixture and show the window robustly
+        // Create the fixture for the already visible window
         window = new FrameFixture(robot(), view);
-        window.show(); // Activates window on EDT and waits
+        robot().showWindow(view);
         
         // Ensure window is at the front
         window.moveToFront();
