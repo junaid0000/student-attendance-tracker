@@ -44,40 +44,39 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
     @Override
     protected void onSetUp() {
-        // detect headless and skipp t if not its display
-
         if (GraphicsEnvironment.isHeadless()) {
             return;
         }
 
-        // Restore original delay for maximum stability on slow machines
-        robot().settings().delayBetweenEvents(60);
-        robot().settings().timeoutToBeVisible(10000);
+        // Speed up execution significantly
+        robot().settings().delayBetweenEvents(10);
+        robot().settings().timeoutToBeVisible(5000);
 
-        // Create fake controllers that will not connect to database
         StudentController fakeStudentController = mock(StudentController.class);
         AttendanceController fakeAttendanceController = mock(AttendanceController.class);
 
-        // Ensure test mode is set for properties
         System.setProperty("test.mode", "true");
 
-        // Use standard Direct Visibility pattern for maximum stability in suite runs
         view = GuiActionRunner.execute(() -> {
             AttendanceTrackerSwingView v = new AttendanceTrackerSwingView();
             v.setTestMode(true);
             return v;
         });
 
-        // Set the fake controllers
         view.setStudentController(fakeStudentController);
         view.setAttendanceController(fakeAttendanceController);
 
-        // Create the fixture for the already visible window
         window = new FrameFixture(robot(), view);
-        robot().showWindow(view);
-        
-        // Ensure window is at the front
+        window.show(); // More stable than manual robot call
+        window.focus();
         window.moveToFront();
+    }
+
+    @Override
+    protected void onTearDown() {
+        if (window != null) {
+            window.cleanUp(); // Explicitly clear window to prevent ghosting between tests
+        }
     }
     // GUI TESTS
 
@@ -146,8 +145,9 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
             return;
 
         Student student = new Student("Ahmed", "123");
+        window.tabbedPane().selectTab(0);
         view.studentAdded(student);
-        window.robot().waitForIdle();
+        org.assertj.swing.timing.Pause.pause(300); 
         assertThat(window.label(LBL_ERROR).text()).isEqualTo("Student added: Ahmed");
     }
 
@@ -158,7 +158,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
         Student student = new Student("Umer", "456");
         view.studentUpdated(student);
-        window.robot().waitForIdle();
+        org.assertj.swing.timing.Pause.pause(200);
         assertThat(window.label(LBL_ERROR).text()).isEqualTo("Student updated: Umer");
     }
 
@@ -169,7 +169,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
 
         Student student = new Student("Sarim", "789");
         view.studentDeleted(student);
-        window.robot().waitForIdle();
+        org.assertj.swing.timing.Pause.pause(200);
         assertThat(window.label(LBL_ERROR).text()).isEqualTo("Student deleted: Sarim");
     }
 
@@ -179,8 +179,9 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
             return;
 
         Student student = new Student("sadii", "999");
+        window.tabbedPane().selectTab(0);
         view.showStudentError("Test error", student);
-        window.robot().waitForIdle();
+        org.assertj.swing.timing.Pause.pause(300);
         assertThat(window.label(LBL_ERROR).text()).isEqualTo("Error: Test error");
     }
 
@@ -199,7 +200,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         }
         AttendanceRecord attendanceRecord = new AttendanceRecord("123", new Date(), true);
         view.attendanceMarked(attendanceRecord);
-        window.robot().waitForIdle();
+        org.assertj.swing.timing.Pause.pause(300);
         assertThat(window.label(LBL_ATTENDANCE_ERROR).text()).isEqualTo("Attendance marked for student ID: 123");
     }
 
@@ -244,7 +245,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         SwingUtilities.invokeLater(() -> {
             view.studentAdded(student);
         });
-        window.robot().waitForIdle();
+        org.assertj.swing.timing.Pause.pause(300);
         assertThat(window.label(LBL_ERROR).text()).isEqualTo("Student added: EDT");
     }
 }

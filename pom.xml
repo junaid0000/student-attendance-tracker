@@ -14,10 +14,11 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jacoco.version>0.8.8</jacoco.version>
+        <jacoco.version>0.8.12</jacoco.version>
 
         <assertj.version>3.24.2</assertj.version>
         <log4j.version>2.20.0</log4j.version>
+        <testcontainers.version>1.21.4</testcontainers.version>
         <!-- SonarQube properties -->
         <sonar.projectKey>junaid0000_student-attendance-tracker</sonar.projectKey>
         <sonar.organization>junaid0000</sonar.organization>
@@ -117,13 +118,13 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
-            <version>1.19.0</version>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>mongodb</artifactId>
-            <version>1.19.0</version>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- SLF4J Warnings -->

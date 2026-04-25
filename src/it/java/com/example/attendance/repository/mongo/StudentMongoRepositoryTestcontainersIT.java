@@ -13,6 +13,9 @@ import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 
 public class StudentMongoRepositoryTestcontainersIT {
+    static {
+        System.setProperty("test.mode", "true");
+    }
     private static final String ATTENDANCE_DB = "attendance_db";
     private static final String STUDENTS_COLLECTION = "students";
     private static final String JUNAID = "Junaid";

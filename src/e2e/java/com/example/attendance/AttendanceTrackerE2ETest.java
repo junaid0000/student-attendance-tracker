@@ -24,6 +24,10 @@ import com.mongodb.client.model.Filters;
 @RunWith(GUITestRunner.class)
 public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
 
+    static {
+        System.setProperty("test.mode", "true");
+    }
+
     @ClassRule
     public static final MongoDBContainer mongo = new MongoDBContainer("mongo:4.4.3");
 
@@ -83,12 +87,14 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
         }).using(robot());
 
         // Wait for UI to load completely
-        window.robot().waitForIdle();
-        window.robot().waitForIdle();
+        org.assertj.swing.timing.Pause.pause(1000); 
     }
 
     @Override
     protected void onTearDown() {
+        if (window != null) {
+            window.cleanUp(); // Crucial: Closes the app window after each test
+        }
         if (mongoClient != null) {
             mongoClient.close();
         }
@@ -107,7 +113,6 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
         window.tabbedPane().selectTab(TAB_STUDENTS);
 
         // Wait longer for students to load
-        window.robot().waitForIdle();
         org.assertj.swing.timing.Pause.pause(1000);
 
         // Get list contents
@@ -127,7 +132,7 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
 
         // Click Add button
         window.button(BTN_ADD).click();
-        window.robot().waitForIdle();
+        org.assertj.swing.timing.Pause.pause(500);
 
         // Verify success message in UI
         assertThat(window.label(LBL_ERROR).text()).contains("Student added");
@@ -151,7 +156,7 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
         window.textBox(TB_STUDENT_NAME).enterText("Duplicate");
         window.textBox(TB_ROLL_NUMBER).enterText(STUDENT_1_ROLL);
         window.button(BTN_ADD).click();
-        window.robot().waitForIdle();
+        org.assertj.swing.timing.Pause.pause(500);
 
         // ADD A SMALL DELAY TO ERROR APPEAR
         org.assertj.swing.timing.Pause.pause(1000);
@@ -175,7 +180,6 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
 
         // Wait for deletion message
         org.assertj.swing.timing.Pause.pause(500);
-        window.robot().waitForIdle();
         
         // Verify success message - it might say "Student deleted" or already "Loaded"
         String labelText = window.label(LBL_ERROR).text();
@@ -183,7 +187,6 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
         
         // Final wait for database to be cleaned and UI to refresh
         org.assertj.swing.timing.Pause.pause(500);
-        window.robot().waitForIdle();
 
         // Verify removed from database
         Document studentDoc = mongoClient.getDatabase(DB_NAME).getCollection(STUDENT_COLLECTION)

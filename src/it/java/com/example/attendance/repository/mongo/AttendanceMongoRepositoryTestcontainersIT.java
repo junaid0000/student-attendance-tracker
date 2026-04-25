@@ -16,6 +16,9 @@ import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 
 public class AttendanceMongoRepositoryTestcontainersIT {
+    static {
+        System.setProperty("test.mode", "true");
+    }
     private static final String ATTENDANCE_DB = "attendance_db";
     private static final String ATTENDANCE_COLLECTION = "attendance_records";
 

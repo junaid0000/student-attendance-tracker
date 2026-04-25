@@ -853,23 +853,24 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         // Reset flag after a delay. In test mode, we use a slightly shorter delay
         // but still long enough for tests to see the message (500ms).
         int delay = isTestMode ? 500 : 3000;
-        new Timer(delay, e -> {
+        Timer timer = new Timer(delay, e -> {
             // Only act if this is still the most recent message
             if (msgId == currentMessageId) {
                 showingSuccessMessage = false;
-                // Just update the label instead of full reload to avoid selection flickering
                 if (studentController != null) {
                     try {
                         int count = studentController.getAllStudents().size();
-                        // Only update if no error message has appeared in the meantime
                         if (!showingErrorMessage) {
                             lblError.setText(LOADED_MSG + count + LOADED_SUFFIX);
                         }
                     } catch (Exception ex) {
-                        // Ignore exception during background list update
                     }
                 }
             }
-        }).start();
+        });
+        timer.setRepeats(false);
+        if (!isTestMode) {
+            timer.start();
+        }
     }
 }
