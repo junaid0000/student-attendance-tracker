@@ -1,5 +1,8 @@
 package com.example.attendance.app;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.SwingUtilities;
 
 import com.example.attendance.controller.AttendanceController;
@@ -9,9 +12,6 @@ import com.example.attendance.repository.mongo.AttendanceMongoRepository;
 import com.example.attendance.repository.mongo.StudentMongoRepository;
 import com.example.attendance.view.swing.AttendanceTrackerSwingView;
 import com.mongodb.MongoClient;
-
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 public class AttendanceTrackerApp {
     private static final Logger LOGGER = Logger.getLogger(AttendanceTrackerApp.class.getName());

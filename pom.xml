@@ -160,7 +160,7 @@
                 </executions>
             </plugin>
             
-            <!-- Maven Surefire Plugin for unit tests - PROPAGATE PROPERTIES TO CHILD JVM -->
+            <!-- Maven Surefire Plugin for unit tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

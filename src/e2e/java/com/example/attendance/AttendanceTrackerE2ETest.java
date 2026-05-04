@@ -87,13 +87,13 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
         }).using(robot());
 
         // Wait for UI to load completely
-        org.assertj.swing.timing.Pause.pause(1000); 
+        org.assertj.swing.timing.Pause.pause(1000);
     }
 
     @Override
     protected void onTearDown() {
         if (window != null) {
-            window.cleanUp(); // Crucial: Closes the app window after each test
+            window.cleanUp(); // Closes the app window after each test
         }
         if (mongoClient != null) {
             mongoClient.close();
@@ -102,8 +102,8 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
 
     private void addTestStudentToDatabase(String rollNumber, String name) {
         mongoClient.getDatabase(DB_NAME).getCollection(STUDENT_COLLECTION)
-                .insertOne(new Document().append(FIELD_ROLL_NUMBER, rollNumber).append(FIELD_NAME, name).append("studentId",
-                        java.util.UUID.randomUUID().toString()));
+                .insertOne(new Document().append(FIELD_ROLL_NUMBER, rollNumber).append(FIELD_NAME, name)
+                        .append("studentId", java.util.UUID.randomUUID().toString()));
     }
 
     // Verify students from database are shown on startup
@@ -180,11 +180,11 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
 
         // Wait for deletion message
         org.assertj.swing.timing.Pause.pause(500);
-        
-        // Verify success message - it might say "Student deleted" or already "Loaded"
+
+        // Verify success message it might say "Student deleted" or already "Loaded"
         String labelText = window.label(LBL_ERROR).text();
         assertThat(labelText).matches(".*(Student deleted|Loaded).*");
-        
+
         // Final wait for database to be cleaned and UI to refresh
         org.assertj.swing.timing.Pause.pause(500);
 

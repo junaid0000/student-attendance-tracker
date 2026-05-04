@@ -147,7 +147,7 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         Student student = new Student("Ahmed", "123");
         window.tabbedPane().selectTab(0);
         view.studentAdded(student);
-        org.assertj.swing.timing.Pause.pause(300); 
+        org.assertj.swing.timing.Pause.pause(300);
         assertThat(window.label(LBL_ERROR).text()).isEqualTo("Student added: Ahmed");
     }
 
@@ -236,7 +236,6 @@ public class AttendanceTrackerSwingViewTest extends AssertJSwingJUnitTestCase {
         assertThat(window).isNotNull(); // SonarCloud compliance
     }
 
-    // now multithreading but
     @Test
     public void shouldUpdateUIOnEventDispatchThread() {
         if (GraphicsEnvironment.isHeadless())
