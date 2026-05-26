@@ -158,4 +158,22 @@ public class AttendanceControllerTest {
         // ASSERT
         assertEquals(0.0, result, 0.01);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testMarkAttendanceStudentNotFound() {
+        when(studentRepository.findByRollNumber("INVALID")).thenReturn(Optional.empty());
+        attendanceController.markAttendance("INVALID", new Date(), true);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetAttendanceByStudentNotFound() {
+        when(studentRepository.findByRollNumber("INVALID")).thenReturn(Optional.empty());
+        attendanceController.getAttendanceByStudent("INVALID");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetAttendancePercentageStudentNotFound() {
+        when(studentRepository.findByRollNumber("INVALID")).thenReturn(Optional.empty());
+        attendanceController.getAttendancePercentage("INVALID");
+    }
 }

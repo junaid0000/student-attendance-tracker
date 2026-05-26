@@ -46,6 +46,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private static final String LOADED_MSG = "Loaded ";
     private static final String LOADED_SUFFIX = " students from database";
     private static final String TAB_STUDENTS = "Students";
+    // private static final String ATTENDANCE_DB = "attendance_db";
     private static final String SEPARATOR = " - ";
     private static final Logger LOGGER = Logger.getLogger(AttendanceTrackerSwingView.class.getName());
     private JTabbedPane tabbedPane;
@@ -676,7 +677,6 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         return tabbedPane;
     }
 
-//    @SuppressWarnings("unused")
 //    private void displaySuccessMessage(String message) {
 //        final int msgId = ++currentMessageId;
 //        showingErrorMessage = false;

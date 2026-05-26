@@ -55,13 +55,13 @@
             <scope>test</scope>
         </dependency>
         
-        <!-- Hamcrest for assertions -->
+        <!-- Hamcrest for assertions follow from the book but its not used in the projet
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
             <version>3.0</version>
             <scope>test</scope>
-        </dependency>
+        </dependency> -->
         
         <!-- AssertJ -->
         <dependency>
@@ -79,7 +79,7 @@
             <scope>test</scope>
         </dependency>
         
-        <!-- Log4j -->
+        <!-- Log4j follows from the book but not used in the project
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -89,7 +89,7 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
-        </dependency>
+        </dependency> -->
         
         <!-- Mockito core -->
         <dependency>

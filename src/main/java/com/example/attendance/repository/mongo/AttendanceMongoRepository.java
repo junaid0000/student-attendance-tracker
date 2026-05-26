@@ -29,7 +29,7 @@ public class AttendanceMongoRepository implements AttendanceRepository {
     }
 
     @Override
-	public AttendanceRecord markAttendance(AttendanceRecord attendanceRecord) {
+    public AttendanceRecord markAttendance(AttendanceRecord attendanceRecord) {
         Document doc = new Document()
             .append(RECORD_ID, attendanceRecord.getRecordId())
             .append(DATE, attendanceRecord.getDate())
@@ -41,7 +41,7 @@ public class AttendanceMongoRepository implements AttendanceRepository {
     }
 
     @Override
-	public List<AttendanceRecord> findByDate(Date date) {
+    public List<AttendanceRecord> findByDate(Date date) {
         List<AttendanceRecord> results = new ArrayList<>();
 
         for (Document doc : attendanceCollection.find(Filters.eq(DATE, date))) {
@@ -57,7 +57,7 @@ public class AttendanceMongoRepository implements AttendanceRepository {
     }
 
     @Override
-	public List<AttendanceRecord> findByStudentId(String studentId) {
+    public List<AttendanceRecord> findByStudentId(String studentId) {
         List<AttendanceRecord> results = new ArrayList<>();
 
         for (Document doc : attendanceCollection.find(Filters.eq(STUDENT_ID, studentId))) {

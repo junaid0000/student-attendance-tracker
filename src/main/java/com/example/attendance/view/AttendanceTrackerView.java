@@ -6,7 +6,7 @@ import com.example.attendance.model.AttendanceRecord;
 import com.example.attendance.model.Student;
 
 public interface AttendanceTrackerView {
-	
+
     // Student operations add ,update and delete
     void studentAdded(Student student);
     void studentUpdated(Student student);

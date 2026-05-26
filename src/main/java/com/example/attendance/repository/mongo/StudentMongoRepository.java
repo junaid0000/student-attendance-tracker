@@ -73,7 +73,7 @@ public class StudentMongoRepository implements StudentRepository {
     }
 
     @Override
-	public Optional<Student> findByRollNumber(String rollNumber) {
+    public Optional<Student> findByRollNumber(String rollNumber) {
         Document doc = studentCollection.find(
             Filters.eq(ROLL_NUMBER, rollNumber)
         ).first();
@@ -92,9 +92,9 @@ public class StudentMongoRepository implements StudentRepository {
     }
 
     @Override
-	public void delete(Student student) {
+    public void delete(Student student) {
         delete(student.getStudentId());
-    	}
+    }
     @Override
     public List<Student> findAll() {
         List<Student> students = new ArrayList<>();
