@@ -3,8 +3,6 @@ package com.example.attendance.view.swing;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +46,6 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     private static final String LOADED_MSG = "Loaded ";
     private static final String LOADED_SUFFIX = " students from database";
     private static final String TAB_STUDENTS = "Students";
-    private static final String ATTENDANCE_DB = "attendance_db";
     private static final String SEPARATOR = " - ";
     private static final Logger LOGGER = Logger.getLogger(AttendanceTrackerSwingView.class.getName());
     private JTabbedPane tabbedPane;
@@ -513,7 +510,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
                 if (group != null && group.getSelection() != null) {
                     isPresent = group.getSelection().getActionCommand().equals(STATUS_PRESENT);
                 }
-                AttendanceRecord attendanceRecord = attendanceController.markAttendance(student.getRollNumber(), date, isPresent);
+                attendanceController.markAttendance(student.getRollNumber(), date, isPresent);
                 markedCount++;
                 anyMarked = true;
             } catch (Exception e) {
@@ -574,7 +571,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
 
     @Override
     public void showStudentError(String message, Student student) {
-        final int msgId = ++currentMessageId;
+        ++currentMessageId;
         Runnable r = () -> {
             showingSuccessMessage = false;
             showingErrorMessage = true;
@@ -658,8 +655,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             String formatted = String.format("Overall Attendance: %.1f%%", percentage);
             summaryLabel.setText(formatted);
             if (!isTestMode) {
-                JOptionPane.showMessageDialog(this, formatted, "Attendance Summary",
-                        JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, formatted, "Attendance Summary", JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }
@@ -680,14 +676,15 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         return tabbedPane;
     }
 
-    private void displaySuccessMessage(String message) {
-        final int msgId = ++currentMessageId;
-        showingErrorMessage = false;
-        showingSuccessMessage = true;
-        lblError.setText(message);
-
-        resetStatusAfterDelay(msgId);
-    }
+//    @SuppressWarnings("unused")
+//    private void displaySuccessMessage(String message) {
+//        final int msgId = ++currentMessageId;
+//        showingErrorMessage = false;
+//        showingSuccessMessage = true;
+//        lblError.setText(message);
+//
+//        resetStatusAfterDelay(msgId);
+//    }
 
     private void addStudentAction() {
         // Reset flags at the start of action
@@ -805,13 +802,13 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
             if (studentOpt.isPresent()) {
                 Student student = studentOpt.get();
                 studentController.deleteStudent(rollNumber);
-                
+
                 showingSuccessMessage = true;
                 lblError.setText("Student deleted: " + student.getName());
-                
+
                 loadStudentsFromDatabase(); // Refresh the list
                 refreshAttendancePanelStudents(); // Also refresh attendance panel
-                
+
                 resetStatusAfterDelay(msgId);
             } else {
                 showStudentError("Student not found: " + rollNumber, null);
@@ -822,7 +819,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
     }
 
     private void updateSelectedStudent() {
-        final int msgId = ++currentMessageId;
+        ++currentMessageId;
         String selected = (String) listStudent.getSelectedValue();
         if (selected == null) {
             showStudentError("Please select a student to update", null);
@@ -839,7 +836,7 @@ public class AttendanceTrackerSwingView extends JFrame implements AttendanceTrac
         }
 
         try {
-            Student updatedStudent = studentController.updateStudent(oldRollNumber, newName, newRollNumber);
+            studentController.updateStudent(oldRollNumber, newName, newRollNumber);
             loadStudentsFromDatabase(); // Refresh list
             refreshAttendancePanelStudents(); // Also refresh attendance panel
             textFieldName.setText("");

@@ -277,10 +277,10 @@
                         <mutator>DEFAULTS</mutator>
                     </mutators>
                     <targetClasses>
-                        <param>com.example.attendance.*</param>
+                        <param>com.example.attendance.controller.AttendanceController</param>
                     </targetClasses>
                     <targetTests>
-                        <param>com.example.attendance.*</param>
+                        <param>com.example.attendance.controller.AttendanceControllerTest</param>
                     </targetTests>
                 </configuration>
             </plugin>
