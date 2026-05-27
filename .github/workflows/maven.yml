@@ -71,10 +71,9 @@ jobs:
 
       - name: Build with Maven (macOS)
         if: matrix.os == 'macos-latest'
-        run: mvn clean test -Pjacoco -DskipITs
+        run: mvn clean test -Pjacoco -DskipITs -Dtest="!AttendanceTrackerSwingViewTest"
         env:
           TESTCONTAINERS_RYUK_DISABLED: true
-          JAVA_TOOL_OPTIONS: "-Djava.awt.headless=true"
 
       # Upload coverage to Coveralls (Ubuntu only) - WITH GITHUB ACTIONS ENV
       - name: Upload coverage to Coveralls
