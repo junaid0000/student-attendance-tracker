@@ -71,7 +71,7 @@ jobs:
 
       - name: Build with Maven (macOS)
         if: matrix.os == 'macos-latest'
-        run: mvn clean test -Pjacoco -DskipITs -Dtest="!AttendanceTrackerSwingViewTest"
+        run: mvn clean test -Pjacoco -Dtest="!AttendanceTrackerSwingViewTest,!*IT"
         env:
           TESTCONTAINERS_RYUK_DISABLED: true
 
