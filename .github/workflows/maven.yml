@@ -69,13 +69,12 @@ jobs:
         env:
           TESTCONTAINERS_RYUK_DISABLED: true
 
-      - name: Build with Maven (macOS)
-        if: matrix.os == 'macos-latest'
-        run: export JAVA_TOOL_OPTIONS="-Djava.awt.headless=true"
-			mvn clean test -Pjacoco -DskipITs
-		
-        env:
-          TESTCONTAINERS_RYUK_DISABLED: true
+	  - name: Build with Maven (macOS)
+		if: matrix.os == 'macos-latest'
+		run: mvn clean test -Pjacoco -DskipITs
+		env:
+		  TESTCONTAINERS_RYUK_DISABLED: true
+		  JAVA_TOOL_OPTIONS: "-Djava.awt.headless=true"
 
       # Upload coverage to Coveralls (Ubuntu only) - WITH GITHUB ACTIONS ENV
       - name: Upload coverage to Coveralls
