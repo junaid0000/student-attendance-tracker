@@ -1,1 +1,30 @@
+# Maven
 /target/
+*.versionsBackup
+release.properties
+pom.xml.releaseBackup
+pom.xml.tagName
+pom.xml.nextVal
+dependency-reduced-pom.xml
+
+# JaCoCo
+*.exec
+
+# Eclipse
+.classpath
+.project
+.settings/
+.metadata/
+*.tmp
+*.bak
+*.swp
+*~
+.loadpath
+factorypath
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project Jars
+/libs/
