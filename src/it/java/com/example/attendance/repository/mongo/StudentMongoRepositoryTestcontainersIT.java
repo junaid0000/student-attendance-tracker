@@ -49,8 +49,7 @@ public class StudentMongoRepositoryTestcontainersIT {
     }
 
     private void addTestStudentToDatabase(String studentId, String name, String rollNumber) {
-        MongoClient tempClient = new MongoClient(
-                new ServerAddress(mongo.getHost(), mongo.getMappedPort(27017)));
+        MongoClient tempClient = new MongoClient(new ServerAddress(mongo.getHost(), mongo.getMappedPort(27017)));
 
         tempClient.getDatabase(ATTENDANCE_DB).getCollection(STUDENTS_COLLECTION).insertOne(new org.bson.Document()
                 .append("studentId", studentId).append("name", name).append("rollNumber", rollNumber));
