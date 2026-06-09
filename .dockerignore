@@ -1,5 +1,6 @@
-# Ignore everything
-**
+target/
+.git/
+.github/
+failed-gui-tests/
 
-# Except the JAR file
-!target/*.jar
+*.pdf

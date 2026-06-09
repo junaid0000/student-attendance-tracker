@@ -195,4 +195,23 @@ public class AttendanceTrackerE2ETest extends AssertJSwingJUnitTestCase {
         assertThat(studentDoc).isNull();
     }
 
+    // Test Attendance tab view functionality
+    @Test
+    @GUITest
+    public void testViewAttendanceFunctionality() {
+        window.tabbedPane().selectTab("Attendance");
+        window.robot().waitForIdle();
+
+        // Wait for tab to load
+        org.assertj.swing.timing.Pause.pause(500);
+
+        window.textBox("dateTextField").deleteText().enterText("01/01/2026");
+
+        window.button("viewByDateButton").click();
+        org.assertj.swing.timing.Pause.pause(500);
+
+        String labelText = window.label("attendanceErrorLabel").text();
+        assertThat(labelText).contains("records by date");
+    }
+
 }
