@@ -11,9 +11,6 @@ dependency-reduced-pom.xml
 *.exec
 
 # Eclipse
-.classpath
-.project
-.settings/
 .metadata/
 *.tmp
 *.bak
